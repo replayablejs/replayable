@@ -1,6 +1,6 @@
 {
   "name": "@replayablejs/cli",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Command-line interface for Replayable",
   "homepage": "https://github.com/replayablejs/replayable#readme",
   "bugs": {

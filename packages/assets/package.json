@@ -1,6 +1,6 @@
 {
   "name": "@replayablejs/assets",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Deterministic asset processing and typed module generation for playable ads",
   "homepage": "https://github.com/replayablejs/replayable#readme",
   "bugs": {
