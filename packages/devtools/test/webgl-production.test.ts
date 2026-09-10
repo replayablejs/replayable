@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 
-import { build } from 'vite';
+import { build, normalizePath } from 'vite';
 import { expect, it } from 'vitest';
 
 it.each([false, true])('loads context registration only when selected: %s', async (enabled) => {
@@ -43,7 +43,7 @@ it.each([false, true])('loads context registration only when selected: %s', asyn
     ],
   });
 
-  expect(loaded).toContain(entry);
+  expect(loaded).toContain(normalizePath(entry));
   expect(loaded.some((id) => id.endsWith('/stats/webgl/enabled.js'))).toBe(enabled);
   expect(chunks.join('\n').includes('new Map')).toBe(enabled);
   expect(loaded.some((id) => /d3-|@replayablejs\/runtime|stats\.scss/.test(id))).toBe(false);

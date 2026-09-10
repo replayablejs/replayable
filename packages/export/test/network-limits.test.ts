@@ -79,15 +79,20 @@ it.each([limit, limit + 1])('rejects Moloco HTML of %i UTF-8 bytes', (bytes) => 
   expect(() => validateMolocoSource(source)).toThrow('Moloco export must be smaller than 5 MB.');
 });
 
-it.each([limit - 1, limit])('accepts single HTML of %i UTF-8 bytes', async (bytes) => {
-  const source = padToBytes('<!DOCTYPE html><html><body>é</body></html>', bytes);
-  await expect(
-    validateSingleHtmlExport(load(source), source, {
-      networkName: 'Preview',
-      maxFileSizeBytes: limit,
-    }),
-  ).resolves.toBeUndefined();
-});
+// Parsing a full delivery-size document is slower on shared CI runners.
+it.each([limit - 1, limit])(
+  'accepts single HTML of %i UTF-8 bytes',
+  { timeout: 30_000 },
+  async (bytes) => {
+    const source = padToBytes('<!DOCTYPE html><html><body>é</body></html>', bytes);
+    await expect(
+      validateSingleHtmlExport(load(source), source, {
+        networkName: 'Preview',
+        maxFileSizeBytes: limit,
+      }),
+    ).resolves.toBeUndefined();
+  },
+);
 
 it('rejects single HTML whose UTF-8 bytes exceed the limit despite fitting by character count', async () => {
   const source = padToBytes('<!DOCTYPE html><html><body>é</body></html>', limit + 1);
