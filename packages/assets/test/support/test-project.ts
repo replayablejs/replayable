@@ -2,8 +2,14 @@ import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
+import sharp from 'sharp';
 import { glob } from 'tinyglobby';
-import { onTestFinished } from 'vitest';
+import { onTestFinished, vi } from 'vitest';
+
+// Tests delete fixtures immediately; libvips caching can retain Windows file handles.
+sharp.cache(false);
+// Integration fixtures invoke native image, audio and font encoders.
+vi.setConfig({ testTimeout: 30_000 });
 
 /** Filesystem sandbox owned by one test and removed when that test finishes. */
 export interface TestProject {

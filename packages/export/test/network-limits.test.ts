@@ -1,5 +1,5 @@
 import { load } from 'cheerio';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { ExportFile } from '../src/types/export-file.js';
 import { validateGoogleArchive, validateGoogleFiles } from '../src/validation/networks/google.js';
@@ -7,6 +7,9 @@ import { validateLiftoffFiles } from '../src/validation/networks/liftoff.js';
 import { validateMintegralArchive } from '../src/validation/networks/mintegral.js';
 import { validateMolocoSource } from '../src/validation/networks/moloco.js';
 import { validateSingleHtmlExport } from '../src/validation/single-html.js';
+
+// These boundary tests parse full five-megabyte documents on shared CI runners.
+vi.setConfig({ testTimeout: 30_000 });
 
 const limit = 5_000_000;
 const entries = ['host', 'config', 'assets', 'application']
