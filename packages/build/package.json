@@ -1,0 +1,67 @@
+{
+  "name": "@replayablejs/build",
+  "version": "0.1.0-alpha.0",
+  "description": "Playable ad build orchestration for Replayable",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/build"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#browser-targets": "./src/browser-targets.ts",
+    "#development/*": "./src/development/*",
+    "#html/*": "./src/html/*",
+    "#networks/*": "./src/networks/*",
+    "#pipeline/*": "./src/pipeline/*",
+    "#production/*": "./src/production/*",
+    "#runtime/*": "./src/runtime/*",
+    "#types/*": "./src/types/*",
+    "#vite/*": "./src/vite/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/assets": "workspace:*",
+    "@replayablejs/config": "workspace:*",
+    "@replayablejs/devtools": "workspace:*",
+    "@replayablejs/runtime": "workspace:*",
+    "hast-util-to-html": "catalog:",
+    "hastscript": "catalog:",
+    "vite": "catalog:"
+  },
+  "devDependencies": {
+    "@tsdown/css": "catalog:",
+    "@types/node": "catalog:",
+    "sass-embedded": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@replayablejs/example-basic-pixi-playable",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "replayable assets",
+    "build": "replayable build",
+    "dev": "replayable dev",
+    "export": "replayable export",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "show-config": "replayable config",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@esotericsoftware/spine-pixi-v8": "catalog:",
+    "@replayablejs/pixi": "workspace:*",
+    "@replayablejs/runtime": "workspace:*",
+    "@replayablejs/tween": "workspace:*",
+    "pixi.js": "catalog:"
+  },
+  "devDependencies": {
+    "@replayablejs/assets": "workspace:*",
+    "@replayablejs/cli": "workspace:*",
+    "@replayablejs/config": "workspace:*",
+    "@replayablejs/devtools": "workspace:*",
+    "happy-dom": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

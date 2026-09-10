@@ -1,0 +1,65 @@
+{
+  "name": "@replayablejs/assets",
+  "version": "0.1.0-alpha.0",
+  "description": "Deterministic asset processing and typed module generation for playable ads",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/assets"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#adapters/*": "./src/adapters/*",
+    "#config/*": "./src/config/*",
+    "#emitters/*": "./src/emitters/*",
+    "#pipeline/*": "./src/pipeline/*",
+    "#processors/*": "./src/processors/*",
+    "#resolvers/*": "./src/resolvers/*",
+    "#types/*": "./src/types/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@esotericsoftware/spine-core": "catalog:",
+    "@ffmpeg-installer/ffmpeg": "catalog:",
+    "@replayablejs/runtime": "workspace:*",
+    "free-tex-packer-core": "catalog:",
+    "jsonc-parser": "catalog:",
+    "sharp": "catalog:",
+    "subset-font": "catalog:",
+    "tinyglobby": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

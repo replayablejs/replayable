@@ -1,0 +1,28 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
+  "access": "public",
+  "baseBranch": "main",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@replayablejs/assets",
+      "@replayablejs/build",
+      "@replayablejs/canvas",
+      "@replayablejs/cli",
+      "@replayablejs/config",
+      "@replayablejs/devtools",
+      "@replayablejs/export",
+      "@replayablejs/pixi",
+      "@replayablejs/runtime",
+      "@replayablejs/tween"
+    ]
+  ],
+  "ignore": [],
+  "linked": [],
+  "privatePackages": {
+    "tag": false,
+    "version": false
+  },
+  "updateInternalDependencies": "patch"
+}

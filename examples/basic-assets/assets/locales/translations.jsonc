@@ -1,0 +1,13 @@
+{
+  // Only the configured build language is retained in generated assets. Its
+  // characters are also included automatically in every generated font.
+  "play": {
+    "en": "Play",
+    "hy": "Խաղալ"
+  },
+  // This phrase intentionally has no Armenian translation. The English
+  // fallback value is emitted and its characters are included in the fonts.
+  "install": {
+    "en": "Install"
+  }
+}

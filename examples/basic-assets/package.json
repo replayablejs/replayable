@@ -1,0 +1,23 @@
+{
+  "name": "@replayablejs/example-basic-assets",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "replayable assets",
+    "build": "pnpm assets",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@replayablejs/assets": "workspace:*",
+    "@replayablejs/cli": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+:root {
+  color-scheme: dark;
+  background: #061626;
+}
+
+body {
+  margin: 0;
+  padding: 32px;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+h1 {
+  color: #d6deeb;
+  font:
+    600 24px/1.4 system-ui,
+    sans-serif;
+  margin: 0 0 16px;
+}
+
+dl {
+  display: grid;
+  font:
+    14px/1.6 system-ui,
+    sans-serif;
+  grid-template-columns: max-content 1fr;
+  margin: 0 0 24px;
+}
+
+dt {
+  color: #7fdbca;
+  font-weight: 600;
+  padding-right: 24px;
+}
+
+dd {
+  color: #d6deeb;
+  margin: 0;
+}
+
+.dumper-dump pre {
+  margin: 0;
+  overflow: auto;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@replayablejs/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vitepress build --outDir dist",
+    "dev": "vitepress dev",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vitepress": "2.0.0-alpha.19"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

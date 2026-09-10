@@ -1,0 +1,75 @@
+{
+  "name": "@replayablejs/pixi",
+  "version": "0.1.0-alpha.0",
+  "description": "PixiJS rendering integration for Replayable playables",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/pixi"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#factories/*": "./src/factories/*",
+    "#integrations/*": "./src/integrations/*",
+    "#lifecycle/*": "./src/lifecycle/*",
+    "#layout/*": "./src/layout/*",
+    "#loader/*": "./src/loader/*",
+    "#renderer/*": "./src/renderer/*",
+    "#spine/*": "./src/spine/*",
+    "#types/*": "./src/types/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./spine": {
+      "types": "./dist/spine/index.d.ts",
+      "default": "./dist/spine/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/canvas": "workspace:*"
+  },
+  "devDependencies": {
+    "@esotericsoftware/spine-pixi-v8": "catalog:",
+    "@replayablejs/runtime": "workspace:*",
+    "@types/node": "catalog:",
+    "pixi.js": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@esotericsoftware/spine-pixi-v8": "~4.3.13",
+    "@replayablejs/runtime": "workspace:*",
+    "pixi.js": "^8.20.1"
+  },
+  "peerDependenciesMeta": {
+    "@esotericsoftware/spine-pixi-v8": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

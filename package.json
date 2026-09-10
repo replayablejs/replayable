@@ -1,0 +1,40 @@
+{
+  "name": "replayable",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build --filter='!./examples/*'",
+    "check": "pnpm format:check && pnpm dependencies:check && turbo run lint typecheck test build",
+    "dependencies:check": "tsc --noEmit --project scripts/tsconfig.json && node scripts/check-dependency-singletons.ts",
+    "dev": "turbo run dev --parallel",
+    "docs:dev": "pnpm --filter @replayablejs/docs dev",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "packages:check": "node scripts/check-packed-consumer.ts",
+    "changeset": "changeset",
+    "prepare": "husky",
+    "pages:build": "node scripts/build-pages.ts"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.0",
+    "@types/node": "26.2.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.5.0",
+    "oxfmt": "0.63.0",
+    "oxlint": "1.78.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "turbo": "2.10.10",
+    "typescript": "7.0.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,json5,yml,yaml,md,mdx,css,scss,less,html,vue,graphql,gql}": "oxfmt --check"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

@@ -1,0 +1,55 @@
+{
+  "name": "@replayablejs/tween",
+  "version": "0.1.0-alpha.0",
+  "description": "Lifecycle-aware animation for Replayable playable ads",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/tween"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#lifecycle/*": "./src/lifecycle/*",
+    "#types/*": "./src/types/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "motion": "catalog:"
+  },
+  "devDependencies": {
+    "@replayablejs/runtime": "workspace:*",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@replayablejs/runtime": "workspace:*"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

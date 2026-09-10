@@ -1,0 +1,541 @@
+:root {
+  color: #173f52;
+  --ink: #173f52;
+  --paper: #e8f3ff;
+  --paper-shadow: #799aad;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button {
+  font: inherit;
+}
+
+.word-garden {
+  --layout-padding: clamp(0.75rem, 2.5vmin, 1.5rem);
+  /* --content-safe-* comes exclusively from playable.screen.safeArea. */
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template:
+    'brand brand brand' auto
+    'play play play' minmax(0, 1fr)
+    'cta cta cta' auto / auto minmax(0, 1fr) auto;
+  gap: clamp(0.5rem, 1.5vmin, 1rem);
+  width: 100%;
+  height: 100%;
+  padding: max(var(--layout-padding), var(--content-safe-top))
+    max(var(--layout-padding), var(--content-safe-right))
+    max(var(--layout-padding), var(--content-safe-bottom))
+    max(var(--layout-padding), var(--content-safe-left));
+  overflow: hidden;
+  color: var(--ink);
+  text-align: center;
+  background: var(--game-background) center / cover no-repeat;
+}
+
+.game-header {
+  position: relative;
+  z-index: 2;
+  grid-area: brand;
+  width: fit-content;
+  max-width: min(94%, 42rem);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.game-header h1 {
+  width: clamp(7rem, 28vmin, 14rem);
+  height: clamp(2.8rem, 11vmin, 5.6rem);
+  margin: 0 auto;
+  background: var(--game-logo) center / contain no-repeat;
+}
+
+.game-header p {
+  margin: 0.4rem 0 0;
+  color: var(--ink);
+  font-size: clamp(0.72rem, 1.9vmin, 1.1rem);
+  font-weight: 600;
+}
+
+.persistent-cta {
+  z-index: 2;
+  align-self: center;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+/* Keep shared border resets before artwork: minification may combine these
+ * longhands into `border`, which also resets an earlier border-image. */
+.persistent-cta,
+.cta-button {
+  display: grid;
+  width: var(--button-width);
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
+  color: #ffffff;
+  place-items: center;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1;
+}
+
+.persistent-cta {
+  /* Same contain-fit area and 296 × 92 artwork as the Pixi portrait CTA. */
+  --button-width: min(calc(var(--safe-width) * 0.6), calc(var(--safe-height) * 0.09 * 296 / 92));
+  --button-unit: calc(var(--button-width) / 296);
+  grid-area: cta;
+  justify-self: center;
+  height: calc(var(--button-unit) * 92);
+  /* Center the label on the raised face, excluding the artwork's lower shadow chin. */
+  padding: calc(var(--button-unit) * 10) calc(var(--button-unit) * 18) calc(var(--button-unit) * 22);
+  border-image: var(--persistent-cta-image) 15 15 19 15 fill / calc(var(--button-unit) * 15)
+    calc(var(--button-unit) * 15) calc(var(--button-unit) * 19);
+  background: transparent;
+  text-shadow: 0 calc(var(--button-unit) * 2) calc(var(--button-unit) * 5) #d68800;
+  font-size: calc(var(--button-unit) * 44);
+}
+
+.button-label {
+  width: max-content;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.persistent-cta:focus-visible {
+  outline: 0.22rem solid #ffffff;
+  outline-offset: 0.15rem;
+}
+
+.play-area {
+  --panel-gap: clamp(0.5rem, 1.5vmin, 1rem);
+  position: relative;
+  z-index: 1;
+  grid-area: play;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  gap: var(--panel-gap);
+  container-type: size;
+  place-items: center;
+}
+
+.puzzle-panel,
+.wheel-panel {
+  /* Fit the square stages to their slots; portrait adds a little horizontal
+   * breathing room around them. Container units refer to .play-area. */
+  --panel-size: min(100cqw, calc((100cqh - var(--panel-gap)) / 2));
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  width: var(--panel-size);
+  height: var(--panel-size);
+  min-width: 0;
+  overflow: hidden;
+  min-height: 0;
+  border: 0.15rem solid transparent;
+  place-items: center;
+}
+
+.word-garden[data-orientation='portrait'] :is(.puzzle-panel, .wheel-panel) {
+  width: min(100cqw, calc(var(--panel-size) * 1.2));
+}
+
+/*
+ * Draw the shared panel artwork's source slices (top/right/bottom/left) at half size.
+ * A separate background keeps those slice widths out of the panel's layout:
+ * the crossword and wheel retain their existing stage size and centered position.
+ */
+.puzzle-panel::before,
+.wheel-panel::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border: 1px solid transparent;
+  border-image: var(--panel-image) 56 44 37 150 fill / 28px 22px 18.5px 75px;
+  content: '';
+  pointer-events: none;
+}
+
+.puzzle-stage,
+.wheel-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  align-content: center;
+  place-items: center;
+  transform: translate(-50%, -50%) scale(var(--stage-scale, 0));
+  transform-origin: center;
+}
+
+.puzzle-stage {
+  grid-template-rows: 14px 390px;
+  gap: 18px;
+  padding: 28px 55px;
+}
+
+.wheel-stage {
+  grid-template-rows: 54px 340px 80px;
+  gap: 6px;
+  padding: 7px 40px;
+}
+
+.wheel-stage:has(.wheel-tutorial[hidden]) {
+  grid-template-rows: 54px 340px;
+}
+
+.word-progress {
+  width: 380px;
+  height: 14px;
+  overflow: hidden;
+  border: 0.1rem solid rgb(23 63 82 / 25%);
+  border-radius: 999px;
+  background: #d5e5ff;
+  box-shadow: inset 0 0.15rem 0.25rem rgb(23 63 82 / 12%);
+  appearance: none;
+}
+
+.word-progress::-webkit-progress-bar {
+  background: transparent;
+}
+
+.word-progress::-webkit-progress-value {
+  border-radius: inherit;
+  background: var(--ink);
+}
+
+.word-progress::-moz-progress-bar {
+  border-radius: inherit;
+  background: var(--ink);
+}
+
+.puzzle-board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-columns), 1fr);
+  grid-template-rows: repeat(var(--board-rows), 1fr);
+  width: 390px;
+  height: 390px;
+  gap: 8px;
+  filter: drop-shadow(0 0.55rem 0.55rem rgb(36 69 54 / 13%));
+}
+
+.puzzle-cell {
+  position: relative;
+  display: grid;
+  border: 0.11rem solid #355e70;
+  border-radius: 8px;
+  color: transparent;
+  background: linear-gradient(145deg, #e8f3ff, #d5e5ff);
+  box-shadow:
+    inset 0.16rem 0.16rem 0 rgb(255 255 255 / 65%),
+    0 0.2rem 0 var(--paper-shadow);
+  place-items: center;
+  font-size: 38px;
+  font-weight: 800;
+}
+
+/* Unsolved cells resemble planted seeds; gameplay later replaces this state. */
+.puzzle-cell::after {
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 60% 40% 65% 35%;
+  background: #799aad;
+  box-shadow: inset 0.08rem 0.08rem rgb(255 255 255 / 28%);
+  content: '';
+  transform: rotate(35deg);
+}
+
+.puzzle-cell.is-revealed {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.puzzle-cell.is-revealed::after {
+  display: none;
+}
+
+.current-word {
+  display: grid;
+  width: 350px;
+  height: 54px;
+  padding: 4px 20px;
+  border-radius: 999px;
+  color: var(--ink);
+  background: #d5e5ff;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.current-word.is-invalid {
+  color: #a94738;
+  background: rgb(255 225 213 / 88%);
+}
+
+.current-word.is-already-found {
+  color: #8a642d;
+  background: rgb(255 239 171 / 88%);
+}
+
+.letter-wheel {
+  position: relative;
+  width: 340px;
+  height: 340px;
+}
+
+.wheel-tutorial {
+  display: grid;
+  width: 420px;
+  height: 80px;
+  padding: 0 8px;
+  margin: 0;
+  color: var(--ink);
+  place-items: center;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.wheel-tutorial.is-dismissed {
+  visibility: hidden;
+}
+
+/* The center completes the flower silhouette formed by the five letter petals. */
+.letter-wheel::before {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 42%;
+  aspect-ratio: 1;
+  border: 0.13rem solid var(--ink);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 35%, var(--paper) 0 8%, transparent 9%),
+    radial-gradient(circle at 62% 45%, var(--paper) 0 7%, transparent 8%),
+    radial-gradient(circle at 48% 68%, var(--paper) 0 7%, transparent 8%), #d5e5ff;
+  box-shadow:
+    inset 0.18rem 0.18rem 0 rgb(255 255 255 / 40%),
+    0 0.3rem 0 var(--paper-shadow);
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.letter-button {
+  position: absolute;
+  z-index: 2;
+  top: var(--letter-y);
+  left: var(--letter-x);
+  display: grid;
+  width: 78px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0.12rem solid rgb(74 76 54 / 45%);
+  border-radius: 52% 48% 55% 45%;
+  color: var(--ink);
+  background: #d5e5ff;
+  box-shadow:
+    inset 0.18rem 0.18rem 0 rgb(255 255 255 / 38%),
+    0 0.28rem 0 #799aad,
+    0 0.55rem 0.75rem rgb(36 69 54 / 16%);
+  cursor: pointer;
+  place-items: center;
+  font-size: 32px;
+  font-weight: 800;
+  translate: -50% -50%;
+}
+
+.letter-button:focus-visible {
+  outline: 0.22rem solid #ffffff;
+  outline-offset: 0.15rem;
+}
+
+.letter-button.is-selected {
+  border-color: #ffffff;
+  color: #ffffff;
+  background: var(--ink);
+  box-shadow:
+    inset 0.18rem 0.18rem 0 rgb(255 255 255 / 20%),
+    0 0.28rem 0 #0e2936,
+    0 0 0 0.2rem rgb(255 255 255 / 48%);
+}
+
+.selection-path {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.selection-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 12;
+}
+
+/* Stay invisible when [hidden] is removed, before Motion applies entrance keyframes. */
+.end-card,
+.end-card h2,
+.end-card .cta-button {
+  opacity: 0;
+}
+
+.end-card {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  padding: max(2rem, var(--content-safe-top)) max(2rem, var(--content-safe-right))
+    max(2rem, var(--content-safe-bottom)) max(2rem, var(--content-safe-left));
+  background: var(--end-card-background) center / cover no-repeat;
+  place-content: center;
+}
+
+.end-card h2 {
+  max-width: 18ch;
+  /* The centered group splits extra spacing equally: heading up, button down. */
+  margin: 0 auto calc(1.5rem + var(--frame-short-edge) * 0.12);
+  color: var(--ink);
+  font-size: clamp(2rem, 8vmin, 5rem);
+  line-height: 1.05;
+}
+
+.cta-button {
+  /* Enlarge the artwork around the existing label, not the label itself. */
+  --button-base-width: min(
+    calc(var(--safe-width) * 0.7),
+    calc(var(--safe-height) * 0.13 * 280 / 80)
+  );
+  --button-width: calc(var(--button-base-width) * 1.2);
+  --button-unit: calc(var(--button-base-width) / 280);
+  position: relative;
+  top: calc(var(--button-unit) * 24);
+  justify-self: center;
+  height: calc(var(--button-unit) * 100);
+  /*
+   * Reserve extra space below the label for the artwork's shadow chin.
+   * The text area remains 244 × 56, but sits in the raised face rather than
+   * centering against the full image, so fitting keeps the same label size.
+   */
+  padding: calc(var(--button-unit) * 16) calc(var(--button-unit) * 46) calc(var(--button-unit) * 28);
+  border-image: var(--end-card-cta-image) 15 15 19 15 fill / calc(var(--button-unit) * 15)
+    calc(var(--button-unit) * 15) calc(var(--button-unit) * 19);
+  border-radius: calc(var(--button-unit) * 12);
+  background: transparent;
+  cursor: pointer;
+  font-size: calc(var(--button-unit) * 55);
+  text-shadow: 0 calc(var(--button-unit) * 2) calc(var(--button-unit) * 5) #159b1c;
+  isolation: isolate;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.cta-button .button-label {
+  position: relative;
+  z-index: 2;
+  -webkit-text-stroke: calc(var(--button-unit) * 4) #159b1c;
+  paint-order: stroke fill;
+}
+
+/* Motion moves this decorative strip on Replayable's lifecycle-aware clock. */
+.cta-shine {
+  position: absolute;
+  z-index: 1;
+  top: -50%;
+  bottom: -50%;
+  left: -45%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 68%), transparent);
+  clip-path: polygon(35% 0, 100% 0, 65% 100%, 0 100%);
+  pointer-events: none;
+  transform: translateX(-200%);
+}
+
+.cta-button:focus-visible {
+  outline: 0.22rem solid #ffffff;
+  outline-offset: 0.18rem;
+}
+
+.word-garden[data-orientation='landscape'] {
+  grid-template:
+    '. brand cta' auto
+    'play play play' minmax(0, 1fr) / minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.word-garden[data-orientation='landscape'] .game-header {
+  align-self: center;
+  top: min(calc(var(--frame-short-edge) * 0.01), 0.5rem);
+}
+
+.word-garden[data-orientation='landscape'] .persistent-cta {
+  --button-width: min(
+    calc(var(--safe-width) * 0.195),
+    calc(var(--safe-height) * 0.1125 * 296 / 92)
+  );
+  justify-self: end;
+}
+
+.word-garden[data-orientation='landscape'] .cta-button {
+  --button-base-width: min(
+    calc(var(--safe-width) * 0.36),
+    calc(var(--safe-height) * 0.2 * 280 / 80)
+  );
+}
+
+.word-garden[data-orientation='landscape'] .play-area {
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.word-garden[data-orientation='landscape'] :is(.puzzle-panel, .wheel-panel) {
+  --panel-size: min(calc((100cqw - var(--panel-gap)) / 2), 100cqh);
+}
+
+@media (max-width: 500px) {
+  .game-header p {
+    margin-top: 0.25rem;
+    font-size: clamp(0.58rem, 2.6vw, 0.72rem);
+  }
+}
+
+@media (max-height: 500px) {
+  .word-garden[data-orientation='landscape'] .game-header {
+    top: 0;
+  }
+
+  .word-garden[data-orientation='landscape'] .game-header p {
+    display: none;
+  }
+
+  .word-garden[data-orientation='landscape'] .play-area {
+    --panel-gap: 0.65rem;
+  }
+
+  /* Keep spare horizontal space outside the pair, not between the panels. */
+  .word-garden[data-orientation='landscape'] .puzzle-panel {
+    justify-self: end;
+  }
+
+  .word-garden[data-orientation='landscape'] .wheel-panel {
+    justify-self: start;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.codeActionsOnSave": {
+    "source.format.oxc": "always",
+    "source.fixAll.oxc": "always",
+    "source.organizeImports": "never"
+  },
+  "editor.formatOnSave": false,
+  "editor.formatOnSaveMode": "file",
+  "prettier.enable": false,
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.tsdk.path": "./node_modules/typescript",
+  "cSpell.words": ["spritesheet"]
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "./node_modules/turbo/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "@replayablejs/devtools#test": {
+      "dependsOn": ["^build", "build"],
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build", "build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"]
+    },
+    "@replayablejs/example-basic-assets#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "replayable.assets.ts", "assets/source/**"],
+      "outputs": ["src/assets/**"]
+    }
+  }
+}

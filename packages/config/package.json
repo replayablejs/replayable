@@ -1,0 +1,54 @@
+{
+  "name": "@replayablejs/config",
+  "version": "0.1.0-alpha.0",
+  "description": "Validated Replayable project configuration and playable variant expansion",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/config"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#config/*": "./src/config/*",
+    "#variants/*": "./src/variants/*",
+    "#types/*": "./src/types/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/assets": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

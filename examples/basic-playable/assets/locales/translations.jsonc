@@ -1,0 +1,42 @@
+{
+  "title": {
+    "en": "Word Garden",
+    "hy": "Բառերի պարտեզ"
+  },
+  "instruction": {
+    "en": "Find every hidden word",
+    "hy": "Գտիր բոլոր թաքնված բառերը"
+  },
+  "swipeToFindWords": {
+    "en": "Swipe the letters to find each word",
+    "hy": "Սահեցրու տառերի վրայով՝ յուրաքանչյուր բառը գտնելու համար"
+  },
+  "connectLetters": {
+    "en": "Connect letters to make words",
+    "hy": "Միացրու տառերը՝ բառեր կազմելու համար"
+  },
+  "traceToMakeWords": {
+    "en": "Trace across letters to make words",
+    "hy": "Սահեցրու տառերի վրայով՝ բառեր կազմելու համար"
+  },
+  "success": {
+    "en": "The garden is blooming!",
+    "hy": "Պարտեզը ծաղկում է"
+  },
+  "timeout": {
+    "en": "Keep growing your word garden",
+    "hy": "Շարունակի՛ր աճեցնել բառերի պարտեզը"
+  },
+  "playFree": {
+    "en": "Play free",
+    "hy": "Անվճար խաղալ"
+  },
+  "playNow": {
+    "en": "Play now",
+    "hy": "Խաղալ հիմա"
+  },
+  "install": {
+    "en": "Install",
+    "hy": "Տեղադրել"
+  }
+}

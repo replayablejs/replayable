@@ -1,0 +1,56 @@
+{
+  "name": "@replayablejs/cli",
+  "version": "0.1.0-alpha.0",
+  "description": "Command-line interface for Replayable",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "replayable": "./bin/replayable.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poppinss/dumper": "catalog:",
+    "@replayablejs/assets": "workspace:*",
+    "@replayablejs/build": "workspace:*",
+    "@replayablejs/config": "workspace:*",
+    "@replayablejs/export": "workspace:*",
+    "commander": "catalog:",
+    "hast-util-to-html": "catalog:",
+    "hastscript": "catalog:",
+    "jiti": "catalog:",
+    "open": "catalog:"
+  },
+  "devDependencies": {
+    "@tsdown/css": "catalog:",
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

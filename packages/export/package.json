@@ -1,0 +1,65 @@
+{
+  "name": "@replayablejs/export",
+  "version": "0.1.0-alpha.0",
+  "description": "Network delivery exporters for Replayable playable ads",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/export"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#emission/*": "./src/emission/*",
+    "#pipeline/*": "./src/pipeline/*",
+    "#preparation/*": "./src/preparation/*",
+    "#resolution/*": "./src/resolution/*",
+    "#shared/*": "./src/shared/*",
+    "#types/*": "./src/types/*",
+    "#validation/*": "./src/validation/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/config": "workspace:*",
+    "acorn": "catalog:",
+    "acorn-walk": "catalog:",
+    "cheerio": "catalog:",
+    "esbuild": "catalog:",
+    "fflate": "catalog:",
+    "pako": "catalog:",
+    "terser": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pako": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

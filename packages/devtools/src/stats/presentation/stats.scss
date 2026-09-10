@@ -1,0 +1,105 @@
+// Preserve the original card proportions at a 400px short-edge viewport.
+// Viewport units scale the complete DOM overlay on resize, independently of
+// canvas resolution, GPU render scale, and the playable's design dimensions.
+@function stats-size($pixels) {
+  @return $pixels * 0.25vmin;
+}
+
+.replayable-stats {
+  position: fixed;
+  left: calc(#{stats-size(8)} + env(safe-area-inset-left, 0px));
+  bottom: calc(#{stats-size(8)} + env(safe-area-inset-bottom, 0px));
+  z-index: 2147483647;
+  display: flex;
+  flex-wrap: wrap;
+  gap: stats-size(4);
+  max-width: calc(
+    100% - #{stats-size(16)} - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)
+  );
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  font:
+    #{stats-size(11)} / 1.4 ui-monospace,
+    monospace;
+  font-variant-numeric: tabular-nums;
+  color: #e6f5ff;
+
+  &--compact[role='button'] {
+    pointer-events: auto;
+    cursor: pointer;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus-visible {
+      outline: stats-size(1) solid #a7bdd1;
+      outline-offset: stats-size(2);
+    }
+  }
+
+  &[hidden],
+  [hidden] {
+    display: none;
+  }
+
+  &__card {
+    position: relative;
+    box-sizing: border-box;
+    flex: 0 0 stats-size(96);
+    width: stats-size(96);
+    height: stats-size(56);
+    overflow: hidden;
+    padding: stats-size(4) stats-size(6);
+    border: stats-size(1) solid #435366;
+    border-radius: stats-size(4);
+    background: rgb(12 19 28 / 90%);
+    white-space: nowrap;
+  }
+
+  // Text stays above the graph and remains legible even during large spikes.
+  &__label,
+  &__value {
+    position: relative;
+    display: block;
+    text-shadow: 0 stats-size(1) stats-size(2) #0c131c;
+  }
+
+  &__label {
+    color: #a7bdd1;
+    font-size: stats-size(10);
+  }
+
+  &__value {
+    position: absolute;
+    left: stats-size(6);
+    bottom: stats-size(2);
+    font-size: stats-size(12);
+  }
+
+  &__graph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__graph-area {
+    fill: rgb(92 190 220 / 12%);
+  }
+
+  &__graph-line {
+    stroke: rgb(112 211 239 / 45%);
+    stroke-width: 1;
+  }
+
+  &__range {
+    position: absolute;
+    right: stats-size(2);
+    bottom: stats-size(2);
+    color: #8095a8;
+    font-size: stats-size(7);
+    text-shadow: 0 stats-size(1) stats-size(2) #0c131c;
+  }
+}

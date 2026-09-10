@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+exports/
+.turbo/
+.DS_Store
+docs/.vitepress/cache/
+docs/public/demos/

@@ -1,0 +1,26 @@
+{
+  "name": "@replayablejs/example-basic-playable",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "replayable build",
+    "dev": "replayable dev",
+    "export": "replayable export",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "show-config": "replayable config",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@replayablejs/assets": "workspace:*",
+    "@replayablejs/cli": "workspace:*",
+    "@replayablejs/config": "workspace:*",
+    "@replayablejs/devtools": "workspace:*",
+    "@replayablejs/runtime": "workspace:*",
+    "@replayablejs/tween": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

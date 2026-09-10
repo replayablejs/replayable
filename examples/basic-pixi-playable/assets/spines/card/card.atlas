@@ -1,0 +1,12 @@
+card.png
+size:888,483
+filter:Linear,Linear
+card
+bounds:593,17,293,464
+offsets:18,13,325,495
+card_back
+bounds:2,8,303,473
+offsets:14,8,325,495
+glow
+bounds:307,2,284,479
+offsets:0,2,284,482

@@ -1,0 +1,50 @@
+{
+  "Tutorial Text": {
+    "en": "Tap both cards to reveal them!",
+    "es": "¡Toca las dos cartas para descubrirlas!"
+  },
+  "Other Tutorial Text": {
+    "en": "Tap each card to see what's inside!",
+    "es": "¡Toca cada carta para ver qué esconde!"
+  },
+  "GREAT JOB!": {
+    "en": "GREAT JOB!",
+    "es": "¡MUY BIEN!"
+  },
+  "Lorem Ipsum1": {
+    "en": "Lorem Ipsum 1",
+    "es": "Texto de ejemplo 1"
+  },
+  "Lorem Ipsum2": {
+    "en": "Lorem Ipsum 2",
+    "es": "Texto de ejemplo 2"
+  },
+  "cta_btn_persistent_text": {
+    "en": "DOWNLOAD NOW",
+    "es": "DESCARGAR AHORA"
+  },
+  "Play Now": {
+    "en": "Play Now",
+    "es": "Jugar ahora"
+  },
+  "PLAY NOW": {
+    "en": "PLAY NOW",
+    "es": "JUGAR AHORA"
+  },
+  "Download Now": {
+    "en": "Download Now",
+    "es": "Descargar ahora"
+  },
+  "Continue": {
+    "en": "Continue",
+    "es": "Continuar"
+  },
+  "Pixi Playable Template": {
+    "en": "Pixi Playable Template",
+    "es": "Plantilla de juego Pixi"
+  },
+  "4.5 out of 5 stars": {
+    "en": "4.5 out of 5 stars",
+    "es": "4,5 de 5 estrellas"
+  }
+}

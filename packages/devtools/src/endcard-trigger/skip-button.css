@@ -1,0 +1,72 @@
+.replayable-skip {
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top, 0px));
+  right: max(8px, env(safe-area-inset-right, 0px));
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+  appearance: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* A compact visible circle inside a larger, forgiving touch target. */
+.replayable-skip::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgb(255 255 255 / 65%);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 55%);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+.replayable-skip__arrow {
+  position: relative;
+  width: 10px;
+  height: 2px;
+  margin-right: 4px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.replayable-skip__arrow::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 2px;
+  height: 12px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.replayable-skip__arrow::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.replayable-skip:active::before {
+  background: rgb(0 0 0 / 75%);
+}
+
+.replayable-skip:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}

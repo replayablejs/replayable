@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Export module evaluation regression</title>
+  </head>
+  <body>
+    <pre id="results">Running…</pre>
+    <script type="module">
+      // Serve /execute-module.js from the actual TypeScript implementation.
+      import { executeModule } from '/execute-module.js';
+
+      const results = [];
+      await executeModule('await Promise.resolve(); globalThis.exportTestAssets = 42;', 'assets');
+      await executeModule(
+        'if (globalThis.exportTestAssets !== 42) throw new Error("order");',
+        'application',
+      );
+      results.push('PASS: assets complete before application');
+
+      for (const source of [
+        'throw new Error("evaluation failed");',
+        'await Promise.reject(new Error("await failed"));',
+        'const = ;',
+      ]) {
+        try {
+          await executeModule(source, 'application');
+          results.push('FAIL: unexpectedly resolved ' + source);
+        } catch (error) {
+          results.push(error.cause ? 'PASS: rejected ' + source : 'FAIL: original error lost');
+        }
+      }
+      delete globalThis.exportTestAssets;
+      document.querySelector('#results').textContent = results.join('\n');
+    </script>
+  </body>
+</html>

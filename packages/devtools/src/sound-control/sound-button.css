@@ -1,0 +1,42 @@
+.replayable-sound {
+  position: fixed;
+  right: 1vmin;
+  bottom: 1vmin;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  width: max(44px, 8vmin);
+  height: max(44px, 8vmin);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  appearance: none;
+  /* Devtools mounts outside the runtime shell and owns its browser interaction styling. */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.replayable-sound[hidden] {
+  display: none;
+}
+
+.replayable-sound img {
+  display: block;
+  width: 8vmin;
+  height: 8vmin;
+  pointer-events: none;
+}
+
+.replayable-sound:active img {
+  scale: 0.94;
+}
+
+.replayable-sound:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}

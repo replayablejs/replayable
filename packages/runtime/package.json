@@ -1,0 +1,75 @@
+{
+  "name": "@replayablejs/runtime",
+  "version": "0.1.0-alpha.0",
+  "description": "Host lifecycle and network integration for Replayable playable ads",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/runtime"
+  },
+  "files": [
+    "dist",
+    "src/screen/gpu/benchmarks/LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#adapters/*": "./src/adapters/*",
+    "#assets/*": "./src/assets/*",
+    "#audio/*": "./src/audio/*",
+    "#completion/*": "./src/completion/*",
+    "#fb-playable/*": "./src/fb-playable/*",
+    "#lifecycle/*": "./src/lifecycle/*",
+    "#localization/*": "./src/localization/*",
+    "#loader/*": "./src/loader/*",
+    "#mraid/*": "./src/mraid/*",
+    "#screen/*": "./src/screen/*",
+    "#shell/*": "./src/shell/*",
+    "#timers/*": "./src/timers/*",
+    "#types/*": "./src/types/*",
+    "#update/*": "./src/update/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./assets": {
+      "types": "./dist/assets.d.ts",
+      "default": "./dist/assets.js"
+    },
+    "./shell": {
+      "types": "./dist/shell.d.ts",
+      "default": "./dist/shell.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pmndrs/detect-gpu": "catalog:",
+    "howler": "catalog:",
+    "motion": "catalog:"
+  },
+  "devDependencies": {
+    "@types/howler": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

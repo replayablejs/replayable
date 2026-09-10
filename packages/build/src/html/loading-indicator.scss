@@ -1,0 +1,30 @@
+#{$replayable-loading-indicator-selector} {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  pointer-events: none;
+  inset: 0;
+  place-items: center;
+}
+
+#{$replayable-loading-indicator-selector}::after {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.125rem solid rgb(127 127 127 / 45%);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: replayable-loading-spin 800ms linear infinite;
+  content: '';
+}
+
+@keyframes replayable-loading-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #{$replayable-loading-indicator-selector}::after {
+    animation: none;
+  }
+}
