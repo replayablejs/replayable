@@ -2,6 +2,8 @@
 
 # Replayable
 
+[![CI](https://github.com/replayablejs/replayable/actions/workflows/ci.yml/badge.svg)](https://github.com/replayablejs/replayable/actions/workflows/ci.yml)
+[![npm alpha](https://img.shields.io/npm/v/%40replayablejs%2Fruntime/alpha)](https://www.npmjs.com/package/@replayablejs/runtime)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/Built_with-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Built with Codex](https://img.shields.io/badge/Built_with-Codex-18181b?style=flat-square)](https://openai.com/codex/)

@@ -1,84 +1,78 @@
-# Alpha preparation and publication
+# Releases and publication
 
-This is a maintainer procedure. It does not authorize publication. The target is
-`0.1.0-alpha.0` for all ten `@replayablejs` packages, with one shared version for every release afterward.
-Complete the candidate checks in this procedure before publication.
+All ten public packages share one version through Changesets. Versions `0.1.0-alpha.0`
+and `0.1.0-alpha.1` have been published. The `alpha` and `latest` tags currently point to
+`0.1.0-alpha.1`. Root, docs and examples remain private.
 
-## Prepare versions
+## Prepare a change
 
-In the release-preparation checkout, review `pnpm changeset status`, then enter alpha mode once:
+Run `pnpm changeset`, select the packages directly affected, and describe the shipped change.
+Use patch for compatible fixes and minor for features or pre-1.0 breaking changes. Keep alpha
+mode active until the project is ready for a regular release.
 
-```sh
-pnpm changeset pre enter alpha
-pnpm changeset version
-pnpm install --lockfile-only --ignore-scripts
-pnpm install --frozen-lockfile
-```
+After the change reaches `main` and CI succeeds, `.github/workflows/publish.yml` uses Changesets
+v3 actions to create or update a version pull request. Review its versions, changelogs and
+lockfile before merging. GitHub Actions must be allowed to create pull requests in repository
+Settings → Actions → General. A PR created with the default GitHub token may need to be closed
+and reopened by a maintainer to trigger PR CI; merging it always triggers the main CI gate.
 
-Check every public version is `0.1.0-alpha.0`, root/docs/examples remain private, and the
-changelogs, dependency ranges, prerelease state and lockfile agree. Workspace ranges can remain
-`workspace:*` in source; pnpm converts them in tarballs. For subsequent alpha changes stay in
-prerelease mode and run the version/lockfile steps with new changesets.
+## Automated publication
 
-Run fresh candidate checks, examples and packed consumers. Complete manual browser and asset
-rights review. Obtain approval of the exact commit, versions and package contents. No previous
-local rehearsal is a substitute for this candidate verification.
+The release workflow runs only after successful push CI on `main` in this repository. It checks
+that the tested commit is still the current main commit before selecting work. Pull requests and
+fork CI cannot enter this workflow's release jobs.
 
-## First publication
+When no changesets remain and unpublished versions exist, a read-only job builds the packages,
+checks clean packed installation, audits production dependencies, and packs the publication
+artifacts. A separate publishing job receives those artifacts and uses npm OIDC authentication.
+It also creates package Git tags and GitHub releases. No npm write token is stored in GitHub.
 
-The proposed bootstrap is interactive publication by the npm owner, using account login and 2FA.
-This avoids a temporary CI write token. Log in with `npm login` and verify the account with
-`npm whoami`. Authentication and 2FA responses belong in npm's prompts, never repository files.
+Publication is gated by the repository Actions variable `NPM_TRUSTED_PUBLISHING=true`.
+Leave it unset until the npm setup below is complete. The workflow can still prepare version
+PRs and package artifacts while publication is disabled. To retry a failed run, rerun the Release
+workflow in GitHub Actions; Changesets skips versions that are already published. Inspect any
+partial publication before retrying, since published versions cannot be overwritten.
 
-Pack each public package with pnpm into a local release directory. Review the unchanged tarballs
-and record their hashes. Do not publish source folders with unresolved workspace/catalog ranges.
-The current dependency/peer order is:
+The prerelease state selects the `alpha` tag. OIDC publication does not replace the separate
+maintainer step of advancing `latest` during the alpha period. After a release is verified, an
+npm owner can update it with `npm dist-tag add @replayablejs/<package>@<version> latest` for
+each package, completing npm's authentication prompts. Keep all ten default versions aligned.
 
-1. runtime
-2. assets
-3. canvas
-4. devtools
-5. tween
-6. config
-7. pixi
-8. build
-9. export
-10. cli
+## One-time npm setup
 
-After explicit release approval, publish each reviewed tarball with public access and `alpha`.
-For example, from the directory containing `release-tarballs`:
+For each of the ten packages, open its npm Settings page and add a GitHub Actions trusted
+publisher with these exact fields:
 
-```sh
-npm publish ./release-tarballs/replayablejs-runtime-0.1.0-alpha.0.tgz --access public --tag alpha --registry https://registry.npmjs.org
-npm view @replayablejs/runtime@0.1.0-alpha.0 version dist.integrity --registry https://registry.npmjs.org
-npm view @replayablejs/runtime dist-tags --json --registry https://registry.npmjs.org
-```
+| Field                | Value                       |
+| -------------------- | --------------------------- |
+| Organization or user | `replayablejs`              |
+| Repository           | `replayable`                |
+| Workflow filename    | `publish.yml`               |
+| Environment name     | Leave empty                 |
+| Allowed actions      | Enable direct `npm publish` |
 
-Repeat for the approved packages in order. Verify the registry version, tarball integrity and
-`alpha` tag after each publication. Reserve `latest` for a regular release. On failure, inspect
-registry state before retrying; published name/version pairs cannot be overwritten. Do not delete
-published packages to retry. This bootstrap from a local machine has no GitHub build provenance.
+Packages: runtime, assets, canvas, devtools, tween, config, pixi, build, export and cli, all under
+`@replayablejs`. After saving all ten records, set `NPM_TRUSTED_PUBLISHING` to `true` in
+GitHub Settings → Secrets and variables → Actions → Variables. The workflow uses Node 24.13.0
+with npm 11.6.2, which meets npm's trusted publishing requirements.
 
-After publication, repeat npm and pnpm installations using registry packages, with no tarball
-or workspace overrides, then rebuild and test representative playables.
+A saved configuration is not proof of a successful OIDC publication. Verify the next release's
+registry versions, integrity, tags and provenance after the publishing job succeeds.
+[Official npm trusted publishing documentation](https://docs.npmjs.com/trusted-publishers/).
+
+## Manual recovery
+
+Use `npm login` and `npm whoami` to authenticate locally. Keep authentication codes in npm's
+prompts. Build and pack with pnpm so workspace and catalog dependency ranges are resolved;
+do not publish source folders with those ranges unresolved.
+
+Publish reviewed tarballs in dependency order: runtime, assets, canvas, devtools, tween,
+config, pixi, build, export, cli. Pass `--access public --tag alpha` explicitly for alpha releases.
+Verify each version and its `dist.integrity` against the reviewed tarball before completing
+release tags. Registry metadata can briefly lag successful publication; retry read-only checks
+before attempting another write. Never delete a published version to retry it.
+
+Retain the candidate commit, tarball hashes and verification logs locally. Check clean registry
+installation and representative ad builds after publication. Documentation deployment remains
+separate from npm publication.
 [Official npm publish reference](https://docs.npmjs.com/commands/npm-publish/).
-
-## Later trusted publishing
-
-The planned GitHub identity is organization `replayablejs`, repository `replayable`, workflow
-`publish.yml`. That workflow is not implemented yet. Choose any release environment when
-implementing it, then configure the exact workflow/environment identity in each package's npm
-trusted-publisher settings. Enable direct publication if that is the chosen workflow.
-
-Use a GitHub-hosted runner, npm >=11.5.1 and Node >=22.14.0, with `contents: read` and
-`id-token: write` in the publishing job. Ordinary CI remains read-only. OIDC avoids a long-lived
-npm write token. Provenance requires a public repository and public package. A saved trust
-configuration is not a verified publish; check the next approved release's registry evidence.
-[Official trusted-publishing documentation](https://docs.npmjs.com/trusted-publishers/).
-
-## Release evidence
-
-Record the candidate commit, versions, hashes, CI results, manual checks and registry verification
-at release time. Retain evidence locally; Only the Pages site is uploaded by CI; release evidence stays local. Documentation
-hosting is configured separately from npm publication. Do not describe a prepared version as published or ready
-until the corresponding checks have actually completed.
