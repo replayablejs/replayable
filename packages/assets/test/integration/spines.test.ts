@@ -65,7 +65,8 @@ describe('spines', () => {
     );
   });
 
-  it('copies binary Spine skeletons without modification', async () => {
+  // Native image/font encoding needs more time on shared CI runners.
+  it('copies binary Spine skeletons without modification', { timeout: 30_000 }, async () => {
     const project = await createTestProject();
     const fixtureDirectory = resolve(
       dirname(fileURLToPath(import.meta.url)),

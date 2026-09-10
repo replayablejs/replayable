@@ -10,106 +10,112 @@ import { config } from '../support/config.js';
 import { createTestProject, type TestProject } from '../support/test-project.js';
 
 describe('fixed-language localization', () => {
-  it('builds selected and fallback text, sprites, and font characters together', async () => {
-    const project = await createTestProject();
-    const fontFixture = resolve(
-      dirname(fileURLToPath(import.meta.url)),
-      '../../../../examples/basic-assets/assets/fonts/NotoSansArmenian.ttf',
-    );
-    const fontSource = await readFile(fontFixture);
-    const [blue, green, white] = await Promise.all([
-      createSolidPng('blue'),
-      createSolidPng('green'),
-      createSolidPng('white'),
-    ]);
+  // Native image/font encoding needs more time on shared CI runners.
+  it(
+    'builds selected and fallback text, sprites, and font characters together',
+    { timeout: 30_000 },
+    async () => {
+      const project = await createTestProject();
+      const fontFixture = resolve(
+        dirname(fileURLToPath(import.meta.url)),
+        '../../../../examples/basic-assets/assets/fonts/NotoSansArmenian.ttf',
+      );
+      const fontSource = await readFile(fontFixture);
+      const [blue, green, white] = await Promise.all([
+        createSolidPng('blue'),
+        createSolidPng('green'),
+        createSolidPng('white'),
+      ]);
 
-    await Promise.all([
-      project.write('assets/source/fonts/body.ttf', fontSource),
-      project.write(
-        'assets/source/locales/translations.jsonc',
-        [
-          '{',
-          '  // Armenian is selected; English is the fallback.',
-          '  "play": { "en": "Play", "hy": "Խաղալ" },',
-          '  "install": { "en": "Install" },',
-          '}',
-        ].join('\n'),
-      ),
-      project.write('assets/source/locales/README.md', 'Ignored beside broad locale rules.'),
-      project.write('assets/source/sprites/logo.hy.png', blue),
-      project.write('assets/source/sprites/logo.en.png', await createSolidPng('red')),
-      project.write('assets/source/sprites/badge.en.png', green),
-      project.write('assets/source/sprites/background.png', white),
-    ]);
+      await Promise.all([
+        project.write('assets/source/fonts/body.ttf', fontSource),
+        project.write(
+          'assets/source/locales/translations.jsonc',
+          [
+            '{',
+            '  // Armenian is selected; English is the fallback.',
+            '  "play": { "en": "Play", "hy": "Խաղալ" },',
+            '  "install": { "en": "Install" },',
+            '}',
+          ].join('\n'),
+        ),
+        project.write('assets/source/locales/README.md', 'Ignored beside broad locale rules.'),
+        project.write('assets/source/sprites/logo.hy.png', blue),
+        project.write('assets/source/sprites/logo.en.png', await createSolidPng('red')),
+        project.write('assets/source/sprites/badge.en.png', green),
+        project.write('assets/source/sprites/background.png', white),
+      ]);
 
-    const result = await buildAssets(
-      config({
-        assets: {
-          fonts: [
-            {
-              match: '**/*.ttf',
-              options: { family: 'Replayable Body' },
-            },
-          ],
-          locales: [{}],
-          sprites: [
-            {
-              options: { lossless: true },
-            },
-          ],
-        },
-        emit: {
-          assets: 'src/assets/assets.ts',
-          registries: 'src/assets/registries',
-        },
-        localization: { fallback: 'en', language: 'hy' },
-        outDir: 'src/assets/resources',
-      }),
-      project.root,
-    );
-    const dictionary = JSON.parse(
-      await project.readText('src/assets/resources/locales/translations.json'),
-    );
-    const spriteFiles = await project.entries('src/assets/resources/sprites');
-    const logoFile = requireGeneratedFile(spriteFiles, 'logo');
-    const badgeFile = requireGeneratedFile(spriteFiles, 'badge');
-    const font = await project.readBytes('src/assets/resources/fonts/body.woff2');
-    const assetsModule = await project.readText('src/assets/assets.ts');
-    const localeRegistry = await project.readText('src/assets/registries/locales.ts');
-    const asciiProject = await createTestProject();
-    await asciiProject.write('assets/source/fonts/body.ttf', fontSource);
-    await buildAssets(
-      config({
-        assets: {
-          fonts: [
-            {
-              match: '**/*.ttf',
-              options: { family: 'Replayable Body' },
-            },
-          ],
-        },
-      }),
-      asciiProject.root,
-    );
-    const asciiFont = await asciiProject.readBytes('assets/generated/fonts/body.woff2');
+      const result = await buildAssets(
+        config({
+          assets: {
+            fonts: [
+              {
+                match: '**/*.ttf',
+                options: { family: 'Replayable Body' },
+              },
+            ],
+            locales: [{}],
+            sprites: [
+              {
+                options: { lossless: true },
+              },
+            ],
+          },
+          emit: {
+            assets: 'src/assets/assets.ts',
+            registries: 'src/assets/registries',
+          },
+          localization: { fallback: 'en', language: 'hy' },
+          outDir: 'src/assets/resources',
+        }),
+        project.root,
+      );
+      const dictionary = JSON.parse(
+        await project.readText('src/assets/resources/locales/translations.json'),
+      );
+      const spriteFiles = await project.entries('src/assets/resources/sprites');
+      const logoFile = requireGeneratedFile(spriteFiles, 'logo');
+      const badgeFile = requireGeneratedFile(spriteFiles, 'badge');
+      const font = await project.readBytes('src/assets/resources/fonts/body.woff2');
+      const assetsModule = await project.readText('src/assets/assets.ts');
+      const localeRegistry = await project.readText('src/assets/registries/locales.ts');
+      const asciiProject = await createTestProject();
+      await asciiProject.write('assets/source/fonts/body.ttf', fontSource);
+      await buildAssets(
+        config({
+          assets: {
+            fonts: [
+              {
+                match: '**/*.ttf',
+                options: { family: 'Replayable Body' },
+              },
+            ],
+          },
+        }),
+        asciiProject.root,
+      );
+      const asciiFont = await asciiProject.readBytes('assets/generated/fonts/body.woff2');
 
-    expect(result).toMatchObject({ emittedAssets: 5, emittedFiles: 5 });
-    expect(dictionary).toEqual({
-      install: 'Install',
-      play: 'Խաղալ',
-    });
-    expect(await readRgb(project, `src/assets/resources/sprites/${logoFile}`)).toEqual([0, 0, 255]);
-    expect(await readRgb(project, `src/assets/resources/sprites/${badgeFile}`)).toEqual([
-      0, 128, 0,
-    ]);
-    expect(font.subarray(0, 4).toString('ascii')).toBe('wOF2');
-    expect(font.equals(asciiFont)).toBe(false);
-    expect(assetsModule).toContain('family: "Replayable Body"');
-    expect(assetsModule).toContain('"logo": {');
-    expect(assetsModule).toContain('"badge": {');
-    expect(assetsModule).toContain('"background": {');
-    expect(assetsModule).not.toMatch(/(?:logo|badge)\.(?:en|hy)/);
-    expect(localeRegistry).toMatchInlineSnapshot(`
+      expect(result).toMatchObject({ emittedAssets: 5, emittedFiles: 5 });
+      expect(dictionary).toEqual({
+        install: 'Install',
+        play: 'Խաղալ',
+      });
+      expect(await readRgb(project, `src/assets/resources/sprites/${logoFile}`)).toEqual([
+        0, 0, 255,
+      ]);
+      expect(await readRgb(project, `src/assets/resources/sprites/${badgeFile}`)).toEqual([
+        0, 128, 0,
+      ]);
+      expect(font.subarray(0, 4).toString('ascii')).toBe('wOF2');
+      expect(font.equals(asciiFont)).toBe(false);
+      expect(assetsModule).toContain('family: "Replayable Body"');
+      expect(assetsModule).toContain('"logo": {');
+      expect(assetsModule).toContain('"badge": {');
+      expect(assetsModule).toContain('"background": {');
+      expect(assetsModule).not.toMatch(/(?:logo|badge)\.(?:en|hy)/);
+      expect(localeRegistry).toMatchInlineSnapshot(`
       "// AUTO-GENERATED FILE - DO NOT EDIT
       // Generated by @replayablejs/assets
 
@@ -119,7 +125,8 @@ describe('fixed-language localization', () => {
       } as const;
       "
     `);
-  });
+    },
+  );
 });
 
 /** Creates a valid lossless image while keeping binary fixture data out of the repository. */
