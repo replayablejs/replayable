@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { optimizeDeps, resolveConfig } from 'vite';
+import { createServer } from 'vite';
 import { expect, it } from 'vitest';
 
 import { createDevelopmentViteConfig } from '../src/vite/create-development-vite-config.js';
@@ -72,7 +72,7 @@ it.each(['object', 'array'] as const)(
       const entry = join(projectRoot, 'main.js');
       await writeFile(entry, packageNames.map((name) => `import '${name}';`).join('\n'));
       const emptyEntry = { input: entry, viteConfig: {} };
-      async function optimize() {
+      async function optimizeFixture() {
         const alias =
           form === 'array'
             ? Object.entries(aliases).map(([find, replacement]) => ({ find, replacement }))
@@ -92,20 +92,31 @@ it.each(['object', 'array'] as const)(
           include: [...packageNames],
           noDiscovery: true,
         };
-        return optimizeDeps(await resolveConfig(config, 'serve'), false, true);
+        config.server = { middlewareMode: true, watch: null, ws: false };
+        const server = await createServer(config);
+        try {
+          await server.transformRequest('/main.js');
+          const optimizer = server.environments.client?.depsOptimizer;
+          if (!optimizer) {
+            throw new Error('Expected the client dependency optimizer');
+          }
+          await expect
+            .poll(() => Object.keys(optimizer.metadata.optimized).sort())
+            .toEqual([...packageNames].sort());
+          const metadata = optimizer.metadata;
+          const code = (
+            await Promise.all(
+              [...Object.values(metadata.optimized), ...Object.values(metadata.chunks)].map((dep) =>
+                readFile(dep.file, 'utf8'),
+              ),
+            )
+          ).join('\n');
+          return code;
+        } finally {
+          await server.close();
+        }
       }
-      async function output(metadata: Awaited<ReturnType<typeof optimize>>) {
-        expect(Object.keys(metadata.optimized).sort()).toEqual([...packageNames].sort());
-        return (
-          await Promise.all(
-            [...Object.values(metadata.optimized), ...Object.values(metadata.chunks)].map((dep) =>
-              readFile(dep.file, 'utf8'),
-            ),
-          )
-        ).join('\n');
-      }
-      const enabled = await optimize();
-      const enabledCode = await output(enabled);
+      const enabledCode = await optimizeFixture();
       expect(enabledCode).toContain('enabled-audio-backend');
       for (const name of Object.values(selected).filter((binding) => binding !== 'audio')) {
         expect(enabledCode).toContain(`selected-${name}`);
@@ -113,13 +124,11 @@ it.each(['object', 'array'] as const)(
       expect(enabledCode).not.toMatch(
         /from ["']#(?:adapter|assets|definition|audio|stats|sound-control|endcard-trigger)/,
       );
-      const cached = await optimize();
-      expect(cached.hash).toBe(enabled.hash);
+      // Restart against the same cache, then change the selected bindings.
+      expect(await optimizeFixture()).toBe(enabledCode);
       aliases['#audio'] = disabled;
       aliases['#stats'] = disabled;
-      const changed = await optimize();
-      expect(changed.hash).not.toBe(enabled.hash);
-      const disabledCode = await output(changed);
+      const disabledCode = await optimizeFixture();
       expect(disabledCode).toContain('disabled-audio-backend');
       expect(disabledCode).toContain('disabled-stats');
       expect(disabledCode).not.toContain('enabled-audio-backend');
