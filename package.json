@@ -16,6 +16,7 @@
     "typecheck": "turbo run typecheck",
     "packages:check": "node scripts/check-packed-consumer.ts",
     "changeset": "changeset",
+    "release:version": "changeset version && pnpm install --lockfile-only --ignore-scripts && oxfmt packages/*/CHANGELOG.md",
     "prepare": "husky",
     "pages:build": "node scripts/build-pages.ts"
   },

@@ -79,7 +79,7 @@ jobs:
         with:
           pr-base-branch: main
           pr-title: Prepare the next Replayable release
-          script: pnpm changeset version && pnpm install --lockfile-only --ignore-scripts && pnpm exec oxfmt packages/*/CHANGELOG.md
+          script: pnpm release:version
 
   pack:
     needs: select
