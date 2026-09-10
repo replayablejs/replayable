@@ -1,5 +1,12 @@
 # @replayablejs/assets
 
+## 0.1.0-alpha.1
+
+### Patch Changes
+
+- Update sharp to 0.35.4 to include the patched libheif dependency used during image processing (GHSA-rgj7-g3m4-5g8c).
+- @replayablejs/runtime@0.1.0-alpha.1
+
 ## 0.1.0-alpha.0
 
 ### Minor Changes

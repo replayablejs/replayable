@@ -27,7 +27,7 @@ export default defineConfig({
       { link: '/guide/what-is-replayable', text: 'Guide' },
       { link: '/reference/cli', text: 'Reference' },
       {
-        text: '0.1.0-alpha.0',
+        text: '0.1.0-alpha.1',
         items: [
           { text: 'About this release', link: '/guide/release-status' },
           { text: 'Releases', link: 'https://github.com/replayablejs/replayable/releases' },

@@ -1,6 +1,6 @@
 # Alpha release
 
-This documentation describes **Replayable 0.1.0-alpha.0**. Install packages from the
+This documentation describes **Replayable 0.1.0-alpha.1**. Install packages from the
 `@replayablejs` scope. The npm `alpha` tag selects the current alpha; pin exact versions when
 you need reproducible installations.
 

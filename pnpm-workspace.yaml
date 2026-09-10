@@ -38,7 +38,7 @@ catalog:
   pako: 2.1.0
   pixi.js: 8.20.1
   sass-embedded: 1.103.1
-  sharp: 0.35.3
+  sharp: 0.35.4
   subset-font: 2.5.0
   terser: 5.51.2
   tinyglobby: 0.2.17
