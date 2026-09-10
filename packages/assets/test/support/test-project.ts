@@ -38,13 +38,16 @@ export async function createTestProject(prefix = 'replayable-assets-'): Promise<
   const root = await mkdtemp(resolve(tmpdir(), prefix));
   const path = (...segments: string[]): string => resolve(root, ...segments);
 
-  onTestFinished(() =>
-    rm(root, {
-      force: true,
-      maxRetries: 5,
-      recursive: true,
-      retryDelay: 20,
-    }),
+  // Windows may hold native encoder files briefly after processing.
+  onTestFinished(
+    () =>
+      rm(root, {
+        force: true,
+        maxRetries: 5,
+        recursive: true,
+        retryDelay: 20,
+      }),
+    30_000,
   );
 
   return {

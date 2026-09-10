@@ -15,7 +15,7 @@ afterEach(() => {
 });
 
 function createDirectory(): string {
-  const directory = realpathSync(mkdtempSync(join(tmpdir(), 'replayable-output-')));
+  const directory = realpathSync.native(mkdtempSync(join(tmpdir(), 'replayable-output-')));
   directories.push(directory);
   return directory;
 }

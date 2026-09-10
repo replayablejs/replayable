@@ -1,4 +1,4 @@
-import { lstatSync, realpathSync } from 'node:fs';
+import { lstatSync, realpathSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 
 /** Resolves an output path while preventing project-wide recursive deletion. */
@@ -12,7 +12,7 @@ export function resolveOutputDirectory(projectRoot: string, configuredPath: stri
 
   // Resolve existing ancestors too: `linked/dist` may escape even when `dist`
   // does not exist yet. Return the authored path, but validate its physical target.
-  const physicalRoot = realpathSync(projectRoot);
+  const physicalRoot = realpathSync.native(projectRoot);
   const physicalOutput = resolvePhysicalPath(outputDirectory);
   const physicalRelativePath = relative(physicalRoot, physicalOutput);
 
@@ -27,7 +27,11 @@ export function resolveOutputDirectory(projectRoot: string, configuredPath: stri
 function resolvePhysicalPath(path: string): string {
   if (lstatSync(path, { throwIfNoEntry: false }) !== undefined) {
     // Dangling links and permission errors must fail, not bypass the safety check.
-    return realpathSync(path);
+    const physicalPath = realpathSync.native(path);
+    if (!statSync(physicalPath).isDirectory()) {
+      throw new Error(`ENOTDIR: build output ancestor is not a directory: ${path}`);
+    }
+    return physicalPath;
   }
 
   const parent = dirname(path);

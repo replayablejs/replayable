@@ -1,4 +1,5 @@
-import { mkdtemp, mkdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { realpathSync } from 'node:fs';
+import { mkdtemp, mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -89,7 +90,7 @@ async function createPackage(packageName: string, label: string) {
 
   return {
     modulePath,
-    packageDirectory: await realpath(packageDirectory),
+    packageDirectory: realpathSync.native(packageDirectory),
     testDirectory,
   };
 }

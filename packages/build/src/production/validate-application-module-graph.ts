@@ -151,7 +151,7 @@ function readPackageInstance(manifest: unknown, directory: string): PackageInsta
 
   return {
     // Different symlink spellings of one pnpm/workspace package must compare equal.
-    directory: realpathSync(directory),
+    directory: realpathSync.native(directory),
     name: manifest.name,
   };
 }
