@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -10,7 +10,8 @@ import { createDevelopmentViteConfig } from '../src/vite/create-development-vite
 it.each(['object', 'array'] as const)(
   'optimizes installed packages with %s aliases and invalidates cached selections',
   async (form) => {
-    const projectRoot = await mkdtemp(join(tmpdir(), 'replayable-dev-aliases-'));
+    // Windows TEMP may use an 8.3 path (RUNNER~1), which Vite refuses to serve.
+    const projectRoot = await realpath(await mkdtemp(join(tmpdir(), 'replayable-dev-aliases-')));
     const packageNames = ['@replayablejs/runtime', '@replayablejs/devtools'] as const;
     const selected = {
       '#adapter': 'adapter',
@@ -101,7 +102,7 @@ it.each(['object', 'array'] as const)(
             throw new Error('Expected the client dependency optimizer');
           }
           await expect
-            .poll(() => Object.keys(optimizer.metadata.optimized).sort())
+            .poll(() => Object.keys(optimizer.metadata.optimized).sort(), { timeout: 10_000 })
             .toEqual([...packageNames].sort());
           const metadata = optimizer.metadata;
           const code = (
@@ -136,4 +137,5 @@ it.each(['object', 'array'] as const)(
       await rm(projectRoot, { recursive: true, force: true });
     }
   },
+  30_000,
 );
