@@ -2,8 +2,8 @@
 
 # Replayable
 
-[![CI](https://github.com/replayablejs/replayable/actions/workflows/ci.yml/badge.svg)](https://github.com/replayablejs/replayable/actions/workflows/ci.yml)
-[![npm alpha](https://img.shields.io/npm/v/%40replayablejs%2Fruntime/alpha)](https://www.npmjs.com/package/@replayablejs/runtime)
+[![CI](https://img.shields.io/github/actions/workflow/status/replayablejs/replayable/ci.yml?branch=main&style=flat-square&label=CI&logo=github)](https://github.com/replayablejs/replayable/actions/workflows/ci.yml)
+[![npm alpha](https://img.shields.io/npm/v/%40replayablejs%2Fruntime/alpha?style=flat-square)](https://www.npmjs.com/package/@replayablejs/runtime)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/Built_with-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Built with Codex](https://img.shields.io/badge/Built_with-Codex-18181b?style=flat-square)](https://openai.com/codex/)
@@ -14,14 +14,25 @@ The product is Replayable; GitHub and npm use the `replayablejs` organization.
 
 ## Alpha release
 
-Replayable **0.1.0-alpha.0** is an alpha release. APIs may change before 1.0.
+Replayable **0.1.0-alpha.1** is an alpha release. APIs may change before 1.0.
 
 ```sh
-pnpm add @replayablejs/runtime@0.1.0-alpha.0
-pnpm add -D @replayablejs/cli@0.1.0-alpha.0 @replayablejs/config@0.1.0-alpha.0
+pnpm add @replayablejs/runtime@0.1.0-alpha.1
+pnpm add -D @replayablejs/cli@0.1.0-alpha.1 @replayablejs/config@0.1.0-alpha.1
 ```
 
-See [getting started](docs/guide/getting-started.md) for project setup and optional Pixi support.
+See [getting started](https://replayablejs.github.io/replayable/guide/getting-started.html) for project setup and optional Pixi support.
+
+## Examples
+
+Try the ads in your browser or explore their source:
+
+| Example                | Live demo                                                                             | Source                                      |
+| ---------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
+| DOM word ad            | [Play demo](https://replayablejs.github.io/replayable/demos/basic-playable.html)      | [View source](examples/basic-playable)      |
+| Pixi and Spine card ad | [Play demo](https://replayablejs.github.io/replayable/demos/basic-pixi-playable.html) | [View source](examples/basic-pixi-playable) |
+
+See the [examples guide](https://replayablejs.github.io/replayable/guide/examples.html) for details.
 
 ## Run from source
 
@@ -65,9 +76,9 @@ The `replayable` CLI name does not change with the npm scope.
 
 ## Documentation and development
 
-- [Getting started](docs/guide/getting-started.md)
-- [Configuration](docs/reference/config.md)
-- [Asset pipeline](docs/reference/assets.md)
+- [Getting started](https://replayablejs.github.io/replayable/guide/getting-started.html)
+- [Configuration](https://replayablejs.github.io/replayable/reference/config.html)
+- [Asset pipeline](https://replayablejs.github.io/replayable/reference/assets.html)
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
 
