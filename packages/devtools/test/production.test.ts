@@ -123,4 +123,6 @@ it.each([
     // Runtime supplies postRender; devtools never loads its own Motion scheduler.
     expect(loadedModules.some((id) => /\/motion-dom\//.test(id))).toBe(false);
   },
+  // Full Vite builds can exceed the default five seconds on shared CI runners.
+  30_000,
 );
