@@ -27,10 +27,10 @@ See [getting started](https://replayablejs.github.io/replayable/guide/getting-st
 
 Try the ads in your browser or explore their source:
 
-| Example                | Live demo                                                                             | Source                                      |
-| ---------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
-| DOM word ad            | [Play demo](https://replayablejs.github.io/replayable/demos/basic-playable.html)      | [View source](examples/basic-playable)      |
-| Pixi and Spine card ad | [Play demo](https://replayablejs.github.io/replayable/demos/basic-pixi-playable.html) | [View source](examples/basic-pixi-playable) |
+| Example     | Live demo                                                                             | Source                                      |
+| ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Word Puzzle | [Play demo](https://replayablejs.github.io/replayable/demos/basic-playable.html)      | [View source](examples/basic-playable)      |
+| Card Match  | [Play demo](https://replayablejs.github.io/replayable/demos/basic-pixi-playable.html) | [View source](examples/basic-pixi-playable) |
 
 See the [examples guide](https://replayablejs.github.io/replayable/guide/examples.html) for details.
 
