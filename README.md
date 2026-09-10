@@ -34,6 +34,42 @@ Try the ads in your browser or explore their source:
 
 See the [examples guide](https://replayablejs.github.io/replayable/guide/examples.html) for details.
 
+## Build with an AI agent
+
+The [Build a Playable Ad skill](skills/build-playable-ad/SKILL.md) helps AI coding agents create
+ads with Replayable's published packages. It includes a runnable starter and guidance for
+creative variations, deferred assets, and Pixi/Spine integration.
+
+**Codex:** ask:
+
+> Install the `build-playable-ad` skill from the `replayablejs/replayable` repository,
+> under `skills/build-playable-ad`.
+
+Then describe the ad you want and ask Codex to use `$build-playable-ad`.
+
+**Claude Code, Cursor, and GitHub Copilot:** download or clone this repository, then copy the
+entire `skills/build-playable-ad` folder into your **ad project's** location below. Keep `assets/`
+and `references/` alongside `SKILL.md`; copying only the Markdown file omits the starter.
+
+| Agent                                                                                                                             | Destination in your ad project      | Usage                                                  |
+| --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------ |
+| [Claude Code](https://code.claude.com/docs/en/skills)                                                                             | `.claude/skills/build-playable-ad/` | `/build-playable-ad Create a word puzzle ad`           |
+| [Cursor](https://prod.cursor.com/docs/skills)                                                                                     | `.cursor/skills/build-playable-ad/` | Ask Agent to use the build-playable-ad skill           |
+| [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills) | `.github/skills/build-playable-ad/` | Ask Copilot's agent to use the build-playable-ad skill |
+
+For example, from your ad project's root on macOS or Linux, using a local Replayable checkout:
+
+```sh
+mkdir -p .claude/skills
+cp -R /path/to/replayable/skills/build-playable-ad .claude/skills/
+```
+
+Replace `/path/to/replayable` with your checkout path. For Cursor or Copilot, substitute the
+corresponding destination above. Review an existing installation before replacing it.
+Claude Code also supports `~/.claude/skills/build-playable-ad/` for use across projects.
+The shared instructions and starter are agent-independent; `agents/openai.yaml` is optional
+Codex UI metadata and can remain in the folder for other agents.
+
 ## Run from source
 
 Use Node.js 24 or newer and pnpm 10.32.1.

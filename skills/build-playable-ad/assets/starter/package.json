@@ -1,0 +1,23 @@
+{
+  "name": "my-playable-ad",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "replayable dev",
+    "build": "replayable build",
+    "export": "replayable export",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/runtime": "0.1.0-alpha.1"
+  },
+  "devDependencies": {
+    "@replayablejs/cli": "0.1.0-alpha.1",
+    "@replayablejs/config": "0.1.0-alpha.1",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

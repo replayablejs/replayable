@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Build a Playable Ad'
+  short_description: "Create playable ads with Replayable's public packages"
+  default_prompt: 'Use $build-playable-ad to build and validate a playable ad with Replayable.'
