@@ -9,6 +9,7 @@ const howlerHarness = vi.hoisted(() => {
     readonly stop = vi.fn<(soundId: number) => void>();
     readonly fade = vi.fn<(from: number, to: number, duration: number, soundId: number) => void>();
     readonly loop = vi.fn<(loop: boolean, soundId: number) => void>();
+    readonly duration = vi.fn<() => number>(() => 8);
     readonly source: string;
     readonly unload = vi.fn<() => void>();
     readonly volume = vi.fn<() => FakeHowl>(() => this);
@@ -100,6 +101,27 @@ describe('audio', () => {
     const sound = harness.getSound('music');
 
     expect(sound.play.mock.calls).toHaveLength(0);
+  });
+
+  it('keeps application and host mute intact when voice volume changes', async () => {
+    const harness = await createAudioHarness();
+    await harness.loadSounds();
+    harness.audio.update({ allowed: true, volume: 0.4 });
+    const playback = harness.audio.play('music', { loop: true });
+    harness.audio.setMuted(true);
+    howlerHarness.mute.mockClear();
+    howlerHarness.volume.mockClear();
+    playback.setVolume(0.8);
+    expect(harness.audio.muted).toBe(true);
+    expect(howlerHarness.mute).not.toHaveBeenCalled();
+    expect(howlerHarness.volume).not.toHaveBeenCalled();
+    harness.audio.update({ allowed: false, volume: 0.2 });
+    expect(howlerHarness.mute).toHaveBeenLastCalledWith(true);
+    howlerHarness.mute.mockClear();
+    howlerHarness.volume.mockClear();
+    playback.setVolume(1);
+    expect(howlerHarness.mute).not.toHaveBeenCalled();
+    expect(howlerHarness.volume).not.toHaveBeenCalled();
   });
 
   it('drops one-shots until both sound loading and permission are current', async () => {

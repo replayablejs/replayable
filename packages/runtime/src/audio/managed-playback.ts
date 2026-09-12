@@ -1,5 +1,5 @@
 import type { Howl, HowlCallback } from '#audio/howler.js';
-import { resolveAudioStopOptions } from '#audio/resolve-options.js';
+import { resolveAudioStopOptions, resolveAudioVolume } from '#audio/resolve-options.js';
 import type {
   PlaybackStatus,
   ActiveVoice,
@@ -41,7 +41,7 @@ const MILLISECONDS_PER_SECOND = 1000;
  * control.
  *
  * `start` is invoked by the audio controller when loading or permission opens a gate.
- * `stop` is the stable public handle returned to playable application code.
+ * Public controls and metadata remain available on the same handle after finishing.
  */
 export function createManagedPlayback(
   options: Required<AudioPlaybackOptions>,
@@ -51,14 +51,46 @@ export function createManagedPlayback(
   let endListener: HowlCallback | undefined;
   let sound: Howl | undefined;
   let status: PlaybackStatus = 'pending';
+  let volume = options.volume;
+  let soundDuration = 0;
 
   const playback: ManagedAudioPlayback = {
+    get position(): number {
+      if (activeVoice === undefined) {
+        return 0;
+      }
+
+      const position = activeVoice.sound.seek(activeVoice.id);
+      return options.loop && soundDuration > 0 ? position % soundDuration : position;
+    },
+
+    get duration(): number {
+      return soundDuration;
+    },
+
+    setVolume(nextVolume): void {
+      resolveAudioVolume(nextVolume);
+      if (status === 'stopping' || status === 'finished') {
+        return;
+      }
+
+      volume = nextVolume;
+      if (activeVoice !== undefined) {
+        const { sound: activeSound, id } = activeVoice;
+        activeSound.volume(volume, id);
+        // Howler cancels fades by restoring their target, including its stored
+        // volume. Reapply our value after cancellation so later fades/mutes use it.
+        activeSound.volume(volume, id);
+      }
+    },
+
     setSound(loadedSound): void {
       if (status !== 'pending' || sound !== undefined) {
         return;
       }
 
       sound = loadedSound;
+      soundDuration = loadedSound.duration();
     },
 
     start(): void {
@@ -74,14 +106,14 @@ export function createManagedPlayback(
       status = 'playing';
 
       const fadeInMilliseconds = options.fadeIn * MILLISECONDS_PER_SECOND;
-      const shouldFadeIn = fadeInMilliseconds > 0 && options.volume > 0;
+      const shouldFadeIn = fadeInMilliseconds > 0 && volume > 0;
 
       // Volume and looping are scoped to this ID rather than the shared Howl.
-      sound.volume(shouldFadeIn ? 0 : options.volume, playbackId);
+      sound.volume(shouldFadeIn ? 0 : volume, playbackId);
       sound.loop(options.loop, playbackId);
 
       if (shouldFadeIn) {
-        sound.fade(0, options.volume, fadeInMilliseconds, playbackId);
+        sound.fade(0, volume, fadeInMilliseconds, playbackId);
       }
 
       if (!options.loop) {

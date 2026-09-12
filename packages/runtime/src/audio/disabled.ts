@@ -1,3 +1,4 @@
+import { resolveAudioVolume } from '#audio/resolve-options.js';
 import type { AudioController, AudioPlayback } from '#types/audio.js';
 
 /**
@@ -8,6 +9,11 @@ import type { AudioController, AudioPlayback } from '#types/audio.js';
  * because the handle contains no playback ID or mutable state.
  */
 const disabledPlayback: AudioPlayback = {
+  position: 0,
+  duration: 0,
+  setVolume(volume): void {
+    resolveAudioVolume(volume);
+  },
   stop(): void {},
 };
 

@@ -100,6 +100,30 @@ Volume ranges from `0` to `1`; fade durations are seconds. `playOneShot(id, { vo
 an immediate effect and drops it if blocked or unloaded, preventing a delayed burst of old effects.
 `setMuted(boolean)` controls application mute state; host visibility and permission still apply.
 
+Managed handles also expose `setVolume(volume)`, `position`, and `duration`:
+
+```ts
+music.setVolume(0); // Silent playback keeps advancing.
+music.setVolume(0.8); // Same voice and position, now audible.
+const progress = music.duration > 0 ? music.position / music.duration : 0;
+```
+
+`setVolume` accepts a finite number from `0` through `1` (otherwise it throws
+`RangeError`). Pending playback remembers the new volume. Active playback cancels
+any fade-in and changes only its own voice; application mute and host restrictions
+still apply. Once stopping or finished, volume changes are validated but ignored.
+
+`position` reads the backend clock in seconds, wraps for loops, and returns zero
+before start and after finish. It remains readable during fade-out. `duration` is
+the full loaded sound length in seconds, zero while unknown, and remains available
+after finish. Cancellation before loading does not retain a metadata subscription.
+Audio-disabled builds return zero for both properties and validate volume changes
+without playing anything.
+
+For layered loops, load the tracks first, start them silently in the same turn, and
+switch their volumes. This follows sequential backend starts; it does not guarantee
+sample-accurate synchronization.
+
 ## Frame Updates
 
 Use `update.add()` for work on rendered frames. Its `deltaSeconds` is measured in seconds.

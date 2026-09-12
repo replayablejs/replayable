@@ -23,7 +23,7 @@ export function resolveAudioPlaybackOptions(
   options: AudioPlaybackOptions = {},
 ): Required<AudioPlaybackOptions> {
   return {
-    volume: resolveVolume(options.volume),
+    volume: resolveAudioVolume(options.volume ?? DEFAULT_VOLUME),
     loop: options.loop ?? false,
     fadeIn: resolveFadeDuration('fade-in', options.fadeIn),
   };
@@ -44,7 +44,7 @@ export function resolveAudioOneShotOptions(
   options: AudioOneShotOptions = {},
 ): Required<AudioOneShotOptions> {
   return {
-    volume: resolveVolume(options.volume),
+    volume: resolveAudioVolume(options.volume ?? DEFAULT_VOLUME),
   };
 }
 
@@ -76,7 +76,7 @@ export function resolveAudioStopOptions(
  * `Number.isFinite` deliberately rejects `NaN` and both infinities in addition
  * to values outside the inclusive `0..1` range.
  */
-function resolveVolume(volume = DEFAULT_VOLUME): number {
+export function resolveAudioVolume(volume: number): number {
   if (!Number.isFinite(volume) || volume < 0 || volume > 1) {
     throw new RangeError(
       `Audio volume must be a finite number from 0 through 1; received ${String(volume)}.`,
