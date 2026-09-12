@@ -40,6 +40,13 @@ A rule such as `sprites: [{}]` selects that category; file matches are category-
 Grouped Spine exports are matched by directory ID, such as `raptor`, not `raptor/**`.
 
 Use generated modules and their types rather than guessing cache keys or resource shapes.
+Access sprites/sounds through the generated registries rather than string literals scattered
+through features.
+
+Use Replayable's locale resources and the matching example's lookup for translatable visible
+copy when localization is required, including projects initially shipping only English. Keep
+internal identifiers out of translation dictionaries and validate text fitting for each language.
+
 Keep source resources under project ownership and retain their required license files. The skill
 ships no fonts, artwork, audio or Spine exports; obtain assets suitable for the user's project.
 

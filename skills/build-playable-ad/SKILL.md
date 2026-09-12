@@ -33,6 +33,15 @@ Do not install every Replayable package. The starter needs runtime, CLI and conf
 or animation packages only when needed. A DOM ad is a useful low-dependency default when no
 renderer is specified, not a requirement.
 
+## Recreate an existing ad
+
+Inspect both source and the live interaction when provided. Use configured repository credentials
+for source access; keep the original checkout unchanged. Record loading, tutorial, idle guidance,
+selection rules, animations, audio and each completion outcome. Compare portrait, wide landscape
+and tablet-like aspect ratios. Do not activate outbound store links just to inspect the reference.
+Summarize observed behavior and proposed implementation before substantial recreation work.
+Distinguish verified behavior from inference, and preserve the user's intentional design changes.
+
 ## Build around the runtime
 
 - Import `playable` from `@replayablejs/runtime`. Install renderer integrations before
@@ -43,6 +52,11 @@ renderer is specified, not a requirement.
 - Prefer `playable.audio`, `timers`, `update` and `fixedUpdate` for work that should respect the
   runtime lifecycle. Keep unsubscribe functions and dispose of scene-owned resources.
 - Do not assume a browser preview reproduces ad-host lifecycle, audio or store behavior.
+
+For a substantial ad, read [references/architecture.md](references/architecture.md) before
+structuring the scene or responsive layout. When adding audio, read
+[references/audio.md](references/audio.md); its extended playback APIs require alpha.3 or later,
+not this minimal starter's alpha.1. Do not compensate for missing APIs by reaching into Howler.
 
 Read [references/variants-and-assets.md](references/variants-and-assets.md) when adding creative
 parameters, languages, assets or deferred loading. Read [references/renderers.md](references/renderers.md)
@@ -64,7 +78,8 @@ Use the selected network profiles and resolve their actual export errors rather 
 universal size limits or modifying the exporter to bypass them.
 
 When browser control is available, inspect portrait and landscape layouts, interaction through
-completion, CTA behavior, and console errors using the final preview artifact. Check visibility
+completion, CTA visibility and input routing without opening external stores, and console errors
+using the final preview artifact. Check visibility
 and audio behavior when relevant. Report browser/device or ad-host checks as unverified when
 those environments are unavailable; export success does not certify network acceptance.
 
