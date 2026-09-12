@@ -1,6 +1,6 @@
 {
   "name": "@replayablejs/config",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "Validated Replayable project configuration and playable variant expansion",
   "homepage": "https://github.com/replayablejs/replayable#readme",
   "bugs": {

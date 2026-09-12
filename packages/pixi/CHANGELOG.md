@@ -1,5 +1,13 @@
 # @replayablejs/pixi
 
+## 0.1.0-alpha.3
+
+### Patch Changes
+
+- Updated dependencies [d99c3cb]
+  - @replayablejs/runtime@0.1.0-alpha.3
+  - @replayablejs/canvas@0.1.0-alpha.3
+
 ## 0.1.0-alpha.2
 
 ### Patch Changes

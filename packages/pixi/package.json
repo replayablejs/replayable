@@ -1,6 +1,6 @@
 {
   "name": "@replayablejs/pixi",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "PixiJS rendering integration for Replayable playables",
   "homepage": "https://github.com/replayablejs/replayable#readme",
   "bugs": {
