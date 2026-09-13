@@ -1,5 +1,11 @@
 # @replayablejs/config
 
+## 0.1.0-alpha.4
+
+### Patch Changes
+
+- @replayablejs/assets@0.1.0-alpha.4
+
 ## 0.1.0-alpha.3
 
 ### Patch Changes
