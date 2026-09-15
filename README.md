@@ -14,12 +14,16 @@ The product is Replayable; GitHub and npm use the `replayablejs` organization.
 
 ## Alpha release
 
-Replayable **0.1.0-alpha.1** is an alpha release. APIs may change before 1.0.
+<!-- replayable-version:start -->
+
+Replayable **0.1.0-alpha.4** is an alpha release. APIs may change before 1.0.
 
 ```sh
-pnpm add @replayablejs/runtime@0.1.0-alpha.1
-pnpm add -D @replayablejs/cli@0.1.0-alpha.1 @replayablejs/config@0.1.0-alpha.1
+pnpm add @replayablejs/runtime@0.1.0-alpha.4
+pnpm add -D @replayablejs/cli@0.1.0-alpha.4 @replayablejs/config@0.1.0-alpha.4
 ```
+
+<!-- replayable-version:end -->
 
 See [getting started](https://replayablejs.github.io/replayable/guide/getting-started.html) for project setup and optional Pixi support.
 

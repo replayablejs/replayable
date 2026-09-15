@@ -12,8 +12,8 @@ renderer, existing assets and target networks; do not replace an existing projec
 
 Inspect its manifest, configuration and entry point before editing. Use public `@replayablejs/*`
 packages rather than importing Replayable repository internals or using workspace dependencies.
-Keep Replayable packages at the same version. This skill's starter targets `0.1.0-alpha.1` on
-Node.js 24+; for another installed version, consult that version's declarations and documentation
+Keep Replayable packages at the same version. See [the starter manifest](assets/starter/package.json)
+for the matching toolkit version. Use Node.js 24+; for another installed version, consult that version's declarations and documentation
 before adopting these examples. Do not silently upgrade an existing project.
 
 For a new project, copy the contents of [assets/starter](assets/starter/) into an empty project

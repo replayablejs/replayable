@@ -1,8 +1,17 @@
 # Releases and publication
 
-All ten public packages share one version through Changesets. Versions `0.1.0-alpha.0`
-and `0.1.0-alpha.1` have been published. The `alpha` and `latest` tags currently point to
-`0.1.0-alpha.1`. Root, docs and examples remain private.
+All ten public packages share one version through Changesets. This checkout describes
+`__REPLAYABLE_VERSION__`; npm distribution tags are registry state and may differ while a
+release is being prepared. Root, docs and examples remain private.
+
+`packages/runtime/package.json` is the version source for documentation. VitePress reads it
+for navigation and installation commands. `pnpm release:version` runs Changesets, synchronizes
+the marked README section and skill starter dependencies, then updates the lockfile.
+Review all of these changes in the version PR before merging.
+
+Run `pnpm versions:sync` to refresh generated references manually. `pnpm versions:check`
+checks them without writing files and is included in `pnpm check` on every CI operating system.
+Historical changelogs are not rewritten.
 
 ## Prepare a change
 

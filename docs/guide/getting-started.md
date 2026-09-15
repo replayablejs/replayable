@@ -25,19 +25,19 @@ Install the runtime and development tools:
 ::: code-group
 
 ```sh [npm]
-npm install @replayablejs/runtime@0.1.0-alpha.1
-npm install -D @replayablejs/cli@0.1.0-alpha.1 @replayablejs/config@0.1.0-alpha.1 typescript
+npm install @replayablejs/runtime@__REPLAYABLE_VERSION__
+npm install -D @replayablejs/cli@__REPLAYABLE_VERSION__ @replayablejs/config@__REPLAYABLE_VERSION__ typescript
 ```
 
 ```sh [pnpm]
-pnpm add @replayablejs/runtime@0.1.0-alpha.1
-pnpm add -D @replayablejs/cli@0.1.0-alpha.1 @replayablejs/config@0.1.0-alpha.1 typescript
+pnpm add @replayablejs/runtime@__REPLAYABLE_VERSION__
+pnpm add -D @replayablejs/cli@__REPLAYABLE_VERSION__ @replayablejs/config@__REPLAYABLE_VERSION__ typescript
 ```
 
 :::
 
 ::: info Alpha versions
-Keep Replayable packages on the same version. These instructions pin `0.1.0-alpha.1`; the `alpha`
+Keep Replayable packages on the same version. These instructions pin `__REPLAYABLE_VERSION__`; the `alpha`
 npm tag selects the current alpha. APIs can change before 1.0.
 :::
 
