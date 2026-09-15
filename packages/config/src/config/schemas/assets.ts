@@ -15,4 +15,6 @@ export const replayableAssetsSchema = assetConfigSchema.omit({ localization: tru
 /** Asset changes that may be applied by one version or network. */
 export const assetOverrideSchema = z.strictObject({
   exclude: z.array(requiredStringSchema).default([]),
+  /** Replaces the inherited selection; an empty object keeps every asset in primary. */
+  bundles: assetConfigSchema.shape.bundles.unwrap().optional(),
 });

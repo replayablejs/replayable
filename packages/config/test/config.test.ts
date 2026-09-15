@@ -226,7 +226,7 @@ describe('Replayable config', () => {
         id: 'short/preview/en',
       },
       {
-        completion: { duration: 15 },
+        completion: {},
         id: 'short/applovin/en',
       },
     ]);
@@ -561,5 +561,122 @@ describe('Replayable config', () => {
         },
       }).success,
     ).toBe(false);
+  });
+});
+
+describe('variant bundle assignments', () => {
+  const base = {
+    assets: {
+      ...assets,
+      exclude: ['sprites/debug/**'],
+      bundles: { secondary: { include: ['sounds/**'], exclude: ['sounds/start.*'] } },
+    },
+    screen,
+    store,
+    name: 'bundles',
+    localization: { fallback: 'en', languages: ['en'] },
+  };
+
+  it('inherits project bundles when an override only excludes assets', () => {
+    const config = defineConfig({
+      ...base,
+      versions: { tutorial: { assets: { exclude: ['sprites/unused.*'] } } },
+    });
+    const [variant] = createVariants(config);
+    expect(variant?.assets.bundles).toEqual(base.assets.bundles);
+    expect(variant?.assets.exclude).toEqual(['sprites/debug/**', 'sprites/unused.*']);
+  });
+
+  it('replaces the complete selection with the network selection last', () => {
+    const networkBundles = { secondary: { include: ['sprites/**'] } };
+    const versionBundles = { secondary: { include: ['sounds/later.*'] } };
+    const config = defineConfig({
+      ...base,
+      networks: { preview: { assets: { bundles: networkBundles } } },
+      versions: {
+        inherited: {},
+        tutorial: { assets: { bundles: versionBundles } },
+        free: { assets: { bundles: {} } },
+      },
+    });
+    const variants = createVariants(config);
+    expect(variants.map((variant) => variant.assets.bundles)).toEqual([
+      networkBundles,
+      networkBundles,
+      networkBundles,
+    ]);
+    expect(config.assets.bundles).toEqual(base.assets.bundles);
+  });
+
+  it('allows a network to clear secondary even when a version selects it', () => {
+    const config = defineConfig({
+      ...base,
+      networks: { preview: { assets: { bundles: {} } } },
+      versions: { free: {}, tutorial: { assets: { bundles: base.assets.bundles } } },
+    });
+    expect(createVariants(config).map((variant) => variant.assets.bundles)).toEqual([{}, {}]);
+  });
+
+  it('rejects invalid selections in either override dimension', () => {
+    for (const dimension of ['versions', 'networks']) {
+      expect(() =>
+        defineConfig({
+          ...base,
+          [dimension]: { preview: { assets: { bundles: { secondary: { include: [] } } } } },
+        }),
+      ).toThrow(/include/);
+    }
+  });
+});
+
+describe('network override precedence', () => {
+  it('resolves conflicts per parameter and completion timer while inheriting omitted values', () => {
+    const config = defineConfig({
+      assets,
+      screen,
+      store,
+      name: 'precedence',
+      localization: { fallback: 'en', languages: ['en'] },
+      completion: { duration: 60, inactivity: 20 },
+      params: {
+        difficulty: {
+          type: 'number',
+          default: 1,
+          description: 'Difficulty.',
+          range: { min: 1, max: 3, step: 1 },
+        },
+        theme: {
+          type: 'string',
+          default: 'base',
+          description: 'Theme.',
+          options: ['base', 'custom'],
+        },
+      },
+      versions: {
+        custom: {
+          params: { difficulty: 2, theme: 'custom' },
+          completion: { duration: 45, inactivity: false },
+        },
+      },
+      networks: {
+        preview: {},
+        unity: { params: { difficulty: 3 }, completion: { duration: false, inactivity: 10 } },
+      },
+    });
+    const variants = createVariants(config);
+    expect(variants.find(({ network }) => network === 'preview')).toMatchObject({
+      params: { difficulty: 2, theme: 'custom' },
+      completion: { duration: 45 },
+    });
+    expect(
+      variants.find(({ network }) => network === 'preview')?.completion.inactivity,
+    ).toBeUndefined();
+    expect(variants.find(({ network }) => network === 'unity')).toMatchObject({
+      params: { difficulty: 3, theme: 'custom' },
+      completion: { inactivity: 10 },
+    });
+    expect(
+      variants.find(({ network }) => network === 'unity')?.completion.duration,
+    ).toBeUndefined();
   });
 });

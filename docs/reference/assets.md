@@ -91,3 +91,31 @@ including when changing language or variant exclusions.
   the processor selects files or grouped directories.
 - **A loaded scene cannot find an asset:** check exclusions and whether the asset belongs to secondary.
 - **Export is too large:** reduce source dimensions or adjust processor encoding options, then rebuild.
+
+### Bundle assignments by version or network
+
+Set `assets.bundles` on a version or network to replace the project's bundle selection.
+Resolution follows project → version → network precedence. The complete selection is
+replaced, including its include and exclude arrays; asset exclusions remain additive.
+Omitting `bundles` inherits the previous selection. An empty object keeps all included
+assets in `primary`.
+
+```ts
+versions: {
+  tutorial: {
+    assets: {
+      bundles: { secondary: { include: ['sounds/later/**'] } },
+    },
+  },
+  freePlay: { assets: { bundles: {} } },
+},
+networks: {
+  preview: {},
+  unity: { assets: { bundles: {} } },
+},
+```
+
+In this example tutorial on preview uses secondary for `sounds/later/**`, while tutorial
+on Unity keeps all assets in primary because the network's empty selection wins. Free play
+keeps all assets in primary on both networks. Asset exclusions still apply before bundle
+assignment, and runtime bundle loading is unchanged.

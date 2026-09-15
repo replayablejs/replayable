@@ -8,8 +8,8 @@ const ALL_SOUNDS_PATTERN = 'sounds/**';
  * Expands one project configuration into every version/network/language combination.
  *
  * Every returned variant contains resolved values. Base parameters are extended
- * by network parameters and then version parameters, making the version the
- * most specific override. Asset exclusions follow the same precedence.
+ * by version parameters and then network parameters, making the network the
+ * final override. Asset exclusions are additive; any layer may disable audio.
  *
  * @param config - Validated Replayable project configuration.
  * @returns The ordered concrete playable variants.
@@ -83,7 +83,7 @@ function createPlayableVariant(
   };
 }
 
-/** Resolves each completion timer independently using project, network, then version precedence. */
+/** Resolves each completion timer independently using project, version, then network precedence. */
 function resolveCompletion(
   project: ReplayableConfig['completion'],
   network: VariantOverride['completion'],
@@ -118,7 +118,7 @@ function resolveCompletionDuration(
   network: number | false | undefined,
   version: number | false | undefined,
 ): number | undefined {
-  const resolved = version ?? network ?? project;
+  const resolved = network ?? version ?? project;
 
   return resolved === false ? undefined : resolved;
 }
@@ -141,6 +141,7 @@ function resolveAssetConfig(
 
   return {
     ...base,
+    bundles: network?.bundles ?? version?.bundles ?? base.bundles,
     localization,
     exclude,
   };
@@ -155,7 +156,7 @@ function resolveAudio(
   return project && network !== false && version !== false;
 }
 
-/** Extracts authored defaults, then applies network and version value overrides. */
+/** Extracts authored defaults, then applies version and network value overrides. */
 function resolveParams(
   definitions: ReplayableConfig['params'],
   network: VariantOverride['params'],
@@ -167,7 +168,7 @@ function resolveParams(
 
   return {
     ...defaults,
-    ...network,
     ...version,
+    ...network,
   };
 }

@@ -53,8 +53,31 @@ build for every selected network and creative version.
 `versions` defaults to `{ default: {} }`. Two versions, three networks and two languages produce
 12 variants. Each has an ID such as `default/preview/en`.
 
-Parameter values resolve from the base definition, then the network override, then the version
-override. Use `replayable config --json` to inspect the resolved values before building.
+### Override precedence
+
+Overrides resolve in this order: **project → version → network**. The last explicitly
+configured value wins. Project settings provide defaults, versions define the creative,
+and networks make the final delivery adjustments. An omitted value inherits from the
+previous layer.
+
+| Setting                                        | Resolution                                                                                      |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `params`                                       | Each parameter resolves independently; network wins conflicts.                                  |
+| `completion.duration`, `completion.inactivity` | Each timer resolves independently; network wins, including explicit `false` to disable a timer. |
+| `assets.bundles`                               | The complete selection is replaced; network wins. `{}` keeps all included assets in primary.    |
+| `assets.exclude`                               | Exclusions from all layers are combined; an override cannot restore an excluded asset.          |
+| `audio`                                        | Any layer can disable audio; another layer cannot re-enable it.                                 |
+
+For example, a project duration of `60`, a version duration of `45`, and a network
+duration of `30` resolve to `30`. A network duration of `false` disables that timer.
+If the network omits duration, the version's `45` is used.
+
+**Migration:** previously, version values won conflicts with network values for parameters
+and completion timers. Review configurations that set the same field in both dimensions.
+To retain a version value on a network, remove the conflicting network override or set it
+to the intended value. Configurations without conflicts keep their existing behavior.
+
+Use `replayable config --json` to inspect the resolved values before building.
 
 ## Audio
 
