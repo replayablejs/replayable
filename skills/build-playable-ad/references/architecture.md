@@ -16,6 +16,11 @@ immutable configuration from instance state. Visual hiding and resource disposal
 choose their behavior from the creative's lifecycle rather than implicitly destroying resources
 whenever a component becomes invisible.
 
+For growing scenes, keep gameplay state and selection rules separate from DOM/renderer views.
+Let the scene coordinate tutorial completion, transitions and idle guidance; avoid having one
+feature reach through another feature's internals. Separate substantially different scene flows
+when that reduces branching, while sharing the behavior they genuinely have in common.
+
 ## Screen and controls
 
 Scope DOM styles to the scene or feature; Replayable owns its page shell. Read `playable.screen`
@@ -23,7 +28,16 @@ for orientation, frame and safe-area data. Safe area is a frame-local rectangle:
 insets without applying offsets twice. Keep fullscreen backgrounds separate from inset content.
 For DOM layouts, expose necessary screen values to CSS and prefer grid/flexbox over duplicating
 layout calculations in resize handlers. Use design dimensions appropriate to the creative and
-verify both orientations at more than one aspect ratio.
+verify both orientations at more than one aspect ratio. Give major regions actual grid/flex
+bounds and fit their contents inside them; proportional coordinates alone do not constrain size.
+Include the smallest host preview: a fixed pixel minimum on text can overflow otherwise correctly
+scaled controls. Compare a host's web tester and device app before attributing a discrepancy to
+Replayable.
+
+For localized text, measure without animated transforms, fit after mounting, and refit on resize.
+Anchor the edge that determines the intended gap so shrinking text does not move it away from
+nearby artwork. Spritesheet cell bounds may contain transparent padding: inspect the visible
+resting pose before changing alignment. Do not recenter every animation frame.
 
 Honor resolved runtime controls rather than hard-coding their visibility. Route installs through
 `playable.openStore()` and avoid duplicate activation from overlapping input handlers.
@@ -33,7 +47,9 @@ Honor resolved runtime controls rather than hard-coding their visibility. Route 
 Use `@replayablejs/tween` for lifecycle-aware DOM or renderer animations. Its DOM support means
 an HTML scene does not require a separate animation library. Inspect the installed declarations
 and matching examples for supported options. Keep animation controls and subscriptions with
-their owner, and stop them before destroying their targets. Check in-progress animations during
+their owner, and stop them before destroying their targets. Prefer built-in easing functions over
+copying easing formulas. A spritesheet flipbook can use the same lifecycle-aware animation clock;
+CSS keyframes alone do not provide runtime pause/resume integration. Check in-progress animations during
 resize and visibility changes as well as in a stationary preview.
 
 Devtools require their factories as well as configuration. Follow the example's initialization;

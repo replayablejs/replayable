@@ -24,8 +24,8 @@ Vite config or hand-authored HTML entry.
 
 ```sh
 npm install
-npm run typecheck
 npm run build
+npm run typecheck
 npm run export
 ```
 
@@ -69,7 +69,7 @@ strict: check installed types instead of guessing field names. Ad `versions` are
 not npm package versions.
 
 Stop the development server before building: development and production share generated asset
-paths. Run type checking, build, then export after the final edits. Build clears its configured
+paths. Build first when asset registries are generated, then run type checking and export after the final edits. Build clears its configured
 output directory; keep source and generated output separate. Do not edit generated asset modules.
 
 Build output is `dist/<version>/<network>/<language>/index.html`; delivery artifacts go to
@@ -82,6 +82,10 @@ completion, CTA visibility and input routing without opening external stores, an
 using the final preview artifact. Check visibility
 and audio behavior when relevant. Report browser/device or ad-host checks as unverified when
 those environments are unavailable; export success does not certify network acceptance.
+
+For requested CI, a download catalog, or testing local toolkit packages, read
+[references/build-and-delivery.md](references/build-and-delivery.md). These are optional workflows,
+not requirements for every playable.
 
 Finish with the project location, commands to run it, produced artifacts, checks performed and
 remaining campaign inputs. Creating an ad does not by itself request an npm release, deployment,
