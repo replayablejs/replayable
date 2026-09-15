@@ -1,6 +1,6 @@
 {
   "name": "@replayablejs/export",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "description": "Network delivery exporters for Replayable playable ads",
   "homepage": "https://github.com/replayablejs/replayable#readme",
   "bugs": {
