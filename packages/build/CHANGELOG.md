@@ -1,5 +1,15 @@
 # @replayablejs/build
 
+## 0.1.0-alpha.5
+
+### Patch Changes
+
+- Updated dependencies [9658505]
+  - @replayablejs/config@0.1.0-alpha.5
+  - @replayablejs/assets@0.1.0-alpha.5
+  - @replayablejs/devtools@0.1.0-alpha.5
+  - @replayablejs/runtime@0.1.0-alpha.5
+
 ## 0.1.0-alpha.4
 
 ### Patch Changes

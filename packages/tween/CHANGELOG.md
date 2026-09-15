@@ -1,5 +1,11 @@
 # @replayablejs/tween
 
+## 0.1.0-alpha.5
+
+### Patch Changes
+
+- @replayablejs/runtime@0.1.0-alpha.5
+
 ## 0.1.0-alpha.4
 
 ### Patch Changes
