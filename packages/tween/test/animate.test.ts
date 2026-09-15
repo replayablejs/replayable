@@ -30,6 +30,8 @@ let nextFrameId = 0;
 const frameTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
 beforeAll(async () => {
+  // Motion and the RAF shim must share the same controlled clock.
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'performance', 'Date'] });
   class TestElement {
     readonly nodeType = 1;
   }
@@ -68,6 +70,7 @@ afterAll(() => {
 
   frameTimers.clear();
   vi.unstubAllGlobals();
+  vi.useRealTimers();
 });
 
 describe('animate', () => {
@@ -95,21 +98,21 @@ describe('animate', () => {
     );
 
     try {
-      await vi.waitFor(() => {
-        expect(target.x).toBe(10);
-        expect(target.y).toBeGreaterThan(0);
-        expect(target.y).toBeLessThan(100);
-      });
+      await vi.advanceTimersByTimeAsync(50);
+      expect(target.x).toBe(10);
+      expect(target.y).toBeGreaterThan(0);
+      expect(target.y).toBeLessThan(100);
       runtime.setVisible(false);
       // Motion commits its held position on the next scheduled tick. After
       // that native pause settles, additional hidden frames must not advance it.
-      await new Promise((resolve) => setTimeout(resolve, 20));
+      await vi.advanceTimersByTimeAsync(20);
       const pausedY = target.y;
-      await new Promise((resolve) => setTimeout(resolve, 30));
+      await vi.advanceTimersByTimeAsync(30);
       expect(target.y).toBe(pausedY);
 
       recordX.mockClear();
       runtime.setVisible(true);
+      await vi.advanceTimersByTimeAsync(400);
       await controls;
       expect(target.y).toBe(100);
       // Motion's object renderer may reassign x while rendering y, but must
@@ -124,7 +127,9 @@ describe('animate', () => {
   it('delegates plain-object interpolation to Motion', async () => {
     const target = { x: 0 };
 
-    await animate(target, { x: 10 }, { duration: 0.02, ease: 'linear' });
+    const controls = animate(target, { x: 10 }, { duration: 0.02, ease: 'linear' });
+    await vi.advanceTimersByTimeAsync(100);
+    await controls;
 
     expect(target.x).toBeCloseTo(10);
   });
@@ -132,7 +137,9 @@ describe('animate', () => {
   it('retains Motion spring behavior', async () => {
     const target = { scale: 0 };
 
-    await animate(target, { scale: 1 }, { bounce: 0, duration: 0.03, type: 'spring' });
+    const controls = animate(target, { scale: 1 }, { bounce: 0, duration: 0.03, type: 'spring' });
+    await vi.advanceTimersByTimeAsync(100);
+    await controls;
 
     expect(target.scale).toBeCloseTo(1);
   });
@@ -140,10 +147,12 @@ describe('animate', () => {
   it('retains Motion sequence behavior', async () => {
     const target = { x: 0 };
 
-    await animate([
+    const controls = animate([
       [target, { x: 5 }, { duration: 0.01 }],
       [target, { x: 10 }, { duration: 0.01 }],
     ]);
+    await vi.advanceTimersByTimeAsync(100);
+    await controls;
 
     expect(target.x).toBeCloseTo(10);
   });
