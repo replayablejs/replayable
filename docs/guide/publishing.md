@@ -42,10 +42,12 @@ PRs and package artifacts while publication is disabled. To retry a failed run, 
 workflow in GitHub Actions; Changesets skips versions that are already published. Inspect any
 partial publication before retrying, since published versions cannot be overwritten.
 
-The prerelease state selects the `alpha` tag. OIDC publication does not replace the separate
-maintainer step of advancing `latest` during the alpha period. After a release is verified, an
-npm owner can update it with `npm dist-tag add @replayablejs/<package>@<version> latest` for
-each package, completing npm's authentication prompts. Keep all ten default versions aligned.
+Replayable uses `latest` as its only supported npm distribution tag, including during alpha.
+The `-alpha.N` suffix is part of the version number; it does not require an `alpha` tag.
+Changesets currently publishes these alpha-only packages to `latest` because none has had a
+stable release. Verify all ten package versions and `latest` tags after publication.
+Revisit prerelease tagging before publishing alphas after the first stable release, when
+Changesets' tag-selection behavior changes.
 
 ## One-time npm setup
 
@@ -76,7 +78,7 @@ prompts. Build and pack with pnpm so workspace and catalog dependency ranges are
 do not publish source folders with those ranges unresolved.
 
 Publish reviewed tarballs in dependency order: runtime, assets, canvas, devtools, tween,
-config, pixi, build, export, cli. Pass `--access public --tag alpha` explicitly for alpha releases.
+config, pixi, build, export, cli. Pass `--access public --tag latest` explicitly.
 Verify each version and its `dist.integrity` against the reviewed tarball before completing
 release tags. Registry metadata can briefly lag successful publication; retry read-only checks
 before attempting another write. Never delete a published version to retry it.

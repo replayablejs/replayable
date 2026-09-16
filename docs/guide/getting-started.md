@@ -37,8 +37,8 @@ pnpm add -D @replayablejs/cli@__REPLAYABLE_VERSION__ @replayablejs/config@__REPL
 :::
 
 ::: info Alpha versions
-Keep Replayable packages on the same version. These instructions pin `__REPLAYABLE_VERSION__`; the `alpha`
-npm tag selects the current alpha. APIs can change before 1.0.
+Keep Replayable packages on the same version. These instructions pin `__REPLAYABLE_VERSION__`; the `latest`
+npm tag selects the default published release, which is currently an alpha. APIs can change before 1.0.
 :::
 
 ## Project Structure

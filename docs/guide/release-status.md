@@ -1,7 +1,7 @@
 # Alpha release
 
 This documentation describes **Replayable **REPLAYABLE_VERSION****. Install packages from the
-`@replayablejs` scope. The npm `alpha` tag selects the current alpha; pin exact versions when
+`@replayablejs` scope. The npm `latest` tag selects the default release, including during alpha; pin exact versions when
 you need reproducible installations.
 
 ## Versioning
