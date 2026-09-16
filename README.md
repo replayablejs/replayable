@@ -29,7 +29,23 @@ See [getting started](https://replayablejs.github.io/replayable/guide/getting-st
 
 ## Examples
 
-Try the ads in your browser or explore their source:
+### Featured: Music Mixer
+
+[**Music Mixer**](https://github.com/replayablejs/music-mixer-playable) is a complete playable
+built with Replayable's published packages and HTML/CSS. One codebase produces two music packs,
+distinct color themes, guided and free-play modes, and three languages—including localized hand
+artwork. Together with eight delivery profiles, that produces **96 exports**.
+
+Replayable selects only the assets each version needs, resizes artwork, subsets fonts, and
+applies version-specific loading bundles. The project also demonstrates synchronized audio,
+lifecycle-aware animations, tutorials, idle hints, and endcards.
+
+**[Play the variants and download exports](https://replayablejs.github.io/music-mixer-playable/)**
+· **[Explore the source](https://github.com/replayablejs/music-mixer-playable)**
+
+### Basic examples
+
+For smaller starting points, try these focused examples:
 
 | Example     | Live demo                                                                             | Source                                      |
 | ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
