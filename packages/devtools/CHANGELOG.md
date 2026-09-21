@@ -1,5 +1,12 @@
 # @replayablejs/devtools
 
+## 0.1.0-alpha.6
+
+### Patch Changes
+
+- Updated dependencies [dc896ee]
+  - @replayablejs/runtime@0.1.0-alpha.6
+
 ## 0.1.0-alpha.5
 
 ### Patch Changes
