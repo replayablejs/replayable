@@ -13,7 +13,7 @@ pnpm add @replayablejs/tween@0.1.0-alpha.0
 
 ## Public surface
 
-`animate`, `stagger`, `TweenPlaybackControls`.
+`animate`, `stagger`, `release`, `TweenPlaybackControls`.
 
 [Usage and reference](https://github.com/replayablejs/replayable/blob/main/docs/reference/tween.md).
 The package manifest defines supported import paths; internal source files are not public APIs.

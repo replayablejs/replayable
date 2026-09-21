@@ -3,7 +3,8 @@ export interface UpdateChannel<Context> {
   /**
    * Adds a listener to the channel.
    *
-   * @returns A function that removes this listener.
+   * @returns A function that immediately removes this listener, including before
+   * its turn in an in-progress dispatch. An executing callback finishes normally.
    */
   add(listener: (context: Context) => void): () => void;
 }
@@ -37,6 +38,12 @@ export interface FixedUpdateContext {
 /** Receives one value from an internal update dispatch. */
 export type UpdateListener<Context> = (context: Context) => void;
 
+/** One registration, retained by a dispatch snapshot until that dispatch finishes. */
+export interface UpdateSubscription<Context> {
+  readonly listener: UpdateListener<Context>;
+  active: boolean;
+}
+
 /**
  * Internal controls retained alongside one public update subscription channel.
  *
@@ -45,8 +52,8 @@ export type UpdateListener<Context> = (context: Context) => void;
  */
 export interface UpdateChannelController<Context> extends UpdateChannel<Context> {
   /**
-   * Delivers one value to the exact listener snapshot present when dispatch
-   * begins. Subscription changes take effect on the following dispatch.
+   * Delivers to still-active subscriptions present when dispatch begins.
+   * Removed subscriptions are skipped; additions wait for the next dispatch.
    */
   dispatch(context: Context): void;
   /** Reports whether at least one consumer currently requires this channel. */

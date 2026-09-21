@@ -9,5 +9,6 @@
  */
 
 export { animate } from './animate.js';
+export { release } from './release.js';
 export { stagger } from 'motion';
 export type { TweenPlaybackControls } from '#types/playback.js';

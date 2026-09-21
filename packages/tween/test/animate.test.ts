@@ -26,6 +26,7 @@ const runtime = vi.hoisted(() => {
 vi.mock('@replayablejs/runtime', () => ({ playable: runtime }));
 
 let animate: typeof Animate;
+let release: typeof import('../src/release.js').release;
 let nextFrameId = 0;
 const frameTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
@@ -61,6 +62,7 @@ beforeAll(async () => {
   });
 
   ({ animate } = await import('../src/animate.js'));
+  ({ release } = await import('../src/release.js'));
 });
 
 afterAll(() => {
@@ -132,6 +134,82 @@ describe('animate', () => {
     await controls;
 
     expect(target.x).toBeCloseTo(10);
+  });
+
+  it.each(['object', 'sequence', 'array'] as const)(
+    'releases pending writes before a %s target is destroyed',
+    async (kind) => {
+      let destroyed = false;
+      let x = 0;
+      const target = {
+        get x(): number {
+          return x;
+        },
+        set x(value: number) {
+          if (destroyed) {
+            throw new Error('Write after destruction');
+          }
+          x = value;
+        },
+      };
+      const controls =
+        kind === 'sequence'
+          ? animate([[target, { x: 10 }, { duration: 0.2 }]])
+          : animate(kind === 'array' ? [target] : target, { x: 10 }, { duration: 0.2 });
+      // Even creation queues an initial property render before the first RAF.
+      controls.stop();
+      release(target);
+      destroyed = true;
+      await vi.advanceTimersByTimeAsync(300);
+      expect(x).toBe(0);
+    },
+  );
+
+  it('can stop and destroy an object from its completion callback', async () => {
+    let destroyed = false;
+    const target = {
+      get x(): number {
+        return 0;
+      },
+      set x(_value: number) {
+        if (destroyed) {
+          throw new Error('Write after completion teardown');
+        }
+      },
+    };
+    const controls = animate(
+      target,
+      { x: 10 },
+      {
+        duration: 0.02,
+        onComplete: () => {
+          controls.stop();
+          release(target);
+          destroyed = true;
+        },
+      },
+    );
+    await vi.advanceTimersByTimeAsync(100);
+    expect(destroyed).toBe(true);
+  });
+
+  it('preserves newer and unrelated property animations when an older tween stops', async () => {
+    const target = { x: 0, y: 0 };
+    const old = animate(target, { x: 10 }, { duration: 0.2 });
+    const current = animate(target, { x: 20 }, { duration: 0.03 });
+    const other = animate(target, { y: 30 }, { duration: 0.03 });
+    old.stop();
+    await vi.advanceTimersByTimeAsync(100);
+    expect(target).toEqual({ x: 20, y: 30 });
+    current.stop();
+    other.stop();
+    release(target);
+    release(target);
+    target.x = 5;
+    const restarted = animate(target, { x: 40 }, { duration: 0.03 });
+    await vi.advanceTimersByTimeAsync(100);
+    expect(target.x).toBe(40);
+    restarted.stop();
   });
 
   it('retains Motion spring behavior', async () => {

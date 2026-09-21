@@ -128,6 +128,9 @@ sample-accurate synchronization.
 
 Use `update.add()` for work on rendered frames. Its `deltaSeconds` is measured in seconds.
 `fixedUpdate.add()` advances simulation at 60 steps per second. Both return unsubscribe functions.
+Unsubscribing takes effect immediately: a callback waiting for its turn in the current
+dispatch is skipped. A callback already executing finishes normally. Listeners added
+during dispatch start on the next dispatch. The same behavior applies to `postRender.add()`.
 
 ```ts
 import { playable } from '@replayablejs/runtime';

@@ -93,7 +93,7 @@ it('invalidates callbacks retained in a postRender snapshot even after stop and 
   expect(listener).toHaveBeenCalledExactlyOnceWith({ timestamp: 116 });
 });
 
-it('preserves update-channel snapshot semantics and stops when the last listener unsubscribes', () => {
+it('skips removed post-render listeners and stops when the last listener unsubscribes', () => {
   const updates = createUpdates();
   const second = vi.fn<(context: PostRenderContext) => void>();
   let removeSecond = (): void => {};
@@ -103,8 +103,8 @@ it('preserves update-channel snapshot semantics and stops when the last listener
   updates.setVisible(true);
   processFrame(100);
   processFrame(116);
-  expect(second).toHaveBeenCalledExactlyOnceWith({ timestamp: 100 });
+  expect(second).not.toHaveBeenCalled();
   removeFirst();
   processFrame(132);
-  expect(second).toHaveBeenCalledTimes(1);
+  expect(second).not.toHaveBeenCalled();
 });

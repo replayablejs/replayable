@@ -32,6 +32,31 @@ await entrance;
 Keep the controls when a scene can be disposed before the animation completes. Call `stop()`
 before removing its target. Duration and playback position are measured in seconds.
 
+## Releasing object targets
+
+When disposing a Pixi object or another plain-object target, stop its tweens and
+release its property bindings before destroying it:
+
+```ts
+import { animate, release } from '@replayablejs/tween';
+
+const animation = animate(chip, { x: 100 }, { duration: 0.3 });
+
+// When this artwork is no longer needed:
+animation.stop();
+release(chip);
+chip.destroy();
+```
+
+`release(target)` disconnects **all** plain-object property bindings on that target,
+including pending writes. It does not stop playback, restore values, or clean up
+DOM styles. Calling it on an unbound or already released object is safe. A later
+animation can bind the object again.
+
+Release each animated target separately: if a sequence animates both `chip` and
+`chip.scale`, stop the sequence, then release both objects before destroying the chip.
+Do not release a target while other tweens should continue updating it.
+
 ## Playback Controls
 
 | Member       | Behavior                                                            |
