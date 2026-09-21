@@ -8,9 +8,13 @@
     "build": "pnpm assets",
     "lint": "oxlint --type-aware --max-warnings 0 .",
     "test": "vitest run --passWithNoTests",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "models:prepare": "node scripts/prepare-model-layouts.ts",
+    "models:examples": "node scripts/model-examples.ts"
   },
   "devDependencies": {
+    "@gltf-transform/core": "catalog:",
+    "@gltf-transform/extensions": "catalog:",
     "@replayablejs/assets": "workspace:*",
     "@replayablejs/cli": "workspace:*",
     "@types/node": "catalog:",

@@ -5,5 +5,5 @@
     "moduleResolution": "Bundler",
     "types": ["node"]
   },
-  "include": ["replayable.assets.ts", "src/**/*.ts"]
+  "include": ["replayable.assets.ts", "src/**/*.ts", "scripts/**/*.ts"]
 }

@@ -35,6 +35,7 @@ export type {
   AtlasAssetOptions,
   FontAssetOptions,
   ImageAssetOptions,
+  ModelAssetOptions,
   SoundAssetOptions,
   SpineAssetOptions,
 } from '#types/asset-options.js';
@@ -64,6 +65,7 @@ export type {
   JsonValue,
   LocaleAsset,
   LocaleDictionary,
+  ModelAsset,
   ShaderAsset,
   SpineAsset,
 } from '#types/runtime-assets.js';

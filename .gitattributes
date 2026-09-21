@@ -1,1 +1,8 @@
 * text=auto eol=lf
+
+# Preserve model source bytes and upstream whitespace for provenance hashes.
+examples/basic-assets/assets/models/**/*.obj -text -whitespace
+examples/basic-assets/assets/models/**/*.mtl -text -whitespace
+examples/basic-assets/assets/models/**/License.txt -text -whitespace
+examples/basic-assets/assets/textures/kenney-blocky/License.txt -text -whitespace
+packages/assets/test/fixtures/models/animated-triangle/AnimatedTriangle.gltf -text -whitespace

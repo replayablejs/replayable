@@ -7,6 +7,7 @@ import { processAtlas } from './categories/atlas.js';
 import { processFont } from './categories/font.js';
 import { processImage } from './categories/image.js';
 import { processLocale } from './categories/locale.js';
+import { processModel } from './categories/model.js';
 import { processShader } from './categories/shader.js';
 import { processSound } from './categories/sound.js';
 import { processSpine } from './categories/spine.js';
@@ -45,6 +46,8 @@ function processAsset(asset: ResolvedAsset): Promise<ProcessedAsset[]> {
       return processAtlas(asset);
     case 'fonts':
       return processFont(asset);
+    case 'models':
+      return processModel(asset);
     case 'locales':
       return processLocale(asset);
     case 'shaders':

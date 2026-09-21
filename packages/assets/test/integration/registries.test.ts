@@ -48,6 +48,7 @@ describe('registries', () => {
       export { sounds } from './sounds.js';
       export { fonts } from './fonts.js';
       export { locales } from './locales.js';
+      export { models } from './models.js';
       export { atlases } from './atlases.js';
       export { spines } from './spines.js';
       export { shaders } from './shaders.js';
@@ -59,6 +60,7 @@ describe('registries', () => {
       'fonts.ts',
       'index.ts',
       'locales.ts',
+      'models.ts',
       'shaders.ts',
       'sounds.ts',
       'spines.ts',

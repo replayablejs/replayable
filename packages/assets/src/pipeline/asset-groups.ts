@@ -96,6 +96,7 @@ function createEmptyCategories(): MutableAssetsByCategory {
     atlases: [],
     fonts: [],
     locales: [],
+    models: [],
     shaders: [],
     sounds: [],
     spines: [],
@@ -118,6 +119,9 @@ function addAsset(categories: MutableAssetsByCategory, asset: ProcessedAsset): v
       break;
     case 'fonts':
       categories.fonts.push(asset);
+      break;
+    case 'models':
+      categories.models.push(asset);
       break;
     case 'locales':
       categories.locales.push(asset);

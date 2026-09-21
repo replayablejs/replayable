@@ -1,4 +1,10 @@
-import type { AtlasOptions, FontOptions, ImageOptions, SoundOptions } from './asset-options.js';
+import type {
+  AtlasOptions,
+  FontOptions,
+  ImageOptions,
+  ModelOptions,
+  SoundOptions,
+} from './asset-options.js';
 import type { AssetBundleName } from './bundles.js';
 import type { SourceFile } from './source.js';
 
@@ -70,7 +76,13 @@ export interface ResolvedSoundAsset extends ResolvedSimpleSource {
   readonly options: SoundOptions;
 }
 
+export interface ResolvedModelAsset extends ResolvedSimpleSource {
+  readonly category: 'models';
+  readonly options: ModelOptions;
+}
+
 export type ResolvedSimpleAsset =
+  | ResolvedModelAsset
   | ResolvedFontAsset
   | ResolvedImageAsset
   | ResolvedLocaleAsset

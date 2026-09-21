@@ -9,7 +9,12 @@ export default defineConfig({
   },
   bundles: {
     secondary: {
-      include: ['sounds/theme-*', 'spines/raptor'],
+      include: [
+        'sounds/theme-*',
+        'spines/raptor',
+        'models/blocky-characters/**',
+        'models/platformer-kit/character-*.glb',
+      ],
     },
   },
   assets: {
@@ -33,8 +38,23 @@ export default defineConfig({
         options: { family: 'Source Serif 4' },
       },
     ],
+    // Every supported source layout becomes one self-contained Meshopt GLB.
+    // See MODELS.md and scripts/model-examples.ts for all model options.
+    models: [
+      { options: { compression: 'meshopt' } },
+      {
+        match: 'blocky-characters/character-a.glb',
+        options: {
+          // Matching rules replace options, so repeat the geometry compression.
+          compression: 'meshopt',
+          // Compress only this model's color textures and halve their dimensions.
+          textures: { lossless: false, quality: 70, scale: 0.5 },
+        },
+      },
+    ],
     locales: [{ match: '**' }],
     shaders: [{ match: '**' }],
+    textures: [{}],
     sprites: [
       {
         options: { quality: 70, scale: 1 },

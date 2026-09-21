@@ -94,6 +94,8 @@ export function isSupportedSourceFile(category: AssetCategory, path: string): bo
       return isImageFile(path);
     case 'fonts':
       return /\.(?:otf|ttf|woff2?)$/i.test(path);
+    case 'models':
+      return /\.(?:obj|gltf|glb)$/i.test(path);
     case 'locales':
       return /\.jsonc?$/i.test(path);
     case 'shaders':

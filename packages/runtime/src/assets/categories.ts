@@ -1,5 +1,12 @@
 /** Categories produced from one selected source file per logical asset. */
-export const simpleAssetCategories = ['sprites', 'textures', 'sounds', 'fonts', 'locales'] as const;
+export const simpleAssetCategories = [
+  'sprites',
+  'textures',
+  'sounds',
+  'fonts',
+  'locales',
+  'models',
+] as const;
 
 /** Categories assembled from several related source files. */
 export const groupedAssetCategories = ['atlases', 'spines', 'shaders'] as const;

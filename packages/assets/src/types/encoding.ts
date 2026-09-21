@@ -18,3 +18,9 @@ export interface ImageEncodingRequest {
   /** Human-readable source path included in processing errors. */
   readonly sourcePath: string;
 }
+
+/** Encoded image bytes paired with the MIME type that must be stored in the document. */
+export interface ModelTextureCandidate {
+  readonly image: Uint8Array;
+  readonly mimeType: string;
+}

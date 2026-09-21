@@ -1,0 +1,36 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "pack": "platformer-kit",
+  "version": "4.1",
+  "page": "https://kenney.nl/assets/platformer-kit",
+  "download": "https://kenney.nl/media/pages/assets/platformer-kit/1585cf62b4-1775122253/kenney_platformer-kit.zip",
+  "archiveSha256": "899605d237367688c6b42e41fff2206c0fb8d626163158294556353f7baa7c1b",
+  "files": [
+    {
+      "source": "Models/GLB format/character-oopi.glb",
+      "file": "character-oopi.glb",
+      "sha256": "faaecd9c4a9648c8c51115cf09e3b3895685f30edaf57a298a768471f5355e2e"
+    },
+    {
+      "source": "Models/GLB format/chest.glb",
+      "file": "chest.glb",
+      "sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274"
+    },
+    {
+      "source": "Models/OBJ format/tree.obj",
+      "file": "tree.obj",
+      "sha256": "d3c5d0f68c70f68fdf1f7216b16e4da1e8e8a1f51062d9caa19829eb05acebef"
+    },
+    {
+      "source": "Models/OBJ format/tree.mtl",
+      "file": "tree.mtl",
+      "sha256": "45a6736aa344a0c7e286b9c43c6a48f25b6a2f78d8c5949e430c3b4a93b4e060"
+    },
+    {
+      "source": "Models/GLB format/Textures/colormap.png",
+      "file": "Textures/colormap.png",
+      "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd"
+    }
+  ]
+}

@@ -33,3 +33,25 @@ declare module 'free-tex-packer-core' {
     config?: ReplayableTexturePackerOptions,
   ): Promise<Array<{ readonly buffer: Buffer; readonly name: string }>>;
 }
+
+/** The binary-only conversion boundary used by the model pipeline. */
+declare module 'obj2gltf' {
+  export default function obj2gltf(
+    path: string,
+    options: {
+      binary: true;
+      checkTransparency: boolean;
+      logger: (message: string) => void;
+      secure: boolean;
+    },
+  ): Promise<Buffer>;
+}
+
+/** Codec objects are passed through to glTF Transform, which owns their API. */
+declare module 'draco3dgltf' {
+  const draco: {
+    createDecoderModule(): Promise<unknown>;
+    createEncoderModule(): Promise<unknown>;
+  };
+  export default draco;
+}

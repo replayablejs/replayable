@@ -83,8 +83,16 @@ export interface SpineAsset {
   readonly skel: JsonObject | string;
 }
 
+/** Self-contained GLB and the geometry decoder required by its build options. */
+export interface ModelAsset {
+  readonly src: string;
+  readonly compression: 'none' | 'draco' | 'meshopt';
+}
+
 /** Runtime assets available inside one generated bundle. */
 export interface AssetsInBundle {
+  /** Self-contained 3D models keyed by logical asset ID. */
+  readonly models?: Readonly<Record<string, ModelAsset>>;
   /** Packed sprite sheets keyed by generated sheet ID. */
   readonly atlases?: Readonly<Record<string, AtlasAsset>>;
   /** Subset web fonts keyed by logical asset ID. */

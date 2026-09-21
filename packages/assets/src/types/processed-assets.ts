@@ -86,7 +86,14 @@ export interface ProcessedSoundAsset extends ProcessedAssetBase<'sounds'> {
   readonly file: GeneratedFile<GeneratedAudioFormat>;
 }
 
+/** One GLB containing all geometry, materials, and texture images. */
+export interface ProcessedModelAsset extends ProcessedAssetBase<'models'> {
+  readonly file: GeneratedFile<'glb'>;
+  readonly runtime: { readonly compression: 'none' | 'draco' | 'meshopt' };
+}
+
 export type ProcessedAsset =
+  | ProcessedModelAsset
   | ProcessedAtlasAsset
   | ProcessedFontAsset
   | ProcessedImageAsset

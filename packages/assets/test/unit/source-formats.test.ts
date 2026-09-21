@@ -7,6 +7,7 @@ describe('supported source formats', () => {
   it.each<[AssetCategory, readonly string[]]>([
     ['atlases', ['sheet.avif', 'sheet.jpeg', 'sheet.jpg', 'sheet.png', 'sheet.webp']],
     ['fonts', ['body.otf', 'body.ttf', 'body.woff', 'body.woff2']],
+    ['models', ['car.obj', 'car.gltf', 'car.glb']],
     ['locales', ['interface.json', 'interface.jsonc']],
     ['shaders', ['vert.glsl']],
     ['sounds', ['click.m4a', 'click.mp3', 'click.ogg', 'click.wav']],

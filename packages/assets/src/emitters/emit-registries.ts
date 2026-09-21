@@ -10,6 +10,7 @@ import { renderAtlasRegistry } from './categories/atlas.js';
 import { renderFontRegistry } from './categories/font.js';
 import { renderImageRegistry } from './categories/image.js';
 import { renderLocaleRegistry } from './categories/locale.js';
+import { renderModelRegistry } from './categories/model.js';
 import { renderShaderRegistry } from './categories/shader.js';
 import { renderSoundRegistry } from './categories/sound.js';
 import { renderSpineRegistry } from './categories/spine.js';
@@ -171,6 +172,8 @@ function renderCategoryRegistry(category: AssetCategory, assets: AssetsByCategor
       return renderAtlasRegistry(assets.atlases);
     case 'fonts':
       return renderFontRegistry(assets.fonts);
+    case 'models':
+      return renderModelRegistry(assets.models);
     case 'locales':
       return renderLocaleRegistry(assets.locales);
     case 'shaders':

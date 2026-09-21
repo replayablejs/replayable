@@ -157,6 +157,7 @@ describe('asset configuration', () => {
     expect(parsed.assets).toMatchObject({
       fonts: [],
       locales: [],
+      models: [],
       shaders: [],
       sounds: [],
       spines: [],
@@ -169,6 +170,24 @@ describe('asset configuration', () => {
     });
     expect(parsed.bundles).toEqual({});
     expect(parsed.exclude).toEqual([]);
+  });
+
+  it('validates model compression and shared texture options', () => {
+    const parsed = config({ assets: { models: [{}] } });
+    expect(parsed.assets.models[0]?.options).toEqual({
+      compression: 'none',
+      textures: { scale: 1, lossless: true },
+    });
+    for (const options of [
+      { compression: 'objpack' },
+      { textures: { scale: 0 } },
+      { textures: { quality: 101 } },
+      { textures: { lossless: true, quality: 80 } },
+    ]) {
+      expect(
+        assetConfigSchema.safeParse({ ...config(), assets: { models: [{ options }] } }).success,
+      ).toBe(false);
+    }
   });
 
   it('requires an explicit nonblank font family', () => {

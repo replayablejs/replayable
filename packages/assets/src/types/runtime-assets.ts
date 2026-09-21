@@ -10,6 +10,7 @@ export type {
   JsonValue,
   LocaleAsset,
   LocaleDictionary,
+  ModelAsset,
   ShaderAsset,
   SpineAsset,
 } from '@replayablejs/runtime/assets';

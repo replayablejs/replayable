@@ -3,6 +3,7 @@ import type { z } from 'zod';
 import type { atlasOptionsSchema } from '#config/schemas/atlas.js';
 import type { fontOptionsSchema } from '#config/schemas/font.js';
 import type { imageOptionsSchema } from '#config/schemas/image.js';
+import type { modelOptionsSchema } from '#config/schemas/model.js';
 import type { soundOptionsSchema } from '#config/schemas/sound.js';
 import type { spineOptionsSchema } from '#config/schemas/spine.js';
 
@@ -32,3 +33,9 @@ export type SoundOptions = z.infer<typeof soundOptionsSchema>;
 
 /** Author-written image options applied to Spine texture pages. */
 export type SpineAssetOptions = z.input<typeof spineOptionsSchema>;
+
+/** Author-written model conversion and texture encoding settings. */
+export type ModelAssetOptions = z.input<typeof modelOptionsSchema>;
+
+/** Validated model options with every default applied. */
+export type ModelOptions = z.infer<typeof modelOptionsSchema>;

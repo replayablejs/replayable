@@ -20,6 +20,7 @@ describe('runtime asset types', () => {
 
     const assets = {
       primary: {
+        models: { car: { src: '/car.glb', compression: 'draco' } },
         atlases: {
           interface: { image: '/interface.webp', json: atlasLayout },
         },

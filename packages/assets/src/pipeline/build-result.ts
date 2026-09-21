@@ -38,6 +38,7 @@ function countGeneratedFiles(asset: ProcessedAsset): number {
     case 'spines':
       return asset.files.images.length + 2;
     case 'fonts':
+    case 'models':
     case 'locales':
     case 'sounds':
     case 'sprites':

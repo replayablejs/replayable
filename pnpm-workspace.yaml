@@ -7,6 +7,13 @@ autoInstallPeers: false
 linkWorkspacePackages: true
 
 catalog:
+  gltf-validator: 2.0.0-dev.3.10
+  '@gltf-transform/core': 4.5.0
+  '@gltf-transform/extensions': 4.5.0
+  '@gltf-transform/functions': 4.5.0
+  'obj2gltf': 3.2.0
+  'draco3dgltf': 1.5.7
+  'meshoptimizer': 1.2.0
   '@poppinss/dumper': 0.7.0
   '@tsdown/css': 0.22.14
   '@esotericsoftware/spine-core': 4.3.13

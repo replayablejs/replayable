@@ -1,0 +1,5 @@
+newmtl Surface
+Kd 1 1 1
+Ks 0 0 0
+Ns 20
+map_Kd checker.png

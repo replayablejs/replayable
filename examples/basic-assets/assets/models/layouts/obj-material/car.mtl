@@ -1,0 +1,6 @@
+# Derived from Kenney Car Kit; CC0. Plain blue material without images.
+newmtl colormap
+Kd 0.12 0.45 0.8
+Ks 0 0 0
+Ns 20
+d 1

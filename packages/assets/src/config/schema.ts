@@ -5,6 +5,7 @@ import { requiredStringSchema } from './schemas/base.js';
 import { fontRuleSchema } from './schemas/font.js';
 import { imageRuleSchema } from './schemas/image.js';
 import { localeRuleSchema } from './schemas/locale.js';
+import { modelRuleSchema } from './schemas/model.js';
 import { shaderRuleSchema } from './schemas/shader.js';
 import { soundRuleSchema } from './schemas/sound.js';
 import { spineRuleSchema } from './schemas/spine.js';
@@ -14,6 +15,7 @@ const assetsSchema = z.strictObject({
   atlases: z.array(atlasRuleSchema).default([]),
   fonts: z.array(fontRuleSchema).default([]),
   locales: z.array(localeRuleSchema).default([]),
+  models: z.array(modelRuleSchema).default([]),
   shaders: z.array(shaderRuleSchema).default([]),
   sounds: z.array(soundRuleSchema).default([]),
   spines: z.array(spineRuleSchema).default([]),

@@ -45,9 +45,15 @@
   "dependencies": {
     "@esotericsoftware/spine-core": "catalog:",
     "@ffmpeg-installer/ffmpeg": "catalog:",
+    "@gltf-transform/core": "catalog:",
+    "@gltf-transform/extensions": "catalog:",
+    "@gltf-transform/functions": "catalog:",
     "@replayablejs/runtime": "workspace:*",
+    "draco3dgltf": "catalog:",
     "free-tex-packer-core": "catalog:",
     "jsonc-parser": "catalog:",
+    "meshoptimizer": "catalog:",
+    "obj2gltf": "catalog:",
     "sharp": "catalog:",
     "subset-font": "catalog:",
     "tinyglobby": "catalog:",
@@ -55,6 +61,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "gltf-validator": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

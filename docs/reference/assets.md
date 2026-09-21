@@ -24,7 +24,7 @@ project configuration, omit asset `localization`; variant expansion supplies the
 
 ## Selection and output
 
-Sources are grouped by category: sprites, textures, atlases, spines, shaders, sounds, fonts and
+Sources are grouped by category: sprites, textures, atlases, spines, shaders, sounds, fonts, models and
 locales. Omitted category lists select nothing. A rule's `match` defaults to `**`; `exclude`
 removes matching sources. Top-level exclusions use source-relative paths.
 
@@ -53,6 +53,7 @@ for processor options and licensing considerations.
 | Individual images        | [Sprites](./sprites.md)   | UI and scene images           |
 | Individual images        | [Textures](./textures.md) | Texture resources             |
 | Image groups             | [Atlases](./atlases.md)   | Pack multiple images together |
+| OBJ, glTF, GLB           | [Models](./models.md)     | Self-contained 3D models      |
 | Spine exports            | [Spines](./spines.md)     | Skeletal animation            |
 | Shader pairs             | [Shaders](./shaders.md)   | Vertex and fragment programs  |
 | Audio files              | [Sounds](./sounds.md)     | Music and effects             |

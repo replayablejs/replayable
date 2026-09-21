@@ -14,6 +14,7 @@ describe('complete asset build', () => {
         atlases: [{}],
         fonts: [{ options: { family: 'Replayable Body' } }],
         locales: [{}],
+        models: [{}],
         shaders: [{}],
         sounds: [{}],
         spines: [{}],
@@ -35,8 +36,8 @@ describe('complete asset build', () => {
 
     expect(firstResult).toEqual({
       bundles: ['primary', 'secondary'],
-      emittedAssets: 8,
-      emittedFiles: 12,
+      emittedAssets: 9,
+      emittedFiles: 13,
       outputDirectory: project.path('src/assets/resources'),
     });
     expect(firstOutput.resources).toEqual([
@@ -44,6 +45,7 @@ describe('complete asset build', () => {
       expect.stringMatching(/^atlases\/interface\/interface\.(?:avif|jpg|png|webp)$/),
       'fonts/body.woff2',
       'locales/translations.json',
+      'models/triangle.glb',
       'shaders/grayscale/frag.glsl',
       'shaders/grayscale/vert.glsl',
       expect.stringMatching(/^sounds\/theme\.(?:m4a|mp3)$/),

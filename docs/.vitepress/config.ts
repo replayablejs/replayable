@@ -88,6 +88,7 @@ export default defineConfig({
                 { link: '/reference/assets', text: 'Overview' },
                 { link: '/reference/sprites', text: 'Sprites' },
                 { link: '/reference/textures', text: 'Textures' },
+                { link: '/reference/models', text: 'Models' },
                 { link: '/reference/atlases', text: 'Atlases' },
                 { link: '/reference/spines', text: 'Spines' },
                 { link: '/reference/shaders', text: 'Shaders' },

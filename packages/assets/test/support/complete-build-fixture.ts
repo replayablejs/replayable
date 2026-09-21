@@ -32,6 +32,7 @@ export async function writeCompleteBuildFixture(project: TestProject): Promise<v
     ),
     project.write('assets/source/spines/hero/hero.atlas', 'page.png\nsize: 1,1\n'),
     project.write('assets/source/spines/hero/page.png', png),
+    project.write('assets/source/models/triangle.obj', 'v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n'),
     project.write('assets/source/sprites/logo.png', png),
     project.write('assets/source/textures/noise.png', png),
   ]);

@@ -18,6 +18,7 @@ export type {
   JsonValue,
   LocaleAsset,
   LocaleDictionary,
+  ModelAsset,
   ShaderAsset,
   SimpleAssetCategory,
   SpineAsset,

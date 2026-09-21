@@ -1,0 +1,26 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "pack": "car-kit",
+  "version": "3.1",
+  "page": "https://kenney.nl/assets/car-kit",
+  "download": "https://kenney.nl/media/pages/assets/car-kit/1a312ec241-1775131960/kenney_car-kit.zip",
+  "archiveSha256": "fac7dacac5c7874348cf19729af3ef205f3d366493edaf0a827d93f4fdf3d0c4",
+  "files": [
+    {
+      "source": "Models/OBJ format/race.obj",
+      "file": "race.obj",
+      "sha256": "06e251531499efe4f7857e66468df7cbc466bcfb82e6894493f121baed08ec74"
+    },
+    {
+      "source": "Models/OBJ format/race.mtl",
+      "file": "race.mtl",
+      "sha256": "45a6736aa344a0c7e286b9c43c6a48f25b6a2f78d8c5949e430c3b4a93b4e060"
+    },
+    {
+      "source": "Models/OBJ format/Textures/colormap.png",
+      "file": "Textures/colormap.png",
+      "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+    }
+  ]
+}

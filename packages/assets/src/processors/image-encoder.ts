@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 import sharp from 'sharp';
@@ -98,6 +98,15 @@ async function writeImageVariant(
 ): Promise<void> {
   await mkdir(dirname(outputPath), { recursive: true });
 
+  await writeFile(outputPath, await encodeImageVariant(input, format, options));
+}
+
+/** Shared in-memory encoder for standalone files and embedded model textures. */
+export async function encodeImageVariant(
+  input: Buffer,
+  format: GeneratedImageFormat,
+  options: ImageOptions,
+): Promise<Buffer> {
   let image = sharp(input);
   const quality = options.lossless ? undefined : options.quality;
 
@@ -118,5 +127,5 @@ async function writeImageVariant(
       break;
   }
 
-  await image.toFile(outputPath);
+  return image.toBuffer();
 }

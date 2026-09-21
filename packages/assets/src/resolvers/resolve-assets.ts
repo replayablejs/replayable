@@ -6,6 +6,7 @@ import type { ResolvedAsset } from '#types/resolved-assets.js';
 import { resolveAtlases } from './categories/atlas.js';
 import { resolveFonts } from './categories/font.js';
 import { resolveLocales } from './categories/locale.js';
+import { resolveModels } from './categories/model.js';
 import { resolveShaders } from './categories/shader.js';
 import { resolveSounds } from './categories/sound.js';
 import { resolveSpines } from './categories/spine.js';
@@ -38,6 +39,7 @@ export async function resolveAssets(
   // Spine is asynchronous because it reads atlas page declarations from disk.
   const atlases = resolveAtlases(resolution);
   const fonts = resolveFonts(resolution, localeCharacters);
+  const models = resolveModels(resolution);
   const shaders = resolveShaders(resolution);
   const sounds = resolveSounds(resolution);
   const spines = await resolveSpines(resolution);
@@ -50,6 +52,7 @@ export async function resolveAssets(
     ...atlases,
     ...fonts,
     ...locales,
+    ...models,
     ...shaders,
     ...sounds,
     ...spines,

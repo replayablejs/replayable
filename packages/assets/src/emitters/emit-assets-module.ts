@@ -10,6 +10,7 @@ import { renderAtlasEntry } from './categories/atlas.js';
 import { renderFontEntry } from './categories/font.js';
 import { renderImageEntry } from './categories/image.js';
 import { renderLocaleEntry } from './categories/locale.js';
+import { renderModelEntry } from './categories/model.js';
 import { renderShaderEntry } from './categories/shader.js';
 import { renderSoundEntry } from './categories/sound.js';
 import { renderSpineEntry } from './categories/spine.js';
@@ -325,6 +326,8 @@ function renderAssetEntry(asset: ProcessedAsset, context: AssetsModuleContext): 
       return renderAtlasEntry(asset, context);
     case 'fonts':
       return renderFontEntry(asset, context);
+    case 'models':
+      return renderModelEntry(asset, context);
     case 'locales':
       return renderLocaleEntry(asset, context);
     case 'shaders':

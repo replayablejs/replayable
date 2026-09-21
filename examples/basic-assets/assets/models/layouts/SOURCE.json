@@ -1,0 +1,68 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "generator": "examples/basic-assets/scripts/prepare-model-layouts.ts",
+  "changes": {
+    "obj-geometry": "Removed mtllib/usemtl declarations; original tree geometry, normals, and UVs retained.",
+    "obj-material": "Renamed the MTL reference and supplied a plain blue material; original race-car geometry retained.",
+    "glb-embedded": "Embedded the chest texture into GLB, both flat and in a dedicated directory; all three animation clips retained.",
+    "gltf-external": "Repacked the chest as glTF JSON with external binary and image resources.",
+    "gltf-embedded": "Repacked the chest as glTF JSON with data-URI buffers and images."
+  },
+  "inputs": [
+    {
+      "file": "car-kit/race.obj",
+      "sha256": "06e251531499efe4f7857e66468df7cbc466bcfb82e6894493f121baed08ec74"
+    },
+    {
+      "file": "platformer-kit/Textures/colormap.png",
+      "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd"
+    },
+    {
+      "file": "platformer-kit/chest.glb",
+      "sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274"
+    },
+    {
+      "file": "platformer-kit/tree.obj",
+      "sha256": "d3c5d0f68c70f68fdf1f7216b16e4da1e8e8a1f51062d9caa19829eb05acebef"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "chest.glb",
+      "sha256": "0c76f969a8e45eebb19945093e25e39e04028541920de02f3f866d44c26ca0d2"
+    },
+    {
+      "file": "layouts/glb-embedded/chest.glb",
+      "sha256": "0c76f969a8e45eebb19945093e25e39e04028541920de02f3f866d44c26ca0d2"
+    },
+    {
+      "file": "layouts/gltf-embedded/chest.gltf",
+      "sha256": "bff10fb6391256b392d07983a155c8bf28880a378b141e7bf9590226f2214742"
+    },
+    {
+      "file": "layouts/gltf-external/Textures/colormap.png",
+      "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd"
+    },
+    {
+      "file": "layouts/gltf-external/chest.bin",
+      "sha256": "82632398dc6ec3f305120bd17ac33f65580c1c74c2b52364170a8c59e2a30966"
+    },
+    {
+      "file": "layouts/gltf-external/chest.gltf",
+      "sha256": "36d4854bce63422971c0786343d14295364a2d681331c99a3dade2e57db87b7d"
+    },
+    {
+      "file": "layouts/obj-geometry/tree.obj",
+      "sha256": "150332147fe47821f17a9151f89b3e219af548ab5e9a46ac13d814f22e9aa86f"
+    },
+    {
+      "file": "layouts/obj-material/car.mtl",
+      "sha256": "6de82fc3e755741f161209ac713cc235d6ee7574d61b1f3ec4255a154f4ec635"
+    },
+    {
+      "file": "layouts/obj-material/car.obj",
+      "sha256": "4fd8421847e681f0cc3a42e76a8ac652b5325fc97fac9b52b97ea741f94d216e"
+    }
+  ]
+}
