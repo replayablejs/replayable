@@ -43,6 +43,21 @@ lifecycle-aware animations, tutorials, idle hints, and endcards.
 **[Play the variants and download exports](https://replayablejs.github.io/music-mixer-playable/)**
 · **[Explore the source](https://github.com/replayablejs/music-mixer-playable)**
 
+### Featured: Color Loop
+
+[**Color Loop**](https://github.com/replayablejs/color-loop-playable) is a color-matching puzzle
+built with Replayable's published packages, PixiJS, and TypeScript. Players send colored chips
+onto a moving conveyor to clear matching arrow chains. One codebase powers five gameplay
+versions with different level sequences and endcard triggers. Across eight delivery profiles,
+that produces **40 exports**, including five standalone browser previews.
+
+Replayable packs shared artwork into an atlas, resizes the logo, compresses audio, and defers
+audio loading until the scene appears. The project also demonstrates portrait and landscape
+layouts, a first-interaction tutorial, lifecycle-aware audio, and network-aware endcards.
+
+**[Play the variants and download exports](https://replayablejs.github.io/color-loop-playable/)**
+· **[Explore the source](https://github.com/replayablejs/color-loop-playable)**
+
 ### Basic examples
 
 For smaller starting points, try these focused examples:
