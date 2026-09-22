@@ -1,0 +1,72 @@
+{
+  "name": "@replayablejs/three",
+  "version": "0.1.0-alpha.6",
+  "description": "Three.js rendering integration for Replayable playables",
+  "homepage": "https://github.com/replayablejs/replayable#readme",
+  "bugs": {
+    "url": "https://github.com/replayablejs/replayable/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/replayablejs/replayable.git",
+    "directory": "packages/three"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "imports": {
+    "#types/*": "./src/types/*",
+    "#renderer/*": "./src/renderer/*",
+    "#lifecycle/*": "./src/lifecycle/*",
+    "#models/*": "./src/models/*",
+    "#loader/*": "./src/loader/*",
+    "#integrations/*": "./src/integrations/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./meshopt": {
+      "types": "./dist/meshopt/index.d.ts",
+      "default": "./dist/meshopt/index.js"
+    },
+    "./draco": {
+      "types": "./dist/draco/index.d.ts",
+      "default": "./dist/draco/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware --max-warnings 0 .",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@replayablejs/canvas": "workspace:*"
+  },
+  "devDependencies": {
+    "@replayablejs/runtime": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/three": "catalog:",
+    "happy-dom": "catalog:",
+    "three": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@replayablejs/runtime": "workspace:*",
+    "three": "~0.186.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

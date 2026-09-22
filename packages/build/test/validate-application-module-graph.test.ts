@@ -54,6 +54,7 @@ describe('application module graph validation', () => {
     'motion',
     'motion-dom',
     'pixi.js',
+    'three',
   ])('rejects separate %s installations', async (packageName) => {
     const first = await createPackage(packageName, 'first');
     const second = await createPackage(packageName, 'second');

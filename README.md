@@ -135,6 +135,7 @@ Export reads those builds and writes HTML/ZIP delivery files to `exports/`.
 - [`@replayablejs/config`](packages/config/README.md) — Validate project settings and expand versions, networks and languages into playable variants.
 - [`@replayablejs/runtime`](packages/runtime/README.md) — Manage host readiness, assets, screen state, audio, updates, completion and store actions.
 - [`@replayablejs/canvas`](packages/canvas/README.md) — Provide a shared canvas host for rendering integrations.
+- [`@replayablejs/three`](packages/three/README.md) — Connect Three.js rendering, camera resizing, and cleanup to the playable lifecycle.
 - [`@replayablejs/pixi`](packages/pixi/README.md) — Connect Pixi rendering, asset loaders and layout to the playable lifecycle.
 - [`@replayablejs/tween`](packages/tween/README.md) — Animate DOM elements and object properties using lifecycle-aware Motion playback.
 - [`@replayablejs/devtools`](packages/devtools/README.md) — Provide optional stats, sound controls and an endcard trigger for development previews.

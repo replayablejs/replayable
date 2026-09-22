@@ -23,6 +23,7 @@ const SINGLETON_PACKAGES = [
   'motion',
   'motion-dom',
   'pixi.js',
+  'three',
 ] as const;
 
 type SingletonPackage = (typeof SINGLETON_PACKAGES)[number];

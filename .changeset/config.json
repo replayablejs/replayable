@@ -15,6 +15,7 @@
       "@replayablejs/export",
       "@replayablejs/pixi",
       "@replayablejs/runtime",
+      "@replayablejs/three",
       "@replayablejs/tween"
     ]
   ],

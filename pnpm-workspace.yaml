@@ -7,6 +7,8 @@ autoInstallPeers: false
 linkWorkspacePackages: true
 
 catalog:
+  three: 0.186.0
+  '@types/three': 0.186.0
   gltf-validator: 2.0.0-dev.3.10
   '@gltf-transform/core': 4.5.0
   '@gltf-transform/extensions': 4.5.0

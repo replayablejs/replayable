@@ -16,6 +16,7 @@ const SINGLETON_PACKAGES = [
   'motion',
   'motion-dom',
   'pixi.js',
+  'three',
 ] as const;
 
 /**
