@@ -21,7 +21,10 @@ afterEach(() => {
 });
 
 describe('GLB loading', () => {
-  it('parses actual GLB bytes from an inline data URI with the real GLTFLoader', async () => {
+  it('parses inline GLB bytes without fetch, even when the host blocks requests', async () => {
+    const fetch = vi.spyOn(globalThis, 'fetch').mockImplementation(() => {
+      throw new Error('Host blocked fetch');
+    });
     const bytes = await readFile(
       resolve(process.cwd(), '../assets/test/fixtures/models/vertex-colors/BoxVertexColors.glb'),
     );
@@ -32,10 +35,20 @@ describe('GLB loading', () => {
         src: `data:model/gltf-binary;base64,${bytes.toString('base64')}`,
       },
     });
+    expect(fetch).not.toHaveBeenCalled();
     expect(loaded.gltf.scene.children.length).toBeGreaterThan(0);
     expect(loaded.resources.geometries.size).toBeGreaterThan(0);
     expect(loaded.resources.materials.size).toBeGreaterThan(0);
     disposeModelResources(loaded.resources);
+  });
+
+  it('reports malformed inline models with the asset ID', async () => {
+    await expect(
+      loadThreeModel({
+        ...context,
+        source: { src: 'data:model/gltf-binary,invalid', compression: 'none' },
+      }),
+    ).rejects.toThrow('Cannot load model "box": An inline GLB must be a Base64 data URL.');
   });
 
   it.each(['meshopt', 'draco'] as const)(

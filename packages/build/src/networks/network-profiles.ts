@@ -52,7 +52,8 @@ const networkProfiles = {
     runtime: 'meta',
   },
   google: {
-    assetMode: 'resource',
+    // Keep binary assets inside JavaScript so the ZIP contains only web code files.
+    assetMode: 'inline',
     applicationMode: 'module-graph',
     compileTimeDefinitions: noCompileTimeDefinitions,
     completionDurationStart: 'ready',

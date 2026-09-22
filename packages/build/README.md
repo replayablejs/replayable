@@ -27,3 +27,8 @@ with `pnpm build`. Run `pnpm --filter @replayablejs/build test` for this package
 
 Original code is [MIT licensed](https://github.com/replayablejs/replayable/blob/main/LICENSE). Bundled third-party resources retain
 their accompanying license terms.
+
+Google builds keep HTML, CSS, and JavaScript modules as separate files, but embed
+asset data in JavaScript. Models, images, fonts, and locale data therefore do not
+appear as separate files in the upload ZIP. Secondary bundles still defer loading
+and decoding through the runtime; their embedded bytes may download with JavaScript.

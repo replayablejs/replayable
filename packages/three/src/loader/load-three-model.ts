@@ -49,7 +49,10 @@ async function loadCompleteModel({
   const loader = new GLTFLoader(manager);
   const releaseDecoder = acquireModelDecoder(compression, loader);
   try {
-    const gltf = await loader.loadAsync(src);
+    // Embedded GLBs already contain their bytes; do not send data URLs through fetch.
+    const gltf = src.startsWith('data:')
+      ? await loader.parseAsync(decodeInlineModel(src), '')
+      : await loader.loadAsync(src);
     const resources = collectModelResources(gltf);
 
     if (failedDependencies.length > 0) {
@@ -60,4 +63,19 @@ async function loadCompleteModel({
   } finally {
     releaseDecoder();
   }
+}
+
+/**
+ * Decode the pipeline's Base64 GLB locally, without a network request.
+ * Ad hosts can block or intercept fetch(data:...), even for embedded assets.
+ * Resource URLs still use GLTFLoader.loadAsync and its normal dependency paths.
+ */
+function decodeInlineModel(source: string): ArrayBuffer {
+  const separator = source.indexOf(',');
+  if (separator === -1 || !source.slice(0, separator).endsWith(';base64')) {
+    throw new Error('An inline GLB must be a Base64 data URL.');
+  }
+
+  const binary = atob(source.slice(separator + 1));
+  return Uint8Array.from(binary, (character) => character.charCodeAt(0)).buffer;
 }
