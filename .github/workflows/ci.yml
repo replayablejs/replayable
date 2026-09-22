@@ -55,6 +55,9 @@ jobs:
       - name: Export Pixi playable variants
         run: pnpm --filter @replayablejs/example-basic-pixi-playable export
 
+      - name: Export Three.js playable variants
+        run: pnpm --filter @replayablejs/example-basic-three-playable export
+
       - name: Check packed package consumer
         run: pnpm packages:check
 

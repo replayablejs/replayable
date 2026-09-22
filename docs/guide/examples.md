@@ -33,6 +33,18 @@ Reveal two animated cards. This example includes English and Spanish, a tutorial
 hints, responsive layout, audio and a star-rating endcard. It installs the optional Spine
 integration before runtime readiness.
 
+## Three.js City Builder
+
+[Try City Builder](/demos/basic-three-playable.html){target="_blank" rel="noopener"}
+
+```sh
+pnpm --filter @replayablejs/example-basic-three-playable dev
+```
+
+Tap empty plots to build a woodland neighborhood. This example uses Meshopt-compressed
+Kenney models, instanced scenery, animated placement, idle plot hints, and an HTML logo
+and CTA. It supports portrait and landscape layouts and eight network exports in English.
+
 ## Asset Processing
 
 ```sh
@@ -49,4 +61,5 @@ with matching published Replayable versions. Change store URLs and campaign sett
 all included resources' attribution and license terms before redistribution.
 
 Stop development before running the example's build and export scripts. The playable examples
-configure eight networks and two languages each, yielding sixteen variants per example.
+configure eight networks. The DOM and Pixi examples each include two languages (sixteen
+variants); City Builder includes English (eight variants).

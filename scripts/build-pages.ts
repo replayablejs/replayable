@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const demos = join(root, 'docs/public/demos');
 await rm(demos, { recursive: true, force: true });
 await mkdir(demos, { recursive: true });
-for (const example of ['basic-playable', 'basic-pixi-playable']) {
+for (const example of ['basic-playable', 'basic-pixi-playable', 'basic-three-playable']) {
   await copyFile(
     join(root, 'examples', example, 'exports/preview_default_en.html'),
     join(demos, `${example}.html`),

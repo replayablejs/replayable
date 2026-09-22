@@ -62,10 +62,11 @@ layouts, a first-interaction tutorial, lifecycle-aware audio, and network-aware 
 
 For smaller starting points, try these focused examples:
 
-| Example     | Live demo                                                                             | Source                                      |
-| ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Word Puzzle | [Play demo](https://replayablejs.github.io/replayable/demos/basic-playable.html)      | [View source](examples/basic-playable)      |
-| Card Match  | [Play demo](https://replayablejs.github.io/replayable/demos/basic-pixi-playable.html) | [View source](examples/basic-pixi-playable) |
+| Example      | Live demo                                                                              | Source                                       |
+| ------------ | -------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Word Puzzle  | [Play demo](https://replayablejs.github.io/replayable/demos/basic-playable.html)       | [View source](examples/basic-playable)       |
+| Card Match   | [Play demo](https://replayablejs.github.io/replayable/demos/basic-pixi-playable.html)  | [View source](examples/basic-pixi-playable)  |
+| City Builder | [Play demo](https://replayablejs.github.io/replayable/demos/basic-three-playable.html) | [View source](examples/basic-three-playable) |
 
 See the [examples guide](https://replayablejs.github.io/replayable/guide/examples.html) for details.
 
