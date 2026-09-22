@@ -215,9 +215,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.2.0)(esbuild@0.28.2)(happy-dom@20.13.2)(jiti@2.7.0)(sass-embedded@1.103.1)(sass@1.103.1)(terser@5.51.2)(yaml@2.9.0)
 
   examples/basic-pixi-playable:
     dependencies:
@@ -249,15 +246,9 @@ importers:
       '@replayablejs/devtools':
         specifier: workspace:*
         version: link:../../packages/devtools
-      happy-dom:
-        specifier: 'catalog:'
-        version: 20.13.2
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.2.0)(esbuild@0.28.2)(happy-dom@20.13.2)(jiti@2.7.0)(sass-embedded@1.103.1)(sass@1.103.1)(terser@5.51.2)(yaml@2.9.0)
 
   examples/basic-playable:
     devDependencies:
@@ -279,6 +270,43 @@ importers:
       '@replayablejs/tween':
         specifier: workspace:*
         version: link:../../packages/tween
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  examples/basic-three-playable:
+    dependencies:
+      '@replayablejs/canvas':
+        specifier: workspace:*
+        version: link:../../packages/canvas
+      '@replayablejs/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@replayablejs/three':
+        specifier: workspace:*
+        version: link:../../packages/three
+      '@replayablejs/tween':
+        specifier: workspace:*
+        version: link:../../packages/tween
+      three:
+        specifier: 'catalog:'
+        version: 0.186.0
+    devDependencies:
+      '@replayablejs/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
+      '@replayablejs/cli':
+        specifier: workspace:*
+        version: link:../../packages/cli
+      '@replayablejs/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@replayablejs/devtools':
+        specifier: workspace:*
+        version: link:../../packages/devtools
+      '@types/three':
+        specifier: 'catalog:'
+        version: 0.186.0
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -4004,14 +4032,14 @@ snapshots:
       '@changesets/should-skip-package': 1.0.0
       '@changesets/types': 7.0.0
       '@manypkg/get-packages': 3.1.0
-      picomatch: 4.0.5
+      picomatch: 4.0.7
 
   '@changesets/errors@1.0.0': {}
 
   '@changesets/format@0.1.2':
     dependencies:
       package-manager-detector: 1.8.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
 
   '@changesets/get-dependents-graph@3.0.0':
     dependencies:
@@ -4023,8 +4051,8 @@ snapshots:
       '@changesets/errors': 1.0.0
       '@changesets/types': 7.0.0
       '@manypkg/get-packages': 3.1.0
-      picomatch: 4.0.5
-      tinyexec: 1.3.0
+      picomatch: 4.0.7
+      tinyexec: 1.3.1
 
   '@changesets/parse@1.0.0':
     dependencies:
@@ -4772,7 +4800,7 @@ snapshots:
       detect-libc: 2.1.2
       is-glob: 4.0.3
       node-addon-api: 7.1.1
-      picomatch: 4.0.5
+      picomatch: 4.0.7
     optionalDependencies:
       '@parcel/watcher-android-arm64': 2.6.0
       '@parcel/watcher-darwin-arm64': 2.6.0

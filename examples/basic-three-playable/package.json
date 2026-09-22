@@ -1,5 +1,5 @@
 {
-  "name": "@replayablejs/example-basic-pixi-playable",
+  "name": "@replayablejs/example-basic-three-playable",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,17 +13,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@esotericsoftware/spine-pixi-v8": "catalog:",
-    "@replayablejs/pixi": "workspace:*",
+    "@replayablejs/canvas": "workspace:*",
     "@replayablejs/runtime": "workspace:*",
+    "@replayablejs/three": "workspace:*",
     "@replayablejs/tween": "workspace:*",
-    "pixi.js": "catalog:"
+    "three": "catalog:"
   },
   "devDependencies": {
     "@replayablejs/assets": "workspace:*",
     "@replayablejs/cli": "workspace:*",
     "@replayablejs/config": "workspace:*",
     "@replayablejs/devtools": "workspace:*",
+    "@types/three": "catalog:",
     "typescript": "catalog:"
   },
   "engines": {

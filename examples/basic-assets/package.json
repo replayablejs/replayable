@@ -7,7 +7,6 @@
     "assets": "replayable assets",
     "build": "pnpm assets",
     "lint": "oxlint --type-aware --max-warnings 0 .",
-    "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "models:prepare": "node scripts/prepare-model-layouts.ts",
     "models:examples": "node scripts/model-examples.ts"
@@ -18,8 +17,7 @@
     "@replayablejs/assets": "workspace:*",
     "@replayablejs/cli": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=24.0.0"

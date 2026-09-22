@@ -1,0 +1,190 @@
+.city-interface {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  font-family: Arial, sans-serif;
+}
+
+.city-interface[hidden],
+.city-interface [hidden] {
+  display: none !important;
+}
+
+.city-interface-content,
+.city-end-card-content {
+  position: absolute;
+  box-sizing: border-box;
+  container-type: size;
+}
+
+/* One shared size keeps the logo/CTA relationship identical on every screen. */
+.city-interface-content {
+  --ui-width: min(60cqw, 60cqh, 280px);
+}
+
+.city-interface-content[data-orientation='landscape'] {
+  --ui-width: min(45.9cqw, 45.9cqh, 214.2px);
+}
+
+.city-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  container-type: inline-size;
+  aspect-ratio: 25 / 9;
+  user-select: none;
+  filter: drop-shadow(0 2px 1px #071f19) drop-shadow(0 4px 0 #071f19)
+    drop-shadow(0 6px 6px #071f19cc);
+}
+
+.city-logo img {
+  width: 34.97472%;
+  flex-shrink: 0;
+  height: auto;
+  filter: drop-shadow(0 0 2px #164738);
+}
+
+.city-logo-title {
+  display: grid;
+  flex-shrink: 0;
+  color: #fff9e6;
+  font-size: 12.5cqw;
+  line-height: 1.05;
+  -webkit-text-stroke: 1px #164738;
+  paint-order: stroke fill;
+}
+
+.city-logo-title span:first-child {
+  color: #ffe082;
+  font-size: 1.6em;
+}
+
+.city-interface-content > .city-logo {
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  width: calc(var(--ui-width) * 0.825);
+  transform: translateX(-50%);
+}
+
+.city-cta {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0 solid transparent;
+  aspect-ratio: 3 / 1;
+  container-type: inline-size;
+  /* The Kenney sprite is already 3:1, so scale the whole artwork uniformly. */
+  background: var(--button-artwork) center / 100% 100% no-repeat;
+  color: #493415;
+  cursor: pointer;
+  pointer-events: auto;
+  font-family: inherit;
+  line-height: 1;
+  text-shadow: 0 1px 0 #ffe8a3;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.city-cta span {
+  /* Scale text against the button, not the screen orientation. */
+  font-size: 11cqw;
+  /* Balance Kenney Future's extra trailing space after the final letter. */
+  transform: translateX(0.1em);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+/* The longer persistent CTA keeps comfortable space inside the artwork. */
+.city-interface-content > .city-cta span {
+  font-size: 8.5cqw;
+}
+
+.city-cta:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 4px;
+  border-radius: 18px;
+}
+
+.city-interface-content > .city-cta {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  width: var(--ui-width);
+  transform: translateX(-50%);
+}
+
+.city-interface-content[data-orientation='landscape'] > .city-logo {
+  justify-content: flex-start;
+  left: 0;
+  transform: none;
+}
+
+.city-interface-content[data-orientation='landscape'] > .city-cta {
+  left: 0;
+  transform: none;
+}
+
+.city-end-card {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.city-end-card-backdrop {
+  position: absolute;
+  inset: 0;
+  background: #123528b8;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+}
+
+/* Both independent layers share the same centered logo/button composition. */
+.city-end-card-layout {
+  --end-logo-width: min(70.4cqw, 60.5cqh, 374px);
+  --end-logo-height: calc(var(--end-logo-width) * 9 / 25);
+  --end-button-width: min(64cqw, 55cqh, 340px);
+  --end-button-height: calc(var(--end-button-width) / 3);
+  --end-gap: min(18cqh, 130px);
+}
+
+.city-interface-content {
+  /* Keep the UI-owned logo above the end-card backdrop. */
+  z-index: 3;
+}
+
+.city-interface-content[data-state='endcard'] > .city-logo {
+  left: calc(50% - var(--end-logo-width) / 2);
+  top: calc(50% - (var(--end-logo-height) + var(--end-gap) + var(--end-button-height)) / 2);
+  width: var(--end-logo-width);
+  justify-content: center;
+  transform: none;
+  transform-origin: top left;
+}
+
+.city-end-card-content > .city-cta {
+  /* Keep the artwork and label on a composited layer while the button breathes. */
+  will-change: transform;
+  opacity: 0;
+  color: #fff9e6;
+  text-shadow: 0 2px 0 #046d41;
+  position: absolute;
+  width: var(--end-button-width);
+  left: calc(50% - var(--end-button-width) / 2);
+  top: calc(50% + (var(--end-logo-height) + var(--end-gap) - var(--end-button-height)) / 2);
+}
+
+.city-interface-content[data-state='gameplay'][data-orientation='portrait'] > .city-logo {
+  top: 0;
+}
+
+.city-interface-content[data-orientation='portrait'] > .city-cta {
+  bottom: 0;
+}
