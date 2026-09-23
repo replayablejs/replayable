@@ -1,5 +1,11 @@
 # @replayablejs/canvas
 
+## 0.1.0-alpha.10
+
+### Patch Changes
+
+- @replayablejs/runtime@0.1.0-alpha.10
+
 ## 0.1.0-alpha.9
 
 ### Patch Changes

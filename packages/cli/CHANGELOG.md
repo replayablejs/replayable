@@ -1,5 +1,15 @@
 # @replayablejs/cli
 
+## 0.1.0-alpha.10
+
+### Patch Changes
+
+- Updated dependencies [a4f9ea5]
+  - @replayablejs/config@0.1.0-alpha.10
+  - @replayablejs/export@0.1.0-alpha.10
+  - @replayablejs/build@0.1.0-alpha.10
+  - @replayablejs/assets@0.1.0-alpha.10
+
 ## 0.1.0-alpha.9
 
 ### Patch Changes
