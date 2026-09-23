@@ -1,5 +1,12 @@
 # @replayablejs/pixi
 
+## 0.1.0-alpha.10
+
+### Patch Changes
+
+- @replayablejs/canvas@0.1.0-alpha.10
+  - @replayablejs/runtime@0.1.0-alpha.10
+
 ## 0.1.0-alpha.9
 
 ### Patch Changes

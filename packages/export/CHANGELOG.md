@@ -1,5 +1,16 @@
 # @replayablejs/export
 
+## 0.1.0-alpha.10
+
+### Minor Changes
+
+- a4f9ea5: Support synchronous export.filename callbacks receiving project name, version, network, and language. Preserve callback output, validate filenames, and append the network extension automatically.
+
+### Patch Changes
+
+- Updated dependencies [a4f9ea5]
+  - @replayablejs/config@0.1.0-alpha.10
+
 ## 0.1.0-alpha.9
 
 ### Minor Changes
