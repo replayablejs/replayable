@@ -1,5 +1,15 @@
 # @replayablejs/config
 
+## 0.1.0-alpha.9
+
+### Minor Changes
+
+- 972531a: Add optional `export.filename` templates with project name, playable version, network, and language placeholders. Preserve the current filenames by default, append network-specific extensions automatically, and reject invalid templates and conflicting output names.
+
+### Patch Changes
+
+- @replayablejs/assets@0.1.0-alpha.9
+
 ## 0.1.0-alpha.8
 
 ### Patch Changes

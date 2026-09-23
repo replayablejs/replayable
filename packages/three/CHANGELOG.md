@@ -1,5 +1,12 @@
 # @replayablejs/three
 
+## 0.1.0-alpha.9
+
+### Patch Changes
+
+- @replayablejs/canvas@0.1.0-alpha.9
+  - @replayablejs/runtime@0.1.0-alpha.9
+
 ## 0.1.0-alpha.8
 
 ### Minor Changes

@@ -16,11 +16,11 @@ The product is Replayable; GitHub and npm use the `replayablejs` organization.
 
 <!-- replayable-version:start -->
 
-Replayable **0.1.0-alpha.8** is an alpha release. APIs may change before 1.0.
+Replayable **0.1.0-alpha.9** is an alpha release. APIs may change before 1.0.
 
 ```sh
-pnpm add @replayablejs/runtime@0.1.0-alpha.8
-pnpm add -D @replayablejs/cli@0.1.0-alpha.8 @replayablejs/config@0.1.0-alpha.8
+pnpm add @replayablejs/runtime@0.1.0-alpha.9
+pnpm add -D @replayablejs/cli@0.1.0-alpha.9 @replayablejs/config@0.1.0-alpha.9
 ```
 
 <!-- replayable-version:end -->

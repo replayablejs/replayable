@@ -10,11 +10,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@replayablejs/runtime": "0.1.0-alpha.8"
+    "@replayablejs/runtime": "0.1.0-alpha.9"
   },
   "devDependencies": {
-    "@replayablejs/cli": "0.1.0-alpha.8",
-    "@replayablejs/config": "0.1.0-alpha.8",
+    "@replayablejs/cli": "0.1.0-alpha.9",
+    "@replayablejs/config": "0.1.0-alpha.9",
     "typescript": "7.0.2"
   },
   "engines": {
