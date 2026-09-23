@@ -27,3 +27,10 @@ with `pnpm build`. Run `pnpm --filter @replayablejs/export test` for this packag
 
 Original code is [MIT licensed](https://github.com/replayablejs/replayable/blob/main/LICENSE). Bundled third-party resources retain
 their accompanying license terms.
+
+Customize delivery names with `export.filename` in `replayable.config.ts`, for example
+`'{name}_{version}_{network}_{language}'`. The default remains
+`'{network}_{version}_{language}'`. The exporter normalizes names and adds the
+network's extension automatically. Templates cannot contain directory separators,
+unknown placeholders, or an explicit `.html`/`.zip` extension. Colliding names are
+rejected before exports are written.

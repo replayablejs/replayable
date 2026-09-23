@@ -1,7 +1,7 @@
 import { stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import type { PlayableVariant } from '@replayablejs/config';
+import type { PlayableVariant, ReplayableConfig } from '@replayablejs/config';
 
 import { isMissingPathError } from '#shared/filesystem-error.js';
 import { PLAYABLE_HTML_FILE } from '#shared/playable-html.js';
@@ -18,6 +18,7 @@ import type { ExportDirectories } from '#types/directories.js';
 export async function resolveExportVariant(
   directories: ExportDirectories,
   variant: PlayableVariant,
+  config: Pick<ReplayableConfig, 'name' | 'export'>,
 ): Promise<ExportVariantContext> {
   const buildDirectory = join(directories.buildOutput, variant.id);
   const htmlFile = join(buildDirectory, PLAYABLE_HTML_FILE);
@@ -26,7 +27,7 @@ export async function resolveExportVariant(
 
   return {
     buildDirectory,
-    outputFile: join(directories.exportOutput, resolveExportFileName(variant)),
+    outputFile: join(directories.exportOutput, resolveExportFileName(variant, config)),
     variant,
   };
 }
@@ -34,13 +35,25 @@ export async function resolveExportVariant(
 /**
  * Selects the upload artifact name required by the destination network.
  *
- * Every name identifies its network, version, and language, such as
- * "applovin_default_en.html" or "google_default_en.zip".
+ * Expand the project template, then append the network-owned extension.
+ * The default remains "applovin_default_en.html" or "google_default_en.zip".
  */
-function resolveExportFileName(variant: PlayableVariant): string {
-  const artifactName = [variant.network, variant.version, variant.localization.language]
-    .map(normalizeArtifactNameSegment)
-    .join('_');
+function resolveExportFileName(
+  variant: PlayableVariant,
+  config: Pick<ReplayableConfig, 'name' | 'export'>,
+): string {
+  const values: Record<string, string> = {
+    name: config.name,
+    network: variant.network,
+    version: variant.version,
+    language: variant.localization.language,
+  };
+  // The config schema validates placeholders. Normalize each value before substitution
+  // to preserve the existing treatment of punctuation in version and locale names.
+  const expanded = config.export.filename.replace(/\{([^{}]+)\}/gu, (_, key: string) =>
+    normalizeArtifactNameSegment(values[key]!),
+  );
+  const artifactName = normalizeArtifactNameSegment(expanded);
 
   switch (variant.network) {
     case 'applovin':

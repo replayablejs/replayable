@@ -140,3 +140,23 @@ campaign destinations before delivery.
 Unknown fields are rejected. Check spelling and whether an option belongs at project level or
 inside a network/version override. If language validation fails, check that the fallback is in the
 language list and that no two tags normalize to the same language tag.
+
+## Export filenames
+
+`export.filename` changes delivery filenames without changing build directories:
+
+```ts
+export: {
+  filename: '{name}_{version}_{network}_{language}',
+},
+```
+
+The default is `{network}_{version}_{language}`. Supported placeholders are `{name}`
+(project name), `{version}` (playable version name), `{network}`, and `{language}`.
+Literal campaign text is allowed. Names become lowercase; punctuation and spaces
+become underscores. For example, `City Builder` with the template above produces
+`city_builder_default_google_en.zip`.
+
+Do not include a directory or extension. The exporter adds `.html` or `.zip` for the
+network and rejects unknown placeholders or duplicate output filenames before writing.
+The CLI's `--output` option still controls the export directory.

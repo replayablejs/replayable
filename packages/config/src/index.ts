@@ -59,6 +59,8 @@ export type {
   ReplayableAssetsConfigInput,
   ReplayableBuild,
   ReplayableBuildInput,
+  ReplayableExport,
+  ReplayableExportInput,
   ReplayableControls,
   ReplayableControlsInput,
   ReplayableDevtools,

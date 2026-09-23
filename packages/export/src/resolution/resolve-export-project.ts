@@ -27,7 +27,7 @@ export async function resolveExportProject(
     options.outputDirectory,
   );
   const variants = await Promise.all(
-    createVariants(config).map((variant) => resolveExportVariant(directories, variant)),
+    createVariants(config).map((variant) => resolveExportVariant(directories, variant, config)),
   );
 
   assertUniqueOutputFiles(variants);

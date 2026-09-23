@@ -68,3 +68,9 @@ export type ReplayableStore = ReplayableConfig['store'];
 
 /** Store destinations accepted in a human-authored Replayable config. */
 export type ReplayableStoreInput = ReplayableConfigInput['store'];
+
+/** Validated project-wide export filename template. */
+export type ReplayableExport = ReplayableConfig['export'];
+
+/** Export naming accepted before defaults are applied. */
+export type ReplayableExportInput = ReplayableConfigInput['export'];

@@ -680,3 +680,39 @@ describe('network override precedence', () => {
     ).toBeUndefined();
   });
 });
+
+it('defaults export naming and accepts a custom template', () => {
+  const input = {
+    assets,
+    screen,
+    store,
+    name: 'City Builder',
+    localization: { fallback: 'en', languages: ['en'] },
+  };
+  expect(defineConfig(input).export.filename).toBe('{network}_{version}_{language}');
+  expect(
+    defineConfig({ ...input, export: { filename: '{name}_{language}_{network}_{version}' } }).export
+      .filename,
+  ).toBe('{name}_{language}_{network}_{version}');
+});
+
+it.each([
+  '',
+  '../{name}',
+  'folder\\{name}',
+  '{unknown}',
+  '{name',
+  '{network}.zip',
+  '{network}.html',
+])('rejects invalid export template %s', (filename) => {
+  expect(() =>
+    defineConfig({
+      assets,
+      screen,
+      store,
+      name: 'City',
+      localization: { fallback: 'en', languages: ['en'] },
+      export: { filename },
+    }),
+  ).toThrow(/export/u);
+});

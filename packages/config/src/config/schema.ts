@@ -8,6 +8,7 @@ import { buildSchema } from './schemas/build.js';
 import { completionSchema } from './schemas/completion.js';
 import { controlsSchema } from './schemas/controls.js';
 import { devtoolsSchema } from './schemas/devtools.js';
+import { exportSchema } from './schemas/export.js';
 import { localizationSchema } from './schemas/localization.js';
 import { paramsSchema } from './schemas/params.js';
 import { screenSchema } from './schemas/screen.js';
@@ -34,6 +35,7 @@ export const replayableConfigSchema = z
     controls: controlsSchema,
     devtools: devtoolsSchema,
     entry: requiredStringSchema.default('src/main.ts'),
+    export: exportSchema,
     localization: localizationSchema,
     name: requiredStringSchema,
     networks: networksSchema,
