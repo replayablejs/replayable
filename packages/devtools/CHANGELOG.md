@@ -1,5 +1,11 @@
 # @replayablejs/devtools
 
+## 0.1.0-alpha.9
+
+### Patch Changes
+
+- @replayablejs/runtime@0.1.0-alpha.9
+
 ## 0.1.0-alpha.8
 
 ### Patch Changes
