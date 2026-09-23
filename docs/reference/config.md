@@ -160,3 +160,18 @@ become underscores. For example, `City Builder` with the template above produces
 Do not include a directory or extension. The exporter adds `.html` or `.zip` for the
 network and rejects unknown placeholders or duplicate output filenames before writing.
 The CLI's `--output` option still controls the export directory.
+
+For full control, provide a synchronous callback. It receives the original project
+name, playable version name, network, and language. Its return value preserves
+casing, spaces, and hyphens:
+
+```ts
+export: {
+  filename: ({ name, version, network, language }) =>
+    `${name}-${version}-${network}-${language}`,
+},
+```
+
+Return a non-empty filename without a directory or `.html`/`.zip` extension.
+Invalid filename characters and duplicate output names are rejected before writing.
+The exporter adds the network's extension automatically. Async callbacks are not supported.

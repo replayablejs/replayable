@@ -34,3 +34,18 @@ Customize delivery names with `export.filename` in `replayable.config.ts`, for e
 network's extension automatically. Templates cannot contain directory separators,
 unknown placeholders, or an explicit `.html`/`.zip` extension. Colliding names are
 rejected before exports are written.
+
+For full control, provide a synchronous callback. It receives the original project
+name, playable version name, network, and language. Its return value preserves
+casing, spaces, and hyphens:
+
+```ts
+export: {
+  filename: ({ name, version, network, language }) =>
+    `${name}-${version}-${network}-${language}`,
+},
+```
+
+Return a non-empty filename without a directory or `.html`/`.zip` extension.
+Invalid filename characters and duplicate output names are rejected before writing.
+The exporter adds the network's extension automatically. Async callbacks are not supported.

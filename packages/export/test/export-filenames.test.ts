@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, basename } from 'node:path';
 
-import { createVariants, defineConfig } from '@replayablejs/config';
+import { type ExportFilename, createVariants, defineConfig } from '@replayablejs/config';
 import { expect, it, onTestFinished } from 'vitest';
 
 import { resolveExportProject } from '../src/resolution/resolve-export-project.js';
@@ -38,7 +38,7 @@ const screen = {
   },
 };
 
-async function resolveNames(filename?: string) {
+async function resolveNames(filename?: string | ExportFilename) {
   const projectRoot = await mkdtemp(join(tmpdir(), 'replayable-export-names-'));
   onTestFinished(() => rm(projectRoot, { recursive: true, force: true }));
   const config = defineConfig({
@@ -77,4 +77,44 @@ it('expands branding and reordered placeholders and normalizes punctuation', asy
 
 it('rejects templates that collapse variants to the same output file', async () => {
   await expect(resolveNames('{name}')).rejects.toThrow('resolve to the same output file');
+});
+
+it('preserves callback output and supplies raw variant values', async () => {
+  expect(
+    await resolveNames(
+      ({ name, version, network, language }) => `${name}-${version}-${network}-${language}`,
+    ),
+  ).toEqual([
+    'City Builder-default-google-en.zip',
+    'City Builder-default-meta-en.html',
+    'City Builder-default-preview-en.html',
+  ]);
+});
+
+it.each([
+  '',
+  '  ',
+  '../escape',
+  'folder\\name',
+  'bad:name',
+  'bad\u0000name',
+  '.',
+  '..',
+  'name.',
+  'name ',
+  'name.HTML',
+  'name.zip',
+])('rejects invalid callback output %j', async (name) => {
+  await expect(resolveNames(() => name)).rejects.toThrow(/Export filename callback/u);
+});
+
+it('rejects non-string and asynchronous callback results', async () => {
+  for (const value of [undefined, 42, Promise.resolve('name')]) {
+    // @ts-expect-error Exercise invalid results from untyped JavaScript callbacks.
+    await expect(resolveNames(() => value)).rejects.toThrow(/non-empty string/u);
+  }
+});
+
+it('checks collisions for callback filenames', async () => {
+  await expect(resolveNames(() => 'Same Name')).rejects.toThrow('resolve to the same output file');
 });

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import type { ExportFilename } from '../../types/export.js';
 import { requiredStringSchema } from './base.js';
 
 /** Filename templates never control directories or network-owned extensions. */
@@ -20,6 +21,8 @@ const filenameSchema = requiredStringSchema
 /** Project-wide export naming, with the existing naming convention as its default. */
 export const exportSchema = z
   .strictObject({
-    filename: filenameSchema.default('{network}_{version}_{language}'),
+    filename: z
+      .union([filenameSchema, z.custom<ExportFilename>((value) => typeof value === 'function')])
+      .default('{network}_{version}_{language}'),
   })
   .prefault({});

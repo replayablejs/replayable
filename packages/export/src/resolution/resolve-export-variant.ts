@@ -1,7 +1,11 @@
 import { stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import type { PlayableVariant, ReplayableConfig } from '@replayablejs/config';
+import type {
+  ExportFilenameContext,
+  PlayableVariant,
+  ReplayableConfig,
+} from '@replayablejs/config';
 
 import { isMissingPathError } from '#shared/filesystem-error.js';
 import { PLAYABLE_HTML_FILE } from '#shared/playable-html.js';
@@ -42,19 +46,19 @@ function resolveExportFileName(
   variant: PlayableVariant,
   config: Pick<ReplayableConfig, 'name' | 'export'>,
 ): string {
-  const values: Record<string, string> = {
+  const values: ExportFilenameContext = {
     name: config.name,
     network: variant.network,
     version: variant.version,
     language: variant.localization.language,
   };
-  // The config schema validates placeholders. Normalize each value before substitution
-  // to preserve the existing treatment of punctuation in version and locale names.
-  const expanded = config.export.filename.replace(/\{([^{}]+)\}/gu, (_, key: string) =>
-    normalizeArtifactNameSegment(values[key]!),
-  );
-  const artifactName = normalizeArtifactNameSegment(expanded);
+  const filename = config.export.filename;
+  const artifactName =
+    typeof filename === 'function'
+      ? validateCallbackFilename(filename(values))
+      : expandFilenameTemplate(filename, values);
 
+  // Extensions belong to the destination network, regardless of naming strategy.
   switch (variant.network) {
     case 'applovin':
     case 'meta':
@@ -69,6 +73,38 @@ function resolveExportFileName(
     default:
       throw new Error(`Unsupported export network: ${String(variant.network)}.`);
   }
+}
+
+/** Template strings retain their existing lowercase, underscore-separated naming. */
+function expandFilenameTemplate(template: string, values: ExportFilenameContext): string {
+  // The config schema validates placeholders. Normalize each value before substitution
+  // to preserve the existing treatment of punctuation in version and locale names.
+  const replacements: Record<string, string> = { ...values };
+  const expanded = template.replace(/\{([^{}]+)\}/gu, (_, key: string) =>
+    normalizeArtifactNameSegment(replacements[key]!),
+  );
+  return normalizeArtifactNameSegment(expanded);
+}
+
+/** Reject unsafe callback output without changing the author's chosen name. */
+function validateCallbackFilename(value: unknown): string {
+  if (typeof value !== 'string' || value.trim() === '') {
+    throw new Error('Export filename callback must return a non-empty string.');
+  }
+  if (
+    /[<>:"/\\|?*\p{Cc}]/u.test(value) ||
+    value === '.' ||
+    value === '..' ||
+    /[. ]$/u.test(value)
+  ) {
+    throw new Error('Export filename callback must return a valid filename without a directory.');
+  }
+  if (/\.(?:html|zip)$/iu.test(value)) {
+    throw new Error(
+      'Export filename callback must omit the extension; the network selects .html or .zip.',
+    );
+  }
+  return value;
 }
 
 /** Produces a portable artifact-name segment containing letters, digits, and underscores. */
