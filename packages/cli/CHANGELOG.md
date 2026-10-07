@@ -1,5 +1,20 @@
 # @replayablejs/cli
 
+## 0.1.0-alpha.11
+
+### Minor Changes
+
+- eef4f3e: Add `replayable config --metadata` for editors that need parameter definitions alongside resolved variants. The versioned JSON output includes parameter types, descriptions, defaults, numeric ranges, string options, and conditional visibility rules. The flag implies JSON output and can also be used with `--json`.
+
+  Existing `replayable config --json` output remains unchanged.
+
+### Patch Changes
+
+- @replayablejs/assets@0.1.0-alpha.11
+  - @replayablejs/build@0.1.0-alpha.11
+  - @replayablejs/config@0.1.0-alpha.11
+  - @replayablejs/export@0.1.0-alpha.11
+
 ## 0.1.0-alpha.10
 
 ### Patch Changes
