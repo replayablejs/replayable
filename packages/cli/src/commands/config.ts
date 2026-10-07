@@ -12,16 +12,18 @@ export function registerConfigCommand(program: Command): void {
     .description('Show the configured playable variants')
     .option('-c, --config <file>', 'path to the Replayable config', 'replayable.config.ts')
     .option('--json', 'print machine-readable JSON')
-    .action(async ({ config, json }: ConfigOptions) => showConfig(config, json ?? false));
+    .option('--metadata', 'print JSON with parameter definitions and resolved variants')
+    .action(async (options: ConfigOptions) => showConfig(options));
 }
 
 /** Loads one project config and presents its concrete playable variants. */
-async function showConfig(configPath: string, json: boolean): Promise<void> {
+async function showConfig({ config: configPath, json, metadata }: ConfigOptions): Promise<void> {
   const config = replayableConfigSchema.parse(await loadDefaultExport(configPath));
   const variants = createVariants(config);
 
-  if (json) {
-    console.log(JSON.stringify(variants, null, 2));
+  if (json || metadata) {
+    const output = metadata ? { schemaVersion: 1, params: config.params, variants } : variants;
+    console.log(JSON.stringify(output, null, 2));
 
     return;
   }

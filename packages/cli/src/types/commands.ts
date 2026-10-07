@@ -12,6 +12,7 @@ export interface BuildOptions {
 export interface ConfigOptions {
   readonly config: string;
   readonly json?: boolean;
+  readonly metadata?: boolean;
 }
 
 /** Parsed options for `replayable dev`. */

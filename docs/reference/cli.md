@@ -54,6 +54,21 @@ pnpm exec replayable config --json
 The viewer helps inspect expanded variants. JSON output is useful when checking resolved parameter
 values and overrides. These commands use `replayable.config.ts` unless `--config` is supplied.
 
+For editors, include the validated parameter definitions alongside the resolved variants:
+
+```sh
+pnpm exec replayable config --json --metadata
+```
+
+`--metadata` implies JSON output and returns `{ schemaVersion: 1, params, variants }`.
+`params` contains the project's existing definitions: `type`, `description`, `default`,
+number `range` (min/max/step), string `options`, and optional `when` conditions.
+There is no separate label field; editors can use parameter names and descriptions.
+`variants` is the same array returned by `--json` alone, including resolved overrides.
+Definitions remain present even when a `when` condition is false; editors evaluate the
+condition against the selected variant's parameter values. This command only reads
+configuration; it does not save edits or modify project files.
+
 ## Generate Assets
 
 ```sh

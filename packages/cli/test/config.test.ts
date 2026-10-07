@@ -74,6 +74,55 @@ describe('replayable config', () => {
     expect(output).toHaveBeenCalledWith('Opened the playable variants in your browser.');
   });
 
+  it.each([['--metadata'], ['--json', '--metadata']])(
+    'exports parameter definitions and unchanged variants with %j',
+    async (...flags) => {
+      const config = await createConfigFixture();
+      const output = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      await createProgram().parseAsync([
+        'node',
+        'replayable',
+        'config',
+        '--config',
+        config,
+        '--json',
+      ]);
+      const variants = JSON.parse(String(output.mock.lastCall?.[0]));
+      await createProgram().parseAsync([
+        'node',
+        'replayable',
+        'config',
+        '--config',
+        config,
+        ...flags,
+      ]);
+      const metadata = JSON.parse(String(output.mock.lastCall?.[0]));
+
+      expect(metadata).toEqual({
+        schemaVersion: 1,
+        params: {
+          tutorial: { type: 'boolean', default: true, description: 'Show tutorial' },
+          moves: {
+            type: 'number',
+            default: 4,
+            description: 'Moves allowed',
+            range: { min: 0, max: 10, step: 2 },
+            when: { param: 'tutorial', equals: true },
+          },
+          theme: {
+            type: 'string',
+            default: 'light',
+            description: 'Color theme',
+            options: ['light', 'dark'],
+          },
+        },
+        variants,
+      });
+      expect(metadata.variants[0].params).toEqual({ tutorial: false, moves: 8, theme: 'dark' });
+      expect(open).not.toHaveBeenCalled();
+    },
+  );
+
   it('prints the playable variants directly with --json', async () => {
     const config = await createConfigFixture();
     const output = vi.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -113,6 +162,13 @@ async function createConfigFixture(): Promise<string> {
         },
         localization: { fallback: 'en', languages: ['en', 'hy'] },
         name: 'basic-playable',
+        params: {
+          tutorial: { type: 'boolean', default: true, description: 'Show tutorial' },
+          moves: { type: 'number', default: 4, description: 'Moves allowed', range: { min: 0, max: 10, step: 2 }, when: { param: 'tutorial', equals: true } },
+          theme: { type: 'string', default: 'light', description: 'Color theme', options: ['light', 'dark'] },
+        },
+        versions: { default: { params: { tutorial: false, moves: 6 } } },
+        networks: { preview: { params: { moves: 8, theme: 'dark' } } },
         screen: {
           orientations: {
             portrait: {
