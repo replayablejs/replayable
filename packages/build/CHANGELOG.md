@@ -1,5 +1,16 @@
 # @replayablejs/build
 
+## 0.1.0-alpha.12
+
+### Patch Changes
+
+- 5c498cd: Update Sharp to 0.35.5 to include the patched librsvg dependency. Refresh the workspace lockfile to patched Undici and source-map-js releases used by export and build tooling, resolving the four high-severity production audit findings.
+- Updated dependencies [5c498cd]
+  - @replayablejs/assets@0.1.0-alpha.12
+  - @replayablejs/config@0.1.0-alpha.12
+  - @replayablejs/devtools@0.1.0-alpha.12
+  - @replayablejs/runtime@0.1.0-alpha.12
+
 ## 0.1.0-alpha.11
 
 ### Patch Changes
