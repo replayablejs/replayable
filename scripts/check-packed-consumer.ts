@@ -32,7 +32,16 @@ function manifest(directory: string): Manifest {
 }
 
 function pnpm(directory: string, ...args: string[]): void {
-  execFileSync(process.execPath, [pnpmPath!, ...args], { cwd: directory, stdio: 'inherit' });
+  const isJavaScriptLauncher = /\.[cm]?js$/i.test(pnpmPath!);
+
+  execFileSync(
+    isJavaScriptLauncher ? process.execPath : pnpmPath!,
+    isJavaScriptLauncher ? [pnpmPath!, ...args] : args,
+    {
+      cwd: directory,
+      stdio: 'inherit',
+    },
+  );
 }
 
 function json(name: string, value: unknown): void {
