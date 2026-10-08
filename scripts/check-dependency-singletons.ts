@@ -42,22 +42,28 @@ if (packageManagerPath === undefined) {
   throw new Error('Run this check through pnpm dependencies:check.');
 }
 
+const packageManagerArguments = [
+  'list',
+  ...SINGLETON_PACKAGES,
+  '--recursive',
+  '--depth',
+  'Infinity',
+  '--json',
+];
+const isJavaScriptLauncher = /\.[cm]?js$/i.test(packageManagerPath);
+
 // Invoke the exact pnpm executable that started this package script. Calling
-// `pnpm` by name would depend on platform-specific PATH shims, particularly on
-// Windows. The recursive output contains every workspace importer and its
-// dependency tree; filtering keeps the JSON limited to the protected packages.
+// `pnpm` by name would depend on platform-specific PATH shims. `npm_execpath`
+// may point to either a JavaScript launcher or a native pnpm executable, so it
+// must not be passed to Node as a script. The recursive output contains every
+// workspace importer and its dependency tree; filtering keeps the JSON limited
+// to the protected packages.
 const dependencyGraph: unknown = JSON.parse(
   execFileSync(
-    process.execPath,
-    [
-      packageManagerPath,
-      'list',
-      ...SINGLETON_PACKAGES,
-      '--recursive',
-      '--depth',
-      'Infinity',
-      '--json',
-    ],
+    isJavaScriptLauncher ? process.execPath : packageManagerPath,
+    isJavaScriptLauncher
+      ? [packageManagerPath, ...packageManagerArguments]
+      : packageManagerArguments,
     {
       cwd: repositoryRoot,
       encoding: 'utf8',
