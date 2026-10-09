@@ -1,5 +1,21 @@
 # @replayablejs/cli
 
+## 0.1.0-alpha.13
+
+### Minor Changes
+
+- f9f4895: Add temporary preview overrides through `replayable dev --overrides <file>` and the `servePreview` API. The JSON input supports version and language selection, parameter values, controls, and developer tools without changing the project's saved configuration or production builds.
+
+  Export the preview overrides schema, input type, and variant resolver from `@replayablejs/config`. Validate overrides against the project's parameter definitions and apply parameter overrides after project, version, and network values.
+
+### Patch Changes
+
+- Updated dependencies [f9f4895]
+  - @replayablejs/config@0.1.0-alpha.13
+  - @replayablejs/build@0.1.0-alpha.13
+  - @replayablejs/export@0.1.0-alpha.13
+  - @replayablejs/assets@0.1.0-alpha.13
+
 ## 0.1.0-alpha.12
 
 ### Patch Changes
