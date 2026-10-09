@@ -1,0 +1,107 @@
+name: Update playable dependencies
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact published Replayable version (including alpha suffix)
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+    secrets:
+      PLAYABLE_UPDATER_PRIVATE_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  HUSKY: 0
+
+jobs:
+  update:
+    if: vars.PLAYABLE_UPDATES_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        repository: [music-mixer-playable, color-loop-playable]
+    concurrency:
+      group: playable-update-${{ matrix.repository }}
+      cancel-in-progress: false
+    steps:
+      - name: Check out updater
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          path: updater
+          persist-credentials: false
+
+      - name: Create scoped installation token
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
+        with:
+          client-id: ${{ vars.PLAYABLE_UPDATER_CLIENT_ID }}
+          private-key: ${{ secrets.PLAYABLE_UPDATER_PRIVATE_KEY }}
+          owner: replayablejs
+          repositories: ${{ matrix.repository }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Check out playable default branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: replayablejs/${{ matrix.repository }}
+          token: ${{ steps.app.outputs.token }}
+          path: playable
+          persist-credentials: false
+
+      - name: Install project pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          package_json_file: playable/package.json
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.13.0'
+
+      - name: Update Replayable dependencies
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: node updater/scripts/update-playable-dependencies.ts playable/package.json "$RELEASE_VERSION"
+
+      - name: Install and regenerate lockfile
+        working-directory: playable
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Check playable
+        working-directory: playable
+        run: pnpm check
+
+      - name: Build playable
+        working-directory: playable
+        run: pnpm build
+
+      - name: Create or update dependency PR
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        with:
+          token: ${{ steps.app.outputs.token }}
+          path: playable
+          branch: automation/replayable-${{ inputs.version }}
+          title: 'Update Replayable to ${{ inputs.version }}'
+          commit-message: 'chore: update Replayable to ${{ inputs.version }}'
+          add-paths: |
+            package.json
+            pnpm-lock.yaml
+          body: |
+            Updates existing Replayable packages to `${{ inputs.version }}` and regenerates the pnpm lockfile.
+
+            Validation passed: `pnpm check` and `pnpm build`.
+
+            Created by Replayable release automation. Review and merge manually.

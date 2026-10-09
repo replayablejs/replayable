@@ -113,6 +113,8 @@ jobs:
 
   publish:
     needs: [select, pack]
+    outputs:
+      version: ${{ steps.release-version.outputs.version }}
     if: needs.select.outputs.mode == 'publish' && vars.NPM_TRUSTED_PUBLISHING == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -139,3 +141,16 @@ jobs:
           pack-dir-artifact-id: ${{ needs.pack.outputs.artifact }}
           create-github-releases: true
           push-git-tags: true
+
+      - name: Read published version
+        id: release-version
+        run: node --input-type=module -e "import fs from 'node:fs'; const {version} = JSON.parse(fs.readFileSync('packages/cli/package.json', 'utf8')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'version=' + version + '\n');"
+
+  update-playables:
+    needs: publish
+    if: vars.PLAYABLE_UPDATES_ENABLED == 'true'
+    uses: ./.github/workflows/update-playables.yml
+    with:
+      version: ${{ needs.publish.outputs.version }}
+    secrets:
+      PLAYABLE_UPDATER_PRIVATE_KEY: ${{ secrets.PLAYABLE_UPDATER_PRIVATE_KEY }}
