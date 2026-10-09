@@ -1,8 +1,9 @@
-import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { invokePackageManager } from './pnpm-utils.ts';
 
 /**
  * Install unchanged release tarballs outside the workspace and compile imports of
@@ -32,16 +33,7 @@ function manifest(directory: string): Manifest {
 }
 
 function pnpm(directory: string, ...args: string[]): void {
-  const isJavaScriptLauncher = /\.[cm]?js$/i.test(pnpmPath!);
-
-  execFileSync(
-    isJavaScriptLauncher ? process.execPath : pnpmPath!,
-    isJavaScriptLauncher ? [pnpmPath!, ...args] : args,
-    {
-      cwd: directory,
-      stdio: 'inherit',
-    },
-  );
+  invokePackageManager(pnpmPath!, args, { cwd: directory, stdio: 'inherit' });
 }
 
 function json(name: string, value: unknown): void {
