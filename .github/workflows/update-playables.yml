@@ -80,13 +80,14 @@ jobs:
         working-directory: playable
         run: pnpm install --no-frozen-lockfile
 
+      # The build generates asset registries required by the playable's typecheck.
+      - name: Build playable and generate registries
+        working-directory: playable
+        run: pnpm build
+
       - name: Check playable
         working-directory: playable
         run: pnpm check
-
-      - name: Build playable
-        working-directory: playable
-        run: pnpm build
 
       - name: Create or update dependency PR
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
