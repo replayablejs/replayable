@@ -8,10 +8,11 @@ add these fields to the starter's `defineConfig` object:
 ```ts
 params: {
   difficulty: {
-    type: 'string',
+    type: 'select',
+    label: 'Difficulty',
     default: 'easy',
-    description: 'Puzzle difficulty',
-    options: ['easy', 'hard'],
+    info: 'Puzzle difficulty',
+    options: [{ name: 'Easy', value: 'easy' }, { name: 'Hard', value: 'hard' }],
   },
 },
 versions: {
@@ -24,8 +25,15 @@ localization: { languages: ['en', 'es'], fallback: 'en' },
 
 This defines eight variants: two creative versions × two networks × two languages. Inspect
 `replayable config --json` and the installed runtime config type for reading resolved parameter
-values. Number parameters additionally require `range: { min, max, step }`; string parameters
-require `options`. Value precedence is base, then network, then creative-version override.
+values. Every definition requires a `label`; optional `info` and `category` provide editor metadata.
+Use `number` for unrestricted finite numbers, `text` for unrestricted strings (including empty text),
+`boolean` for toggles, `color` for six-digit RGB hex strings, `select` for named string options, and `range`
+for bounded numbers with top-level `min`, `max`, and `step`. Object groups use `parameters` containing scalar
+definitions; group defaults come from their children and nested groups are unsupported.
+Value precedence is project, then creative version, then network, independently for every object child.
+Partial group overrides preserve siblings. A `when` condition references an exact root key or an absolute
+`[group, child]` tuple and describes editor relevance only; it never removes a runtime value.
+The config command's `--metadata` output uses `schemaVersion: 2` and carries the definitions beside variants.
 
 Language selection alone does not translate application copy. Supply locale dictionaries or
 implement localized content and verify text fitting. Preview a specific combination with

@@ -80,6 +80,20 @@ export type {
   ReplayableStore,
   ReplayableStoreInput,
 } from '#types/config.js';
+export type {
+  ReplayableBooleanParamDefinition,
+  ReplayableColorParamDefinition,
+  ReplayableNumberParamDefinition,
+  ReplayableObjectParamDefinition,
+  ReplayableParamCondition,
+  ReplayableParamMetadata,
+  ReplayableRangeParamDefinition,
+  ReplayableScalarParamDefinition,
+  ReplayableScalarParamValue,
+  ReplayableSelectOption,
+  ReplayableSelectParamDefinition,
+  ReplayableTextParamDefinition,
+} from '#types/params.js';
 export type { PlayableVariant } from '#types/variant.js';
 
 export type { ExportFilename, ExportFilenameContext } from './types/export.js';

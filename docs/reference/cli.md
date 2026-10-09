@@ -60,13 +60,17 @@ For editors, include the validated parameter definitions alongside the resolved 
 pnpm exec replayable config --json --metadata
 ```
 
-`--metadata` implies JSON output and returns `{ schemaVersion: 1, params, variants }`.
-`params` contains the project's existing definitions: `type`, `description`, `default`,
-number `range` (min/max/step), string `options`, and optional `when` conditions.
-There is no separate label field; editors can use parameter names and descriptions.
+`--metadata` implies JSON output and returns `{ schemaVersion: 2, params, variants }`.
+`params` contains the validated definitions: `type`, `label`, optional `info` and `category`,
+scalar `default`, range `min`/`max`/`step`, select `options: [{ name, value }]`, object
+`parameters`, and optional `when` conditions. Group defaults are derived from their children.
+The seven supported types are `number`, `boolean`, `text`, `range`, `color`, `select`, and `object`.
+Version 2 replaces the old description/string-options/number-range metadata format.
 `variants` is the same array returned by `--json` alone, including resolved overrides.
 Definitions remain present even when a `when` condition is false; editors evaluate the
-condition against the selected variant's parameter values. This command only reads
+condition against the selected variant's parameter values. A condition's `param` is an exact
+root name or an absolute `[group, child]` tuple. Object values remain nested in each variant.
+See [parameter definitions and migration](./config.md#ad-parameters). This command only reads
 configuration; it does not save edits or modify project files.
 
 ## Generate Assets

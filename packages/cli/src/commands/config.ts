@@ -22,7 +22,7 @@ async function showConfig({ config: configPath, json, metadata }: ConfigOptions)
   const variants = createVariants(config);
 
   if (json || metadata) {
-    const output = metadata ? { schemaVersion: 1, params: config.params, variants } : variants;
+    const output = metadata ? { schemaVersion: 2, params: config.params, variants } : variants;
     console.log(JSON.stringify(output, null, 2));
 
     return;

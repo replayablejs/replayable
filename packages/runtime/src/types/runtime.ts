@@ -60,8 +60,12 @@ export type RuntimeNetwork =
   | 'preview'
   | 'unity';
 
-/** Primitive value of one resolved playable parameter. */
-export type RuntimeParamValue = boolean | number | string;
+/** Resolved primitive or one-level group of primitive playable parameter values. */
+export type RuntimeParamValue =
+  | boolean
+  | number
+  | string
+  | Readonly<Record<string, boolean | number | string>>;
 
 /** Resolved iOS and Android call-to-action destinations. */
 export interface RuntimeStoreConfig {

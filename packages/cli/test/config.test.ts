@@ -71,6 +71,8 @@ describe('replayable config', () => {
     expect(viewer).toContain('<dt>Variants</dt><dd>2</dd>');
     expect(viewer).toContain('dumper-toggle');
     expect(viewer).toContain('default/preview/hy');
+    expect(viewer).toContain('presentation');
+    expect(viewer).toContain('#Aa00Ff');
     expect(output).toHaveBeenCalledWith('Opened the playable variants in your browser.');
   });
 
@@ -78,6 +80,7 @@ describe('replayable config', () => {
     'exports parameter definitions and unchanged variants with %j',
     async (...flags) => {
       const config = await createConfigFixture();
+      const sourceBefore = await readFile(config, 'utf8');
       const output = vi.spyOn(console, 'log').mockImplementation(() => undefined);
       await createProgram().parseAsync([
         'node',
@@ -99,26 +102,55 @@ describe('replayable config', () => {
       const metadata = JSON.parse(String(output.mock.lastCall?.[0]));
 
       expect(metadata).toEqual({
-        schemaVersion: 1,
+        schemaVersion: 2,
         params: {
-          tutorial: { type: 'boolean', default: true, description: 'Show tutorial' },
+          tutorial: { type: 'boolean', default: true, label: 'Show tutorial' },
           moves: {
-            type: 'number',
+            type: 'range',
             default: 4,
-            description: 'Moves allowed',
-            range: { min: 0, max: 10, step: 2 },
+            label: 'Moves allowed',
+            min: 0,
+            max: 10,
+            step: 2,
             when: { param: 'tutorial', equals: true },
           },
           theme: {
-            type: 'string',
+            type: 'select',
             default: 'light',
-            description: 'Color theme',
-            options: ['light', 'dark'],
+            label: 'Color theme',
+            options: [
+              { name: 'Light', value: 'light' },
+              { name: 'Dark', value: 'dark' },
+            ],
+          },
+          presentation: {
+            type: 'object',
+            label: 'Presentation',
+            info: 'Appearance settings',
+            category: 'Visual',
+            when: { param: 'tutorial', equals: true },
+            parameters: {
+              enabled: { type: 'boolean', label: 'Enabled', default: true },
+              text: { type: 'text', label: 'Text', default: 'Hello' },
+              speed: { type: 'number', label: 'Speed', default: -1.5 },
+              tint: {
+                type: 'color',
+                label: 'Tint',
+                default: '#Aa00Ff',
+                when: { param: ['presentation', 'enabled'], equals: true },
+              },
+            },
           },
         },
         variants,
       });
-      expect(metadata.variants[0].params).toEqual({ tutorial: false, moves: 8, theme: 'dark' });
+      expect(metadata.variants[0].params).toEqual({
+        tutorial: false,
+        moves: 8,
+        theme: 'dark',
+        presentation: { enabled: false, text: '', speed: 0, tint: '#Aa00Ff' },
+      });
+      expect(await readFile(config, 'utf8')).toBe(sourceBefore);
       expect(open).not.toHaveBeenCalled();
     },
   );
@@ -163,12 +195,25 @@ async function createConfigFixture(): Promise<string> {
         localization: { fallback: 'en', languages: ['en', 'hy'] },
         name: 'basic-playable',
         params: {
-          tutorial: { type: 'boolean', default: true, description: 'Show tutorial' },
-          moves: { type: 'number', default: 4, description: 'Moves allowed', range: { min: 0, max: 10, step: 2 }, when: { param: 'tutorial', equals: true } },
-          theme: { type: 'string', default: 'light', description: 'Color theme', options: ['light', 'dark'] },
+          tutorial: { type: 'boolean', default: true, label: 'Show tutorial' },
+          moves: { type: 'range', default: 4, label: 'Moves allowed', min: 0, max: 10, step: 2, when: { param: 'tutorial', equals: true } },
+          theme: { type: 'select', default: 'light', label: 'Color theme', options: [{ name: 'Light', value: 'light' }, { name: 'Dark', value: 'dark' }] },
+          presentation: {
+            type: 'object', label: 'Presentation', info: 'Appearance settings', category: 'Visual',
+            when: { param: 'tutorial', equals: true },
+            parameters: {
+              enabled: { type: 'boolean', label: 'Enabled', default: true },
+              text: { type: 'text', label: 'Text', default: 'Hello' },
+              speed: { type: 'number', label: 'Speed', default: -1.5 },
+              tint: {
+                type: 'color', label: 'Tint', default: '#Aa00Ff',
+                when: { param: ['presentation', 'enabled'], equals: true },
+              },
+            },
+          },
         },
-        versions: { default: { params: { tutorial: false, moves: 6 } } },
-        networks: { preview: { params: { moves: 8, theme: 'dark' } } },
+        versions: { default: { params: { tutorial: false, moves: 6, presentation: { text: '', speed: 0 } } } },
+        networks: { preview: { params: { moves: 8, theme: 'dark', presentation: { enabled: false } } } },
         screen: {
           orientations: {
             portrait: {
