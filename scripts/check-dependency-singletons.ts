@@ -1,7 +1,8 @@
-import { execFileSync } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { invokePackageManager } from './pnpm-utils.ts';
 
 /**
  * Packages whose identity is observable at runtime rather than merely their API.
@@ -50,25 +51,15 @@ const packageManagerArguments = [
   'Infinity',
   '--json',
 ];
-const isJavaScriptLauncher = /\.[cm]?js$/i.test(packageManagerPath);
-
 // Invoke the exact pnpm executable that started this package script. Calling
-// `pnpm` by name would depend on platform-specific PATH shims. `npm_execpath`
-// may point to either a JavaScript launcher or a native pnpm executable, so it
-// must not be passed to Node as a script. The recursive output contains every
-// workspace importer and its dependency tree; filtering keeps the JSON limited
-// to the protected packages.
+// `pnpm` by name would depend on platform-specific PATH shims. The recursive
+// output contains every workspace importer and its dependency tree; filtering
+// keeps the JSON limited to the protected packages.
 const dependencyGraph: unknown = JSON.parse(
-  execFileSync(
-    isJavaScriptLauncher ? process.execPath : packageManagerPath,
-    isJavaScriptLauncher
-      ? [packageManagerPath, ...packageManagerArguments]
-      : packageManagerArguments,
-    {
-      cwd: repositoryRoot,
-      encoding: 'utf8',
-    },
-  ),
+  invokePackageManager(packageManagerPath, packageManagerArguments, {
+    cwd: repositoryRoot,
+    encoding: 'utf8',
+  }),
 );
 
 const packageInstances = collectPackageInstances(dependencyGraph);
