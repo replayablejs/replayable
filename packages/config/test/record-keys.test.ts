@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { paramDefinitionSchema, paramsSchema } from '../src/config/schemas/params.js';
 import { networksSchema, versionsSchema } from '../src/config/schemas/variants.js';
 
-const booleanParam = { type: 'boolean', default: true, description: 'Toggle' } as const;
+const booleanParam = { type: 'boolean', default: true, label: 'Toggle' } as const;
 
 it('rejects parameter definitions that collide after trimming', () => {
   const schema = z.strictObject({ params: paramsSchema });

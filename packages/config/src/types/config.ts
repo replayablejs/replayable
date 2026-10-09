@@ -3,6 +3,8 @@ import type { z } from 'zod';
 import type { replayableAssetsSchema, replayableConfigSchema } from '#config/schema.js';
 import type { networkSchema } from '#config/schemas/variants.js';
 
+export type { ReplayableParamDefinition, ReplayableParamValue } from './params.js';
+
 /** Validated Replayable project configuration with every schema default applied. */
 export type ReplayableConfig = z.infer<typeof replayableConfigSchema>;
 
@@ -47,12 +49,6 @@ export type ReplayableLocalizationInput = ReplayableConfigInput['localization'];
 
 /** Delivery network with an implementation owned by Replayable. */
 export type ReplayableNetwork = z.infer<typeof networkSchema>;
-
-/** One validated boolean, number, or string parameter definition. */
-export type ReplayableParamDefinition = ReplayableConfig['params'][string];
-
-/** Primitive value accepted by a concrete parameter. */
-export type ReplayableParamValue = ReplayableParamDefinition['default'];
 
 /** Parameter definitions accepted in a human-authored Replayable config. */
 export type ReplayableParamsInput = ReplayableConfigInput['params'];

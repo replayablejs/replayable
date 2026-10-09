@@ -156,19 +156,37 @@ function resolveAudio(
   return project && network !== false && version !== false;
 }
 
-/** Extracts authored defaults, then applies version and network value overrides. */
+/** Resolves every leaf independently; each variant owns its object values. */
 function resolveParams(
   definitions: ReplayableConfig['params'],
   network: VariantOverride['params'],
   version: VariantOverride['params'],
 ): PlayableVariant['params'] {
-  const defaults = Object.fromEntries(
-    Object.entries(definitions).map(([name, definition]) => [name, definition.default]),
+  return Object.fromEntries(
+    Object.entries(definitions).map(([name, definition]) => {
+      const versionValue = version && Object.hasOwn(version, name) ? version[name] : undefined;
+      const networkValue = network && Object.hasOwn(network, name) ? network[name] : undefined;
+      if (definition.type !== 'object') {
+        return [name, networkValue ?? versionValue ?? definition.default];
+      }
+      const versionChildren = typeof versionValue === 'object' ? versionValue : undefined;
+      const networkChildren = typeof networkValue === 'object' ? networkValue : undefined;
+      return [
+        name,
+        Object.fromEntries(
+          Object.entries(definition.parameters).map(([child, scalar]) => {
+            const fromVersion =
+              versionChildren && Object.hasOwn(versionChildren, child)
+                ? versionChildren[child]
+                : undefined;
+            const fromNetwork =
+              networkChildren && Object.hasOwn(networkChildren, child)
+                ? networkChildren[child]
+                : undefined;
+            return [child, fromNetwork ?? fromVersion ?? scalar.default];
+          }),
+        ),
+      ];
+    }),
   );
-
-  return {
-    ...defaults,
-    ...version,
-    ...network,
-  };
 }

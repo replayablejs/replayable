@@ -21,8 +21,9 @@ City Builder wordmark and persistent CTA. After `buildingsToEndcard` buildings a
 finish appearing, the end card shows the same logo and the Kenney UI button.
 There is no instruction prompt, progress counter, or building selection tray.
 
-`config/params.ts` sets `buildingsToEndcard` to **2** by default. Its allowed values
-are **1** and **2**; project configuration validates the range and integer step.
+`config/params.ts` sets `buildingsToEndcard` to **3** by default. Its allowed values
+are **1**, **2**, and **3**; its `range` definition declares `min`, `max`, and `step`
+directly alongside the default and label.
 The three plots remain available choices, but the player only needs the configured
 number of placements. Store buttons use `playable.openStore()` and respect the
 network's persistent-CTA and end-card interaction settings.

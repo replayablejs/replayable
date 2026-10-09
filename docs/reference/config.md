@@ -62,7 +62,7 @@ previous layer.
 
 | Setting                                        | Resolution                                                                                      |
 | ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `params`                                       | Each parameter resolves independently; network wins conflicts.                                  |
+| `params`                                       | Each scalar or object child resolves independently; network wins conflicts.                     |
 | `completion.duration`, `completion.inactivity` | Each timer resolves independently; network wins, including explicit `false` to disable a timer. |
 | `assets.bundles`                               | The complete selection is replaced; network wins. `{}` keeps all included assets in primary.    |
 | `assets.exclude`                               | Exclusions from all layers are combined; an override cannot restore an excluded asset.          |
@@ -105,16 +105,125 @@ See [completion and store actions](./runtime.md#completion-and-store-actions).
 
 ## Ad Parameters
 
-Each parameter has a `type`, `default` and `description`:
+Every definition requires `type` and a nonempty `label`. Optional `info` provides help text,
+and optional `category` groups controls in an editor. Names and display metadata are trimmed;
+empty names, empty display metadata, unknown fields, and names that collide after trimming
+are rejected. Omitting `params` produces an empty catalog.
 
-| Type      | Additional fields                                 |
-| --------- | ------------------------------------------------- |
-| `boolean` | None                                              |
-| `number`  | `range: { min, max, step }`, with a positive step |
-| `string`  | A nonempty `options` array                        |
+For reusable TypeScript definitions, `@replayablejs/config` exports `ReplayableParamMetadata`
+and `ReplayableParamCondition`, plus named definitions such as `ReplayableRangeParamDefinition`
+and `ReplayableSelectParamDefinition`. All seven definitions extend the shared metadata.
+`ReplayableScalarParamDefinition` combines the six scalar controls; `ReplayableParamDefinition`
+also includes `ReplayableObjectParamDefinition`. Use `ReplayableSelectOption` for select choices.
+These named contracts are preserved in the generated declarations; validation remains owned by
+the schemas, with type checks ensuring the contracts match their inferred inputs and outputs.
 
-An optional `when: { param, equals }` describes when the parameter is relevant. Network and
-version overrides supply parameter values by name rather than repeating their definitions.
+| Type      | Required value fields                   | Allowed values                                                      |
+| --------- | --------------------------------------- | ------------------------------------------------------------------- |
+| `number`  | `default`                               | Any finite number, including negative and fractional numbers        |
+| `boolean` | `default`                               | `true` or `false`, without coercion                                 |
+| `text`    | `default`                               | Any string; empty text, whitespace, and newlines are preserved      |
+| `range`   | `default`, `min`, `max`, `step`         | Finite, bounded, step-aligned numbers                               |
+| `color`   | `default`                               | Six-digit RGB hex strings, such as `#Aa00Ff`; spelling is preserved |
+| `select`  | `default`, `options: [{ name, value }]` | One of the declared string values                                   |
+| `object`  | `parameters`                            | One group of scalar child values, derived from child defaults       |
+
+Ranges require `min <= max` and a positive step. The maximum and default must be reachable
+from the minimum in whole steps; fractional steps tolerate ordinary floating-point rounding.
+Defaults and overrides must stay within the range. Plain `number` parameters accept no range fields.
+
+Selects require at least one option, nonempty option names, and unique nonempty string values.
+Defaults and overrides must match an option value exactly. Text and select values are never trimmed
+or coerced. Colors accept neither shorthand nor alpha, named colors, or CSS functions.
+
+Objects require at least one child, each with its own label and default. Children may use any
+of the six scalar types but cannot be objects themselves. There is no group `default` or
+`optional` flag. Arrays, `null`, media parameters, and highlighting fields are unsupported.
+
+For example, inside a complete `defineConfig` call:
+
+```ts
+params: {
+  tutorial: {
+    type: 'object',
+    label: 'Tutorial',
+    category: 'Gameplay',
+    parameters: {
+      enabled: { type: 'boolean', label: 'Enabled', default: true },
+      message: {
+        type: 'text',
+        label: 'Message',
+        default: 'Swipe to play',
+        when: { param: ['tutorial', 'enabled'], equals: true },
+      },
+      delay: {
+        type: 'range',
+        label: 'Delay',
+        info: 'Seconds before showing the tutorial.',
+        default: 4,
+        min: 0,
+        max: 10,
+        step: 1,
+      },
+      color: { type: 'color', label: 'Text color', default: '#ffffff' },
+    },
+  },
+  difficulty: {
+    type: 'select',
+    label: 'Difficulty',
+    default: 'easy',
+    options: [
+      { name: 'Easy', value: 'easy' },
+      { name: 'Hard', value: 'hard' },
+    ],
+  },
+  speed: { type: 'number', label: 'Speed', default: 1.5 },
+},
+versions: {
+  default: { params: { tutorial: { delay: 6 } } },
+},
+networks: {
+  preview: { params: { tutorial: { enabled: false } } },
+},
+```
+
+The resolved `tutorial` is
+`{ enabled: false, message: 'Swipe to play', delay: 6, color: '#ffffff' }`.
+Version and network overrides are partial value objects: omitted children inherit, an empty
+group override changes nothing, and each child follows project → version → network precedence.
+Unknown root keys or children and values violating their definitions are rejected, including
+when a control is currently irrelevant. Explicit `false`, `0`, and `''` are retained.
+
+At runtime, `playable.config.params` contains only resolved values, including nested group
+objects. Definitions and editor metadata are not included. Values are typed as primitives or
+readonly records of primitives; narrow them before reading a group or a particular scalar.
+Every variant receives its own group objects.
+
+### Conditional relevance
+
+`when: { param, equals }` is optional on both groups and scalar definitions. A string `param`
+references an exact root key; a two-element tuple such as `['tutorial', 'enabled']` references
+a group child. Dots in a string are literal, not path separators. References must exist, target
+a scalar, use an allowed comparison value, and cannot reference the parameter itself.
+
+Conditions are editor metadata: they do not remove values, skip validation, or change runtime
+behavior. Only a single equality is supported. Replayable retains this extension in metadata;
+a future Studio adapter must omit or translate it. Schema alignment alone does not provide
+Studio import, saving, or live updates.
+
+### Migrating existing parameters
+
+The new definition format replaces the previous format; legacy fields are rejected.
+
+- Add a readable `label` to every definition and move `description` to optional `info`.
+- Replace `type: 'string'` with `type: 'select'` and convert string options to
+  `{ name: 'Display name', value: 'originalValue' }`. Preserve localization keys as select values.
+- Replace bounded `type: 'number'` with `type: 'range'`, moving `min`, `max`, and `step`
+  out of the old `range` object onto the definition.
+- Use `text` for unrestricted strings and `number` for unrestricted finite numbers.
+- Existing flat parameter names, runtime access, and version/network values can remain unchanged.
+
+Editor consumers must also handle [CLI metadata version 2](./cli.md#inspect-configuration).
 
 ## Preview Controls and Development Tools
 

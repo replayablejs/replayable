@@ -89,6 +89,9 @@ describe('runtime readiness', () => {
     });
 
     expect(() => runtime.state).toThrow('Await playable.ready() first.');
+    expect(runtime.config.params).toEqual({
+      tutorial: { enabled: false, text: '', delay: 0, color: '#AaBbCc', speed: -0.25, mode: 'one' },
+    });
     expect(() => runtime.complete('success')).toThrow('before await playable.ready()');
 
     let stateObservedAtCompletion: RuntimeState | undefined;
@@ -174,7 +177,16 @@ function createRuntimeDefinition(): RuntimeDefinition {
       id: 'default/preview/en',
       localization: { language: 'en' },
       network: 'preview',
-      params: {},
+      params: {
+        tutorial: {
+          enabled: false,
+          text: '',
+          delay: 0,
+          color: '#AaBbCc',
+          speed: -0.25,
+          mode: 'one',
+        },
+      },
       screen: {
         orientations: {
           landscape: orientation,

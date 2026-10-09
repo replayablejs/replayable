@@ -265,16 +265,21 @@ describe('Replayable config', () => {
         },
         params: {
           difficulty: {
-            type: 'number',
+            type: 'range',
             default: 1,
-            description: 'Gameplay difficulty.',
-            range: { min: 1, max: 3, step: 1 },
+            label: 'Gameplay difficulty.',
+            min: 1,
+            max: 3,
+            step: 1,
           },
           theme: {
-            type: 'string',
+            type: 'select',
             default: 'default',
-            description: 'Visual theme.',
-            options: ['default', 'christmas'],
+            label: 'Visual theme.',
+            options: [
+              { name: 'Default', value: 'default' },
+              { name: 'Christmas', value: 'christmas' },
+            ],
           },
         },
         screen,
@@ -509,10 +514,12 @@ describe('Replayable config', () => {
         ...project,
         params: {
           intensity: {
-            type: 'number',
+            type: 'range',
             default: 0.5,
-            description: 'Effect intensity.',
-            range: { min: 0, max: 1, step: 0.25 },
+            label: 'Effect intensity.',
+            min: 0,
+            max: 1,
+            step: 0.25,
           },
         },
       }).success,
@@ -522,10 +529,12 @@ describe('Replayable config', () => {
         ...project,
         params: {
           intensity: {
-            type: 'number',
+            type: 'range',
             default: 0.3,
-            description: 'Effect intensity.',
-            range: { min: 0, max: 1, step: 0.25 },
+            label: 'Effect intensity.',
+            min: 0,
+            max: 1,
+            step: 0.25,
           },
         },
       }).success,
@@ -535,9 +544,9 @@ describe('Replayable config', () => {
         ...project,
         params: {
           theme: {
-            type: 'string',
+            type: 'select',
             default: 'default',
-            description: 'Visual theme.',
+            label: 'Visual theme.',
           },
         },
       }).success,
@@ -549,14 +558,17 @@ describe('Replayable config', () => {
           snowEnabled: {
             type: 'boolean',
             default: true,
-            description: 'Whether snow is displayed.',
+            label: 'Whether snow is displayed.',
             when: { param: 'theme', equals: 'summer' },
           },
           theme: {
-            type: 'string',
+            type: 'select',
             default: 'default',
-            description: 'Visual theme.',
-            options: ['default', 'winter'],
+            label: 'Visual theme.',
+            options: [
+              { name: 'Default', value: 'default' },
+              { name: 'Winter', value: 'winter' },
+            ],
           },
         },
       }).success,
@@ -630,6 +642,72 @@ describe('variant bundle assignments', () => {
 });
 
 describe('network override precedence', () => {
+  it('resolves grouped leaves independently and isolates objects between variants', () => {
+    const config = defineConfig({
+      assets,
+      screen,
+      store,
+      name: 'grouped-params',
+      localization: { fallback: 'en', languages: ['en', 'fr'] },
+      params: {
+        enabled: { type: 'boolean', label: 'Enabled', default: false },
+        tutorial: {
+          type: 'object',
+          label: 'Tutorial',
+          when: { param: 'enabled', equals: true },
+          parameters: {
+            visible: { type: 'boolean', label: 'Visible', default: true },
+            delay: { type: 'range', label: 'Delay', default: 4, min: 0, max: 10, step: 1 },
+            text: { type: 'text', label: 'Text', default: 'Hello' },
+            color: { type: 'color', label: 'Color', default: '#AaBbCc' },
+            mode: {
+              type: 'select',
+              label: 'Mode',
+              default: ' one ',
+              options: [{ name: 'One', value: ' one ' }],
+            },
+            speed: { type: 'number', label: 'Speed', default: -1.5 },
+          },
+        },
+      },
+      versions: {
+        default: {},
+        edited: { params: { tutorial: { delay: 6, text: 'Changed' } } },
+      },
+      networks: {
+        preview: { params: { tutorial: {} } },
+        unity: { params: { tutorial: { delay: 0, visible: false, text: '' } } },
+      },
+    });
+    const before = structuredClone(config);
+    const variants = createVariants(config);
+    const values = Object.fromEntries(variants.map(({ id, params }) => [id, params]));
+    const defaults = {
+      visible: true,
+      delay: 4,
+      text: 'Hello',
+      color: '#AaBbCc',
+      mode: ' one ',
+      speed: -1.5,
+    };
+    expect(values['default/preview/en']).toEqual({ enabled: false, tutorial: defaults });
+    expect(values['edited/preview/en']).toEqual({
+      enabled: false,
+      tutorial: { ...defaults, delay: 6, text: 'Changed' },
+    });
+    expect(values['edited/unity/en']).toEqual({
+      enabled: false,
+      tutorial: { ...defaults, visible: false, delay: 0, text: '' },
+    });
+    expect(values['edited/unity/fr']).toEqual(values['edited/unity/en']);
+    expect(values['edited/unity/fr']?.tutorial).not.toBe(values['edited/unity/en']?.tutorial);
+    expect(config).toEqual(before);
+    const originalGroup = values['default/preview/en']?.tutorial;
+    expect(Reflect.set(Object(originalGroup), 'text', 'Mutated')).toBe(true);
+    expect(values['default/preview/fr']?.tutorial).toEqual(defaults);
+    expect(config).toEqual(before);
+  });
+
   it('resolves conflicts per parameter and completion timer while inheriting omitted values', () => {
     const config = defineConfig({
       assets,
@@ -640,16 +718,21 @@ describe('network override precedence', () => {
       completion: { duration: 60, inactivity: 20 },
       params: {
         difficulty: {
-          type: 'number',
+          type: 'range',
           default: 1,
-          description: 'Difficulty.',
-          range: { min: 1, max: 3, step: 1 },
+          label: 'Difficulty.',
+          min: 1,
+          max: 3,
+          step: 1,
         },
         theme: {
-          type: 'string',
+          type: 'select',
           default: 'base',
-          description: 'Theme.',
-          options: ['base', 'custom'],
+          label: 'Theme.',
+          options: [
+            { name: 'Base', value: 'base' },
+            { name: 'Custom', value: 'custom' },
+          ],
         },
       },
       versions: {

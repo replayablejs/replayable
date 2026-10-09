@@ -18,6 +18,28 @@ describe('runtime development configuration', () => {
         devtools: { stats },
         localization: { fallback: 'en', languages: ['en'] },
         name: 'runtime-config',
+        params: {
+          tutorial: {
+            type: 'object',
+            label: 'Tutorial',
+            category: 'Gameplay',
+            parameters: {
+              enabled: { type: 'boolean', label: 'Enabled', default: true },
+              message: { type: 'text', label: 'Message', default: ' \nHello\n ' },
+              delay: { type: 'range', label: 'Delay', default: 4, min: 0, max: 10, step: 1 },
+              speed: { type: 'number', label: 'Speed', default: -0.25 },
+              color: { type: 'color', label: 'Color', default: '#aAbBcC' },
+              mode: {
+                type: 'select',
+                label: 'Mode',
+                default: 'one',
+                options: [{ name: 'One', value: 'one' }],
+              },
+            },
+          },
+        },
+        versions: { default: { params: { tutorial: { message: '', delay: 0 } } } },
+        networks: { preview: { params: { tutorial: { enabled: false } } } },
         screen: {
           orientations: {
             portrait: { enabled: true, width: 700, height: 1400, ratio: { min: 0.46, max: 0.76 } },
@@ -40,6 +62,16 @@ describe('runtime development configuration', () => {
 
         expect(definition).toBeDefined();
         expect(JSON.parse(definition!)).toMatchObject({ config: { devtools: config.devtools } });
+        expect(JSON.parse(definition!).config.params).toEqual({
+          tutorial: {
+            enabled: false,
+            message: '',
+            delay: 0,
+            speed: -0.25,
+            color: '#aAbBcC',
+            mode: 'one',
+          },
+        });
       }
     },
   );

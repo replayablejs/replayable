@@ -1,60 +1,91 @@
 import { z } from 'zod';
 
+import type { ParamDefinitions, ParamOverrides } from '#types/params.js';
+
 import { validateParamDefinitions } from '../validation/params.js';
 import { requiredStringSchema } from './base.js';
+import { colorParamValueSchema, scalarParamValueSchema } from './param-values.js';
 import { withUniqueTrimmedKeys } from './record.js';
-
-const paramValueSchema = z.union([z.boolean(), z.number(), requiredStringSchema]);
 
 /** Another parameter value that controls when a parameter is relevant. */
 const paramConditionSchema = z.strictObject({
-  param: requiredStringSchema,
-  equals: paramValueSchema,
+  param: z.union([requiredStringSchema, z.tuple([requiredStringSchema, requiredStringSchema])]),
+  equals: scalarParamValueSchema,
 });
 
-const paramDescriptionField = {
-  description: requiredStringSchema,
-};
-const paramConditionField = {
+const metadataFields = {
+  label: requiredStringSchema,
+  info: requiredStringSchema.optional(),
+  category: requiredStringSchema.optional(),
   when: paramConditionSchema.optional(),
 };
 
-const numberRangeSchema = z.strictObject({
-  min: z.number(),
-  max: z.number(),
-  step: z.number().positive(),
-});
-
-/** Boolean, number, and string parameters exposed to builds and development tools. */
-export const paramDefinitionSchema = z.discriminatedUnion('type', [
+/** Scalar controls shared by the root catalog and one-level object groups. */
+export const scalarParamDefinitionSchema = z.discriminatedUnion('type', [
   z.strictObject({
     type: z.literal('boolean'),
     default: z.boolean(),
-    ...paramDescriptionField,
-    ...paramConditionField,
+    ...metadataFields,
   }),
   z.strictObject({
     type: z.literal('number'),
     default: z.number(),
-    ...paramDescriptionField,
-    range: numberRangeSchema,
-    ...paramConditionField,
+    ...metadataFields,
   }),
   z.strictObject({
-    type: z.literal('string'),
-    default: requiredStringSchema,
-    ...paramDescriptionField,
-    options: z.array(requiredStringSchema).min(1),
-    ...paramConditionField,
+    type: z.literal('text'),
+    default: z.string(),
+    ...metadataFields,
+  }),
+  z.strictObject({
+    type: z.literal('range'),
+    default: z.number(),
+    min: z.number(),
+    max: z.number(),
+    step: z.number().positive(),
+    ...metadataFields,
+  }),
+  z.strictObject({
+    type: z.literal('color'),
+    default: colorParamValueSchema,
+    ...metadataFields,
+  }),
+  z.strictObject({
+    type: z.literal('select'),
+    default: z.string().min(1),
+    options: z
+      .array(z.strictObject({ name: requiredStringSchema, value: z.string().min(1) }))
+      .min(1),
+    ...metadataFields,
   }),
 ]);
 
-export const paramsSchema = withUniqueTrimmedKeys(
-  z.record(requiredStringSchema, paramDefinitionSchema),
-)
-  .superRefine(validateParamDefinitions)
-  .default({});
+/** Studio-compatible controls, with object defaults derived solely from their children. */
+export const paramDefinitionSchema = z.discriminatedUnion('type', [
+  ...scalarParamDefinitionSchema.options,
+  z.strictObject({
+    type: z.literal('object'),
+    parameters: withUniqueTrimmedKeys(
+      z.record(requiredStringSchema, scalarParamDefinitionSchema),
+    ).refine((parameters) => Object.keys(parameters).length > 0, 'At least one child is required.'),
+    ...metadataFields,
+  }),
+]);
 
-export const paramOverridesSchema = withUniqueTrimmedKeys(
-  z.record(requiredStringSchema, paramValueSchema),
-);
+// Named boundary types keep generated declarations reusable instead of expanding
+// every control's metadata at each input/output occurrence in the config schema.
+export const paramsSchema: z.ZodDefault<z.ZodType<ParamDefinitions, ParamDefinitions>> =
+  withUniqueTrimmedKeys(z.record(requiredStringSchema, paramDefinitionSchema))
+    .superRefine(validateParamDefinitions)
+    .default({});
+
+export const paramOverridesSchema: z.ZodType<ParamOverrides, ParamOverrides> =
+  withUniqueTrimmedKeys(
+    z.record(
+      requiredStringSchema,
+      z.union([
+        scalarParamValueSchema,
+        withUniqueTrimmedKeys(z.record(requiredStringSchema, scalarParamValueSchema)),
+      ]),
+    ),
+  );
