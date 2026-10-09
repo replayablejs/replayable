@@ -1,20 +1,21 @@
 import { buildAssets } from '@replayablejs/assets';
-import { createVariants, defineConfig, type ReplayableConfigInput } from '@replayablejs/config';
+import { createPreviewVariant, type ReplayableConfigInput } from '@replayablejs/config';
 
 import { createDevelopmentContext } from '#pipeline/create-development-context.js';
 import type { ServePreviewOptions, ServePreviewResult } from '#types/build.js';
 
 import { createDevelopmentServer } from './create-development-server.js';
-import { selectDevelopmentVariant } from './select-development-variant.js';
 
 /** Builds one preview variant's assets and starts its local Vite server. */
 export async function servePreview(
   config: ReplayableConfigInput,
   options: ServePreviewOptions,
 ): Promise<ServePreviewResult> {
-  const validatedConfig = defineConfig(config);
-  const variants = createVariants(validatedConfig);
-  const variant = selectDevelopmentVariant(variants, options);
+  const variant = createPreviewVariant(config, {
+    ...options.overrides,
+    ...(options.version === undefined ? {} : { version: options.version }),
+    ...(options.language === undefined ? {} : { language: options.language }),
+  });
   const context = createDevelopmentContext(variant, options);
 
   await buildAssets(context.variant.assets, context.projectRoot);

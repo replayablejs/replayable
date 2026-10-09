@@ -1,7 +1,10 @@
 import type { BuildAssetsResult } from '@replayablejs/assets';
+import type { ReplayablePreviewOverrides } from '@replayablejs/config';
 
 /** Optional variant and server choices accepted by local development. */
 export interface ServePreviewOptions {
+  /** Temporary preview values. Explicit version/language options take precedence. */
+  readonly overrides?: ReplayablePreviewOverrides;
   /** Hostname or IP address exposed by the development server. */
   readonly host?: string;
   /** Language selected from the configured playable variants. */
@@ -55,5 +58,3 @@ export interface BuildProjectResult {
   /** Results for the concrete variants in deterministic configuration order. */
   readonly variants: readonly BuildVariantResult[];
 }
-
-export type VariantSelection = Pick<ServePreviewOptions, 'language' | 'version'>;

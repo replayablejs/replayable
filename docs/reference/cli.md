@@ -97,3 +97,51 @@ for output paths and common failures.
 - **Export cannot find a build:** build with the same configuration before exporting.
 
 For npm projects, replace `pnpm exec replayable` with `npx replayable` in these commands.
+
+## Temporary preview overrides
+
+Try runtime values without editing the project configuration:
+
+```sh
+pnpm exec replayable dev --overrides preview-overrides.json
+```
+
+```json
+{
+  "version": "default",
+  "language": "en",
+  "params": { "speed": 2 },
+  "controls": { "persistentCta": false },
+  "devtools": { "soundControl": true, "stats": { "display": "compact" } }
+}
+```
+
+The version, language, and parameter names must already exist in the project.
+Parameter types, ranges, steps, and options use the project's normal validation.
+Explicit --version and --language flags take precedence over file selectors.
+Temporary params take precedence over project defaults, version values, and preview-network values.
+
+Omitted controls and devtools fields preserve project values. An explicit stats value replaces
+that setting as a unit using the usual Replayable defaults: false disables it, true enables all
+metrics, and an object customizes enabled stats. Unknown fields are rejected. Overrides cannot
+change source paths, network selection, assets, or build settings.
+
+The file is read once at startup; restart the command to apply file edits. Overrides affect
+only this preview run, never modify the authored config, and are not used by build or export.
+Relative override-file paths are resolved from the command's working directory.
+
+Programmatic callers use the same object:
+
+```ts
+await servePreview(config, {
+  projectRoot: process.cwd(),
+  overrides: {
+    version: 'default',
+    params: { speed: 2 },
+    controls: { persistentCta: false },
+  },
+});
+```
+
+The config package exports previewOverridesSchema, ReplayablePreviewOverrides, and
+createPreviewVariant(config, overrides) for validation and resolution without starting a server.

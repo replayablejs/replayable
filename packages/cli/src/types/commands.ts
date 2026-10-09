@@ -17,6 +17,7 @@ export interface ConfigOptions {
 
 /** Parsed options for `replayable dev`. */
 export interface DevOptions {
+  readonly overrides?: string;
   readonly config: string;
   readonly host?: string;
   readonly language?: string;

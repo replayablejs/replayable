@@ -5,6 +5,7 @@ import { replayableConfigSchema } from '@replayablejs/config';
 import { InvalidArgumentError, type Command } from 'commander';
 
 import { loadDefaultExport } from '../config/load-default-export.js';
+import { loadPreviewOverrides } from '../config/load-preview-overrides.js';
 import type { DevOptions } from '../types/commands.js';
 
 /** Registers the command that runs one playable variant with Vite HMR. */
@@ -18,15 +19,19 @@ export function registerDevCommand(program: Command): void {
     .option('-o, --open', 'open the playable in the default browser')
     .option('-p, --port <port>', 'development server port', parsePort)
     .option('--version <version>', 'playable version to run')
+    .option('--overrides <file>', 'JSON file with temporary preview overrides')
     .action(async (options: DevOptions) => runDevCommand(options));
 }
 
 /** Loads the project, starts local development, and reports reachable URLs. */
 async function runDevCommand(options: DevOptions): Promise<void> {
-  const { config: configPath, ...developmentOptions } = options;
+  const { config: configPath, overrides: overridesPath, ...developmentOptions } = options;
+  const overrides =
+    overridesPath === undefined ? undefined : await loadPreviewOverrides(overridesPath);
   const config = replayableConfigSchema.parse(await loadDefaultExport(configPath));
   const result = await servePreview(config, {
     ...developmentOptions,
+    ...(overrides === undefined ? {} : { overrides }),
     projectRoot: process.cwd(),
   });
 

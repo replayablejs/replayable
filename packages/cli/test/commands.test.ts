@@ -4,6 +4,7 @@ import { exportProject } from '@replayablejs/export';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
 import { loadDefaultExport } from '../src/config/load-default-export.js';
+import { loadPreviewOverrides } from '../src/config/load-preview-overrides.js';
 import { createProgram } from '../src/program.js';
 import { config } from './fixtures/config.js';
 
@@ -20,6 +21,9 @@ vi.mock('../src/config/load-default-export.js', () => ({
   loadDefaultExport: vi.fn<typeof loadDefaultExport>(),
 }));
 
+vi.mock('../src/config/load-preview-overrides.js', () => ({
+  loadPreviewOverrides: vi.fn<typeof loadPreviewOverrides>(),
+}));
 beforeEach(() => {
   vi.resetAllMocks();
   vi.mocked(loadDefaultExport).mockResolvedValue(config);
@@ -123,4 +127,30 @@ it('rejects invalid configuration before calling the builder', async () => {
     'Invalid input',
   );
   expect(buildProject).not.toHaveBeenCalled();
+});
+
+it('passes overrides separately from explicit development selectors', async () => {
+  const overrides = { version: 'default', language: 'en', controls: { persistentCta: false } };
+  vi.mocked(loadPreviewOverrides).mockResolvedValue(overrides);
+  vi.mocked(servePreview).mockResolvedValue({
+    close: vi.fn<() => Promise<void>>(),
+    variantId: 'alternate/preview/en',
+    localUrls: [],
+    networkUrls: [],
+  });
+  await createProgram().parseAsync([
+    'node',
+    'replayable',
+    'dev',
+    '--overrides',
+    'preview.json',
+    '--version',
+    'alternate',
+  ]);
+  expect(loadPreviewOverrides).toHaveBeenCalledExactlyOnceWith('preview.json');
+  expect(servePreview).toHaveBeenCalledExactlyOnceWith(expect.any(Object), {
+    overrides,
+    version: 'alternate',
+    projectRoot: process.cwd(),
+  });
 });

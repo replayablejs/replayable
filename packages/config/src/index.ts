@@ -83,3 +83,9 @@ export type {
 export type { PlayableVariant } from '#types/variant.js';
 
 export type { ExportFilename, ExportFilenameContext } from './types/export.js';
+
+export {
+  previewOverridesSchema,
+  type ReplayablePreviewOverrides,
+} from '#config/preview-overrides.js';
+export { createPreviewVariant } from '#variants/create-preview-variant.js';
