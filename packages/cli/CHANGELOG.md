@@ -1,5 +1,19 @@
 # @replayablejs/cli
 
+## 0.1.0-alpha.14
+
+### Minor Changes
+
+- 5b1b3e7: Support optional replayable.project.json for saved version values, controls, and devtools without rewriting TypeScript configuration. Load saved data consistently for config, dev, build, and export, and expose evaluated version overrides in config metadata for editor copying. Temporary preview overrides continue to apply last.
+
+### Patch Changes
+
+- Updated dependencies [5b1b3e7]
+  - @replayablejs/config@0.1.0-alpha.14
+  - @replayablejs/build@0.1.0-alpha.14
+  - @replayablejs/export@0.1.0-alpha.14
+  - @replayablejs/assets@0.1.0-alpha.14
+
 ## 0.1.0-alpha.13
 
 ### Minor Changes
