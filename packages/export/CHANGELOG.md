@@ -1,5 +1,12 @@
 # @replayablejs/export
 
+## 0.1.0-alpha.14
+
+### Patch Changes
+
+- Updated dependencies [5b1b3e7]
+  - @replayablejs/config@0.1.0-alpha.14
+
 ## 0.1.0-alpha.13
 
 ### Patch Changes
