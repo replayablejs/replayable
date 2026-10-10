@@ -1,11 +1,10 @@
 import { styleText } from 'node:util';
 
 import { servePreview } from '@replayablejs/build';
-import { replayableConfigSchema } from '@replayablejs/config';
 import { InvalidArgumentError, type Command } from 'commander';
 
-import { loadDefaultExport } from '../config/load-default-export.js';
 import { loadPreviewOverrides } from '../config/load-preview-overrides.js';
+import { loadProjectConfig } from '../config/load-project-config.js';
 import type { DevOptions } from '../types/commands.js';
 
 /** Registers the command that runs one playable variant with Vite HMR. */
@@ -28,7 +27,7 @@ async function runDevCommand(options: DevOptions): Promise<void> {
   const { config: configPath, overrides: overridesPath, ...developmentOptions } = options;
   const overrides =
     overridesPath === undefined ? undefined : await loadPreviewOverrides(overridesPath);
-  const config = replayableConfigSchema.parse(await loadDefaultExport(configPath));
+  const config = await loadProjectConfig(configPath);
   const result = await servePreview(config, {
     ...developmentOptions,
     ...(overrides === undefined ? {} : { overrides }),

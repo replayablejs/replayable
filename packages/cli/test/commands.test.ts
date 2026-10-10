@@ -1,3 +1,7 @@
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
 import { buildAssets } from '@replayablejs/assets';
 import { buildProject, servePreview } from '@replayablejs/build';
 import { exportProject } from '@replayablejs/export';
@@ -153,4 +157,44 @@ it('passes overrides separately from explicit development selectors', async () =
     version: 'alternate',
     projectRoot: process.cwd(),
   });
+});
+
+it.each(['dev', 'build', 'export'])('uses saved project data for %s', async (command) => {
+  const directory = await mkdtemp(join(tmpdir(), 'replayable-command-'));
+  try {
+    await writeFile(
+      join(directory, 'replayable.project.json'),
+      JSON.stringify({
+        schemaVersion: 1,
+        controls: { persistentCta: false },
+        versions: { saved: {} },
+      }),
+    );
+    vi.mocked(buildProject).mockResolvedValue({ outputDirectory: '/project/dist', variants: [] });
+    vi.mocked(exportProject).mockResolvedValue({
+      outputDirectory: '/project/export',
+      variants: [],
+    });
+    vi.mocked(servePreview).mockResolvedValue({
+      close: vi.fn<() => Promise<void>>(),
+      variantId: 'saved/preview/en',
+      localUrls: [],
+      networkUrls: [],
+    });
+    await createProgram().parseAsync([
+      'node',
+      'replayable',
+      command,
+      '--config',
+      join(directory, 'custom.ts'),
+    ]);
+    const target =
+      command === 'dev' ? servePreview : command === 'build' ? buildProject : exportProject;
+    expect(vi.mocked(target).mock.calls[0]?.[0]).toMatchObject({
+      controls: { persistentCta: false },
+      versions: { saved: {} },
+    });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });

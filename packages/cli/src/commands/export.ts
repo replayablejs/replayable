@@ -1,10 +1,9 @@
 import { relative } from 'node:path';
 
-import { replayableConfigSchema } from '@replayablejs/config';
 import { exportProject } from '@replayablejs/export';
 import type { Command } from 'commander';
 
-import { loadDefaultExport } from '../config/load-default-export.js';
+import { loadProjectConfig } from '../config/load-project-config.js';
 import type { ExportOptions } from '../types/commands.js';
 
 /** Registers the command that creates upload-ready network artifacts. */
@@ -19,7 +18,7 @@ export function registerExportCommand(program: Command): void {
 
 /** Loads one project config, exports every variant, and reports their files. */
 async function runExportCommand(options: ExportOptions): Promise<void> {
-  const config = replayableConfigSchema.parse(await loadDefaultExport(options.config));
+  const config = await loadProjectConfig(options.config);
   const result = await exportProject(config, {
     ...(options.output === undefined ? {} : { outputDirectory: options.output }),
     projectRoot: process.cwd(),

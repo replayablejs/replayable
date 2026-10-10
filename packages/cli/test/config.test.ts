@@ -100,6 +100,7 @@ describe('replayable config', () => {
 
       expect(metadata).toEqual({
         schemaVersion: 1,
+        versions: replayableConfigSchema.parse(await loadDefaultExport(config)).versions,
         params: {
           tutorial: { type: 'boolean', default: true, description: 'Show tutorial' },
           moves: {

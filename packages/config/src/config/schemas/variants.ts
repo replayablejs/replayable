@@ -8,7 +8,7 @@ import { paramOverridesSchema } from './params.js';
 import { withUniqueTrimmedKeys } from './record.js';
 
 /** Values that one version or network may override for its playable variants. */
-const variantOverrideSchema = z.strictObject({
+export const variantOverrideSchema = z.strictObject({
   assets: assetOverrideSchema.optional(),
   audio: audioOverrideSchema.optional(),
   completion: completionOverrideSchema.optional(),

@@ -60,7 +60,7 @@ For editors, include the validated parameter definitions alongside the resolved 
 pnpm exec replayable config --json --metadata
 ```
 
-`--metadata` implies JSON output and returns `{ schemaVersion: 1, params, variants }`.
+`--metadata` implies JSON output and returns `{ schemaVersion: 1, params, versions, variants }`.
 `params` contains the project's existing definitions: `type`, `description`, `default`,
 number `range` (min/max/step), string `options`, and optional `when` conditions.
 There is no separate label field; editors can use parameter names and descriptions.

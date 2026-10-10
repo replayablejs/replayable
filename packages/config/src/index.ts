@@ -89,3 +89,7 @@ export {
   type ReplayablePreviewOverrides,
 } from '#config/preview-overrides.js';
 export { createPreviewVariant } from '#variants/create-preview-variant.js';
+
+export { applyProjectData } from '#config/apply-project-data.js';
+export { projectDataSchema } from '#config/schemas/project-data-schema.js';
+export type { ReplayableProjectData } from '#config/apply-project-data.js';

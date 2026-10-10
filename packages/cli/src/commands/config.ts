@@ -1,7 +1,7 @@
-import { createVariants, replayableConfigSchema } from '@replayablejs/config';
+import { createVariants } from '@replayablejs/config';
 import type { Command } from 'commander';
 
-import { loadDefaultExport } from '../config/load-default-export.js';
+import { loadProjectConfig } from '../config/load-project-config.js';
 import { openConfigViewer } from '../config/open-config-viewer.js';
 import type { ConfigOptions } from '../types/commands.js';
 
@@ -18,11 +18,13 @@ export function registerConfigCommand(program: Command): void {
 
 /** Loads one project config and presents its concrete playable variants. */
 async function showConfig({ config: configPath, json, metadata }: ConfigOptions): Promise<void> {
-  const config = replayableConfigSchema.parse(await loadDefaultExport(configPath));
+  const config = await loadProjectConfig(configPath);
   const variants = createVariants(config);
 
   if (json || metadata) {
-    const output = metadata ? { schemaVersion: 1, params: config.params, variants } : variants;
+    const output = metadata
+      ? { schemaVersion: 1, params: config.params, versions: config.versions, variants }
+      : variants;
     console.log(JSON.stringify(output, null, 2));
 
     return;

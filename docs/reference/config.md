@@ -175,3 +175,31 @@ export: {
 Return a non-empty filename without a directory or `.html`/`.zip` extension.
 Invalid filename characters and duplicate output names are rejected before writing.
 The exporter adds the network's extension automatically. Async callbacks are not supported.
+
+## Saved project data
+
+Optionally place `replayable.project.json` beside your `replayable.config.ts` (or custom `--config` file). Replayable loads it for `config`, `dev`, `build`, and `export`. Existing projects do not need this file. Editors can create and save it without rewriting developer-authored TypeScript; commit it with the project when those edits should be shared.
+
+```json
+{
+  "schemaVersion": 1,
+  "versions": {
+    "short-teaser": {
+      "params": { "tutorial": true },
+      "assets": { "bundles": { "secondary": { "include": ["sounds/**"] } } }
+    }
+  },
+  "controls": { "persistentCta": false },
+  "devtools": { "stats": false }
+}
+```
+
+Parameter names and values must satisfy the definitions in the TypeScript configuration. The file supports version overrides (`params`, `assets`, `audio`, `completion`) and project-wide `controls` and `devtools`; it cannot replace source code, parameter definitions, network configuration, or build settings. Unknown fields and unsupported schema versions fail validation.
+
+Saved entries merge into matching versions and add new versions. Parameter and completion fields merge by name. Asset exclusion arrays and bundle selections replace their corresponding version values; omitted fields inherit, and an empty bundle object clears the version bundle selection. Controls and devtools merge by field; `stats` replaces as a unit, using its normal boolean/object semantics. Removing a saved field restores the developer-authored value. This format does not delete developer-authored versions.
+
+Resolution is developer configuration → saved project data → normal version/network expansion → temporary `dev --overrides` values. Network overrides therefore retain their usual precedence over saved version parameters. Temporary overrides never change the saved file. Files are loaded at command startup; restart preview to pick up saved changes.
+
+`config --metadata` includes `versions`: evaluated version overrides before network, language, or project-default expansion. An editor can copy an entry into a new name in the saved file, preserving imported asset bundle values without parsing TypeScript or freezing inherited project defaults. Copying these supported data fields makes an independent snapshot of the source version overrides.
+
+Programmatic consumers can validate with `projectDataSchema` and combine already-loaded inputs with `applyProjectData(config, projectData)`. The config package does not read files implicitly.

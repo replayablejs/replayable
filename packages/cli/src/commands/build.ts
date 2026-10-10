@@ -1,10 +1,9 @@
 import { relative } from 'node:path';
 
 import { buildProject } from '@replayablejs/build';
-import { replayableConfigSchema } from '@replayablejs/config';
 import type { Command } from 'commander';
 
-import { loadDefaultExport } from '../config/load-default-export.js';
+import { loadProjectConfig } from '../config/load-project-config.js';
 import type { BuildOptions } from '../types/commands.js';
 
 /** Registers the command that builds every configured playable variant. */
@@ -18,7 +17,7 @@ export function registerBuildCommand(program: Command): void {
 
 /** Loads one project config, builds it, and reports the generated playables. */
 async function runBuildCommand(configPath: string): Promise<void> {
-  const config = replayableConfigSchema.parse(await loadDefaultExport(configPath));
+  const config = await loadProjectConfig(configPath);
   const result = await buildProject(config);
 
   for (const variant of result.variants) {
