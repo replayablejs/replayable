@@ -21,7 +21,7 @@
     "pages:build": "node scripts/build-pages.ts",
     "versions:sync": "node scripts/sync-release-version.ts",
     "versions:check": "node scripts/sync-release-version.ts --check",
-    "playable-updates:check": "oxlint --max-warnings 0 scripts/update-playable-dependencies.ts scripts/update-playable-dependencies.test.ts && node --test scripts/update-playable-dependencies.test.ts"
+    "playable-updates:check": "oxlint --max-warnings 0 scripts/update-playable-dependencies.ts scripts/update-playable-dependencies.test.ts scripts/wait-for-replayable-release.ts scripts/wait-for-replayable-release.test.ts && node --test scripts/update-playable-dependencies.test.ts scripts/wait-for-replayable-release.test.ts"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.0",

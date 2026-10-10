@@ -76,6 +76,11 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version }}
         run: node updater/scripts/update-playable-dependencies.ts playable/package.json "$RELEASE_VERSION"
 
+      - name: Wait for all Replayable packages on npm
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: node updater/scripts/wait-for-replayable-release.ts "$RELEASE_VERSION"
+
       - name: Install and regenerate lockfile
         working-directory: playable
         run: pnpm install --no-frozen-lockfile
