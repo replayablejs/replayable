@@ -161,7 +161,7 @@ checks, also run by CI.
 
 ## Acknowledgements
 
-Created by Sargis Sargsyan through an AI-assisted engineering workflow, using OpenAI Codex
+Created by [Sargis Sargsyan](https://saqsun.github.io/) through an AI-assisted engineering workflow, using OpenAI Codex
 extensively across implementation, testing and documentation. Product direction, architecture
 and final decisions remained human-led.
 

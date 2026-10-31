@@ -30,7 +30,8 @@ export default defineConfig({
       text: 'Edit this page on GitHub',
     },
     footer: {
-      message: 'Released under the MIT License.',
+      message:
+        'Released under the MIT License. Created by <a href="https://saqsun.github.io/">Sargis Sargsyan</a>.',
       copyright: 'Copyright © 2026 Replayable contributors',
     },
     nav: [
